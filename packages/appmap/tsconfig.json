@@ -4,10 +4,16 @@
     "module": "esnext",
     "lib": ["dom", "esnext"],
     "outDir": "./dist",
-    "rootDir": "./src",
+    // "rootDir": "./",
     "resolveJsonModule": true,
+    "allowJs": true,
+    "baseUrl": "./",
+    "paths": {
+      "@clarion/proxy": ["../proxy/src"],
+    }
   },
   "include": [
-    "./src/**/*",
+    "index.js",
+    "appmap.d.ts",
   ]
 }

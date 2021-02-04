@@ -18,11 +18,13 @@
     "husky": "^4.2.5",
     "jest": "^26.0.1",
     "jest-cli": "^26.6.3",
+    "jsonfile": "^6.1.0",
     "lerna": "^3.22.1",
     "prettier": "^2.0.5",
     "ts-jest": "^26.1.0",
     "tsdx": "^0.13.2",
     "tslib": "^2.0.0",
+    "typedoc": "beta",
     "typescript": "3.9.5",
     "yargs": "^16.1.1"
   },

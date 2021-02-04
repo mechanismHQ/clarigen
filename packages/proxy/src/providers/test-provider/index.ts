@@ -1,4 +1,4 @@
-import { Client, Provider, NativeClarityBinProvider } from '@blockstack/clarity';
+import { Client, NativeClarityBinProvider } from '@blockstack/clarity';
 import { getTempFilePath } from '@blockstack/clarity/lib/utils/fsUtil';
 import { getDefaultBinaryFilePath } from '@blockstack/clarity-native-bin';
 import { ClarityValue, cvToString, parseToCV } from '@stacks/transactions';
@@ -18,10 +18,10 @@ interface CreateOptions {
 }
 
 export class TestProvider {
-  provider: Provider;
+  provider: NativeClarityBinProvider;
   client: Client;
 
-  constructor(provider: Provider, client: Client) {
+  constructor(provider: NativeClarityBinProvider, client: Client) {
     this.provider = provider;
     this.client = client;
   }
@@ -44,8 +44,6 @@ export class TestProvider {
     });
     const receipt = await this.client.submitQuery(query);
     const cv = receiptToCV(receipt, func);
-    console.log(cv);
-    // console.log(res);
     return cv;
   }
 

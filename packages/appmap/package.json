@@ -1,0 +1,11 @@
+{
+  "name": "appmap",
+  "version": "1.0.0",
+  "main": "index.js",
+  "author": "Hank Stoever",
+  "license": "MIT",
+  "types": "appmap.d.ts",
+  "devDependencies": {
+    "typedoc": "^0.19.2"
+  }
+}

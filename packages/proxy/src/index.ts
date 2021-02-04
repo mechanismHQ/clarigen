@@ -1,7 +1,7 @@
 import { ClarityAbi } from '@stacks/transactions';
 import type { TestProvider } from './providers/test-provider';
 
-const toCamelCase = (input: string | number | symbol) => {
+export const toCamelCase = (input: string | number | symbol) => {
   const inputStr = typeof input === 'string' ? input : String(input);
   const [first, ...parts] = inputStr.split('-');
   let result = first;
