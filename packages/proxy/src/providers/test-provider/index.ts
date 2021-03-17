@@ -1,10 +1,17 @@
 import { Client, NativeClarityBinProvider } from '@blockstack/clarity';
 import { getTempFilePath } from '@blockstack/clarity/lib/utils/fsUtil';
 import { getDefaultBinaryFilePath } from '@blockstack/clarity-native-bin';
-import { ClarityValue, cvToString, parseToCV, responseOkCV } from '@stacks/transactions';
+import {
+  ClarityValue,
+  cvToString,
+  deserializeCV,
+  parseToCV,
+  responseErrorCV,
+  responseOkCV,
+} from '@stacks/transactions';
 import { ClarityAbiFunction } from '@stacks/transactions/dist/transactions/src/contract-abi';
-import { Submitter, Transaction } from '../../transaction';
-import { receiptToCV } from './utils';
+import { Submitter, Transaction, TransactionResult } from '../../transaction';
+import { executeJson, receiptToCV } from './utils';
 
 interface Allocation {
   principal: string;
@@ -49,21 +56,32 @@ export class TestProvider {
 
   callPublic(func: ClarityAbiFunction, args: any[]): Transaction<ClarityValue, ClarityValue> {
     const argsFormatted = this.formatArguments(func, args);
-    const tx = this.client.createTransaction({
-      method: { name: func.name, args: argsFormatted },
-    });
     const submit: Submitter<ClarityValue, ClarityValue> = async options => {
       if (!options?.sender) {
         throw new Error('Passing `sender` is required.');
       }
-      await tx.sign(options.sender);
-      const receipt = await this.client.submitTransaction(tx);
-      const getResult = () => {
-        const cv = receiptToCV(receipt, func);
-        return Promise.resolve({
-          value: cv,
-          response: responseOkCV(cv),
-        });
+      const receipt = await executeJson({
+        provider: this.provider,
+        contractAddress: this.client.name,
+        senderAddress: options.sender,
+        functionName: func.name,
+        args: argsFormatted,
+      });
+      const getResult = (): Promise<TransactionResult<ClarityValue, ClarityValue>> => {
+        const resultCV = deserializeCV(Buffer.from(receipt.result_raw, 'hex'));
+        if (receipt.success) {
+          return Promise.resolve({
+            isOk: true,
+            response: responseOkCV(resultCV),
+            value: resultCV,
+          });
+        } else {
+          return Promise.resolve({
+            isOk: false,
+            response: responseErrorCV(resultCV),
+            value: resultCV,
+          });
+        }
       };
       return {
         getResult,

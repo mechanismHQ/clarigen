@@ -1,4 +1,4 @@
-import { Receipt } from '@blockstack/clarity';
+import { NativeClarityBinProvider, Receipt } from '@blockstack/clarity';
 import {
   ClarityAbiFunction,
   ClarityAbiType,
@@ -64,4 +64,46 @@ const resultToCV = (result: string, type: ClarityAbiType) => {
   }
   // TODO: all values should be handled
   return trueCV();
+};
+
+interface ExecuteOk {
+  success: true;
+  events: any[];
+  result_raw: string;
+}
+
+interface ExecuteErr {
+  success: false;
+  result_raw: string;
+  events: null;
+}
+
+type ExecuteResult = ExecuteOk | ExecuteErr;
+
+export const executeJson = async ({
+  contractAddress,
+  senderAddress,
+  functionName,
+  provider,
+  args = [],
+}: {
+  contractAddress: string;
+  senderAddress: string;
+  provider: NativeClarityBinProvider;
+  functionName: string;
+  args?: string[];
+}) => {
+  const result = await provider.runCommand([
+    'execute_json',
+    provider.dbFilePath,
+    contractAddress,
+    functionName,
+    senderAddress,
+    ...args,
+  ]);
+  if (result.exitCode !== 0 || result.stderr) {
+    throw new Error(`Execution error: ${result.stderr}`);
+  }
+  const response: ExecuteResult = JSON.parse(result.stdout);
+  return response;
 };

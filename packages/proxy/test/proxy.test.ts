@@ -23,6 +23,8 @@ test('can call public function', async () => {
   const receipt = await tx.submit({ sender: 'ST1ESYCGJB5Z5NBHS39XPC70PGC14WAQK5XXNQYDW' });
   const result = await receipt.getResult();
   console.log(result);
+  if (!result.isOk) throw 'Expected ok';
+  expect(result.value.data).toEqual('hello, world');
 });
 
 // test('can call read only function', async () => {

@@ -1,10 +1,28 @@
 import { ClarityValue, ResponseErrorCV, ResponseOkCV } from '@stacks/transactions';
 // import { ClarityTypes } from './clarity-types';
 
-export interface TransactionResult<Ok extends ClarityValue, Err extends ClarityValue> {
+export interface TransactionResultOld<Ok extends ClarityValue, Err extends ClarityValue> {
   value: ClarityValue;
   response: Response<Ok, Err>;
+  isOk: boolean;
 }
+
+export interface TransactionResultOk<Ok extends ClarityValue> {
+  value: Ok;
+  response: ResponseOk<Ok>;
+  isOk: true;
+  // TODO: add events
+}
+
+export interface TransactionResultErr<Err extends ClarityValue> {
+  value: Err;
+  response: ResponseErr<Err>;
+  isOk: false;
+}
+
+export type TransactionResult<Ok extends ClarityValue, Err extends ClarityValue> =
+  | TransactionResultOk<Ok>
+  | TransactionResultErr<Err>;
 
 export interface TransactionReceipt<Ok extends ClarityValue, Err extends ClarityValue> {
   getResult: () => Promise<TransactionResult<Ok, Err>>;
