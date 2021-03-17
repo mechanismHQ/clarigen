@@ -71,10 +71,11 @@ export const makeTypes = (abi: ClarityAbi, contractName: string) => {
     typings += `\n  ${functionLine}`;
   });
   typings += '\n}';
-  const fileContents = `
-import { ClarityTypes, Transaction } from '@clarion/proxy';
 
-export ${typings};
-  `;
-  console.log(fileContents);
+  const fileContents = `import { ClarityTypes, Transaction } from '@clarion/proxy';
+
+export ${typings}
+`;
+  // console.log(fileContents);
+  return fileContents;
 };

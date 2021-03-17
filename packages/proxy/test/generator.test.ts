@@ -1,10 +1,6 @@
 import { isClarityAbiResponse, isClarityAbiStringAscii } from '@stacks/transactions';
 import { generateIndexFile, generateInterface, generateInterfaceFile } from '@clarion/proxy';
-import { readFile as readFileFn } from 'fs';
-import { promisify } from 'util';
-import { resolve } from 'path';
-
-const readFile = promisify(readFileFn);
+import { readFile } from './test-utils';
 
 test('can generate an interface', async () => {
   const abi = await generateInterface({
@@ -23,8 +19,7 @@ test('can generate an interface', async () => {
 });
 
 test('can generate interface file', async () => {
-  const abiPath = resolve(__dirname, './mocks/abi.txt');
-  const expectedFile = await readFile(abiPath, { encoding: 'utf-8' });
+  const expectedFile = await readFile('./mocks/abi.txt');
   const fileContents = await generateInterfaceFile({
     contractFile: 'test/contracts/simple/simple.clar',
   });
@@ -32,8 +27,7 @@ test('can generate interface file', async () => {
 });
 
 test('can generate index file', async () => {
-  const indexPath = resolve(__dirname, './contracts/simple/index.ts');
-  const expectedFile = await readFile(indexPath, { encoding: 'utf-8' });
+  const expectedFile = await readFile('./contracts/simple/index.ts');
   const indexFile = generateIndexFile({ contractFile: 'test/contracts/simple/simple.clar' });
   expect(indexFile).toEqual(expectedFile);
 });

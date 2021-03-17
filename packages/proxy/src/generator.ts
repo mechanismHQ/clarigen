@@ -52,7 +52,7 @@ export const generateIndexFile = ({ contractFile }: { contractFile: string }) =>
   const varName = toCamelCase(contractName);
 
   const fileContents = `import { proxy, TestProvider } from '@clarion/proxy';
-import { ${contractTitle}Contract } from './interface';
+import type { ${contractTitle}Contract } from './types';
 import { ${contractTitle}Interface } from './abi';
 
 export const ${varName}Contract = (provider: TestProvider) => {
