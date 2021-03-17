@@ -1,4 +1,3 @@
-// import { ContractInterface } from '../../src';
 import { ClarityAbi } from '@stacks/transactions';
 export const appmap: ClarityAbi = {
   functions: [

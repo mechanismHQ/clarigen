@@ -15,32 +15,32 @@ import { toCamelCase } from './index';
 export const cvFromType = (val: ClarityAbiType) => {
   if (isClarityAbiPrimitive(val)) {
     if (val === 'uint128') {
-      return 'UIntCV';
+      return 'ClarityTypes.UIntCV';
     } else if (val === 'int128') {
-      return 'IntCV';
+      return 'ClarityTypes.IntCV';
     } else if (val === 'bool') {
-      return 'BooleanCV';
+      return 'ClarityTypes.BooleanCV';
     } else if (val === 'principal') {
-      return 'PrincipalCV';
+      return 'ClarityTypes.PrincipalCV';
     } else if (val === 'none') {
-      return 'NoneCV';
+      return 'ClarityTypes.NoneCV';
     } else {
       throw new Error(`Unexpected Clarity ABI type primitive: ${JSON.stringify(val)}`);
     }
   } else if (isClarityAbiBuffer(val)) {
-    return 'BufferCV';
+    return 'ClarityTypes.BufferCV';
   } else if (isClarityAbiResponse(val)) {
-    return 'ResponseCV';
+    return 'ClarityTypes.ResponseCV';
   } else if (isClarityAbiOptional(val)) {
-    return 'OptionalCV';
+    return 'ClarityTypes.OptionalCV';
   } else if (isClarityAbiTuple(val)) {
-    return 'TupleCV';
+    return 'ClarityTypes.TupleCV';
   } else if (isClarityAbiList(val)) {
-    return 'ListCV';
+    return 'ClarityTypes.ListCV';
   } else if (isClarityAbiStringAscii(val)) {
-    return 'StringAsciiCV';
+    return 'ClarityTypes.StringAsciiCV';
   } else if (isClarityAbiStringUtf8(val)) {
-    return 'StringUtf8CV';
+    return 'ClarityTypes.StringUtf8CV';
   } else {
     throw new Error(`Unexpected Clarity ABI type: ${JSON.stringify(val)}`);
   }
@@ -57,7 +57,13 @@ export const makeTypes = (abi: ClarityAbi, contractName: string) => {
     });
     functionLine += `(${args.join(', ')}) => `;
     if (func.access === 'public') {
-      functionLine += 'Transaction;';
+      const { type } = func.outputs;
+      if (!isClarityAbiResponse(type))
+        throw new Error('Expected response type for public function');
+      functionLine += 'Transaction';
+      const ok = cvFromType(type.response.ok);
+      const err = cvFromType(type.response.error);
+      functionLine += `<${ok}, ${err}>;`;
     } else {
       const type = cvFromType(func.outputs.type);
       functionLine += `Promise<${type}>;`;
@@ -65,5 +71,10 @@ export const makeTypes = (abi: ClarityAbi, contractName: string) => {
     typings += `\n  ${functionLine}`;
   });
   typings += '\n}';
-  console.log(typings);
+  const fileContents = `
+import { ClarityTypes, Transaction } from '@clarion/proxy';
+
+export ${typings};
+  `;
+  console.log(fileContents);
 };

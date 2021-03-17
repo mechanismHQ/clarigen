@@ -43,7 +43,7 @@ export const generateInterfaceFile = async ({ contractFile }: { contractFile: st
   const fileContents = `
 import { ClarityAbi } from '@stacks/transactions';
 
-export const ${variableName}: ClarityAbi = ${abiString};
+export const ${variableName}Interface: ClarityAbi = ${abiString};
   `;
 
   return fileContents;

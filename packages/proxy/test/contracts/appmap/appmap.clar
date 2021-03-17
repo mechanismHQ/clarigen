@@ -19,7 +19,7 @@
   (begin
     (if (is-storage-allowed storage-model)
       (begin
-        (map-insert app-map ((index (var-get app-counter))) ((owner owner) (app-contract-id app-contract-id) (storage-model storage-model) (status 0)))
+        ;; (map-insert app-map ((index (var-get app-counter))) ((owner owner) (app-contract-id app-contract-id) (storage-model storage-model) (status 0)))
         (var-set app-counter (+ (var-get app-counter) 1))
         (print (var-get app-counter))
         (ok (var-get app-counter))

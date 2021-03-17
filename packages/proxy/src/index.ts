@@ -2,6 +2,9 @@ import { ClarityAbi } from '@stacks/transactions';
 import type { TestProvider } from './providers/test-provider';
 export * from './generator';
 export type { ClarityTypes } from './clarity-types.d';
+export * from './declaration';
+export * from './transaction';
+export { TestProvider } from './providers/test-provider/index';
 
 export const toCamelCase = (input: string | number | symbol) => {
   const inputStr = typeof input === 'string' ? input : String(input);
