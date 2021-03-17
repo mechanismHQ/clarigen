@@ -12,6 +12,9 @@ const config = {
       tsconfig: 'test/tsconfig.json',
     },
   },
+  moduleNameMapper: {
+    '^@clarion/proxy$': '<rootDir>/src',
+  },
 };
 
 module.exports = config;

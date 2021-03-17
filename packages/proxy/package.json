@@ -24,8 +24,8 @@
   "module": "dist/clarion-proxy.esm.js",
   "devDependencies": {},
   "dependencies": {
-    "@blockstack/clarity": "^0.3.0",
-    "@blockstack/clarity-native-bin": "^0.3.0",
+    "@blockstack/clarity": "^0.3.8",
+    "@blockstack/clarity-native-bin": "^0.3.8",
     "@blockstack/stacks-blockchain-api-types": "^0.34.2",
     "@stacks/blockchain-api-client": "^0.34.2",
     "@stacks/transactions": "^1.0.0-beta.17"
