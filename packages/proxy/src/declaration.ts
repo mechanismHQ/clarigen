@@ -47,8 +47,8 @@ export const cvFromType = (val: ClarityAbiType) => {
 };
 
 export const makeTypes = (abi: ClarityAbi, contractName: string) => {
-  const name = toCamelCase(contractName);
-  let typings = `interface ${name[0].toUpperCase()}${name.slice(1)}Contract {`;
+  const name = toCamelCase(contractName, true);
+  let typings = `interface ${name}Contract {`;
   abi.functions.forEach(func => {
     if (func.access === 'private') return;
     let functionLine = `${toCamelCase(func.name)}: `;

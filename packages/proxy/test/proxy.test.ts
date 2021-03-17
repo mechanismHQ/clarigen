@@ -5,7 +5,7 @@
 import { TestProvider } from '../src/providers/test-provider';
 // import { principalToString } from '../src/providers/test-provider/utils';
 // import { ClarityType, PrincipalCV } from '@stacks/transactions';
-import { proxy as simpleProxy } from './contracts/simple';
+import { simpleContract as simpleProxy } from './contracts/simple';
 
 const getContract = async () => {
   const provider = await TestProvider.create({

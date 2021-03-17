@@ -35,16 +35,31 @@ export const generateInterface = async ({
 export const generateInterfaceFile = async ({ contractFile }: { contractFile: string }) => {
   const abi = await generateInterface({ contractFile });
   const contractName = getContractNameFromPath(contractFile);
-  const contractCamel = toCamelCase(contractName);
-  const variableName = contractCamel[0].toUpperCase() + contractCamel.slice(1);
+  const variableName = toCamelCase(contractName, true);
   const abiString = JSON.stringify(abi, null, 2);
-  // console.log(abiString);
 
-  const fileContents = `
-import { ClarityAbi } from '@stacks/transactions';
+  const fileContents = `import { ClarityAbi } from '@stacks/transactions';
 
 export const ${variableName}Interface: ClarityAbi = ${abiString};
-  `;
+`;
+
+  return fileContents;
+};
+
+export const generateIndexFile = ({ contractFile }: { contractFile: string }) => {
+  const contractName = getContractNameFromPath(contractFile);
+  const contractTitle = toCamelCase(contractName, true);
+  const varName = toCamelCase(contractName);
+
+  const fileContents = `import { proxy, TestProvider } from '@clarion/proxy';
+import { ${contractTitle}Contract } from './interface';
+import { ${contractTitle}Interface } from './abi';
+
+export const ${varName}Contract = (provider: TestProvider) => {
+  const contract = proxy<${contractTitle}Contract>(${contractTitle}Interface, provider);
+  return contract;
+};
+`;
 
   return fileContents;
 };
