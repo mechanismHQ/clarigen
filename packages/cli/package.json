@@ -1,0 +1,59 @@
+{
+  "name": "@clarion/cli",
+  "description": "A CLI for generating a Typescript interface for a Clarity contract.",
+  "author": "Hank Stoever",
+  "version": "1.0.8",
+  "license": "MIT",
+  "main": "dist/index.js",
+  "files": [
+    "dist",
+    "src",
+    "/oclif.manifest.json"
+  ],
+  "engines": {
+    "node": ">=10"
+  },
+  "scripts": {
+    "start": "ts-node-script src/start.ts",
+    "compile": "ncc build src/index.ts --no-source-map-register -e @oclif/command -e @oclif/errors",
+    "build-single-file": "yarn compile && oclif-dev readme",
+    "build": "rm -rf dist && tsc -b && oclif-dev readme && oclif-dev manifest",
+    "test": "tsdx test",
+    "lint": "tsdx lint",
+    "size": "size-limit",
+    "analyze": "size-limit --why",
+    "docs": "oclif-dev readme",
+    "version": "yarn build",
+    "typecheck": "tsc --noEmit",
+    "postpack": "rm -f oclif.manifest.json",
+    "prepack": "yarn build"
+  },
+  "bin": {
+    "clarion": "./bin/run"
+  },
+  "peerDependencies": {},
+  "oclif": {
+    "commands": "./dist/commands",
+    "bin": "clarion"
+  },
+  "prettier": {
+    "printWidth": 80,
+    "semi": true,
+    "singleQuote": true,
+    "trailingComma": "es5"
+  },
+  "devDependencies": {
+    "@oclif/config": "^1.17.0",
+    "@oclif/dev-cli": "^1.26.0",
+    "@oclif/errors": "^1.3.4",
+    "@vercel/ncc": "0.27.0",
+    "oclif": "^1.16.1",
+    "ts-node": "^9.1.1"
+  },
+  "dependencies": {
+    "@oclif/command": "^1.8.0"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

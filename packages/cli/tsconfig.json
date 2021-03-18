@@ -1,0 +1,20 @@
+{
+  "extends": "../../tsconfig.json",
+  "ts-node": {
+    "compilerOptions": {
+      "module": "CommonJS"
+    }
+  },
+  "compilerOptions": {
+    "module": "esnext",
+    "lib": ["dom", "esnext"],
+    "outDir": "./dist",
+    "rootDir": "./src",
+    "resolveJsonModule": true,
+    "baseUrl": ".",
+    "paths": {
+      "@clarion/proxy": ["src/index"]
+    }
+  },
+  "include": ["./src/**/*"]
+}

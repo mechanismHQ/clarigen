@@ -19,9 +19,9 @@
     "prepublishOnly": "tsdx build"
   },
   "prettier": "@blockstack/prettier-config",
-  "name": "clarion-proxy",
+  "name": "@clarion/proxy",
   "author": "Hank Stoever",
-  "module": "dist/clarion-proxy.esm.js",
+  "module": "dist/proxy.esm.js",
   "devDependencies": {},
   "dependencies": {
     "@blockstack/clarity": "^0.3.8",
