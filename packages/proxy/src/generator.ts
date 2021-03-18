@@ -5,22 +5,33 @@ import { ClarityAbi } from '@stacks/transactions';
 import { basename, extname } from 'path';
 import { toCamelCase } from './utils';
 
+export const createProvider = async () => {
+  const binFile = getDefaultBinaryFilePath();
+  const dbFileName = getTempFilePath();
+  const provider = await NativeClarityBinProvider.create([], dbFileName, binFile);
+  return provider;
+};
+
 export const getContractNameFromPath = (path: string) => {
   return basename(path, extname(path));
 };
 
 export const generateInterface = async ({
+  provider: _provider,
   contractFile,
+  contractAddress = 'S1G2081040G2081040G2081040G208105NK8PE5',
 }: {
   contractFile: string;
+  provider?: NativeClarityBinProvider;
+  contractAddress?: string;
 }): Promise<ClarityAbi> => {
   const binFile = getDefaultBinaryFilePath();
   const dbFileName = getTempFilePath();
-  const provider = await NativeClarityBinProvider.create([], dbFileName, binFile);
+  const provider = _provider || (await NativeClarityBinProvider.create([], dbFileName, binFile));
   const contractName = getContractNameFromPath(contractFile);
   const receipt = await provider.runCommand([
     'launch',
-    `S1G2081040G2081040G2081040G208105NK8PE5.${contractName}`,
+    `${contractAddress}.${contractName}`,
     contractFile,
     provider.dbFilePath,
     '--output_analysis',

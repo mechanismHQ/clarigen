@@ -12,7 +12,7 @@ const config = {
       tsconfig: 'tsconfig.json',
     },
   },
-  modulePathIgnorePatterns: ['tmp'],
+  modulePathIgnorePatterns: ['tmp', 'test/sample-project/clarion'],
 };
 
 module.exports = config;
