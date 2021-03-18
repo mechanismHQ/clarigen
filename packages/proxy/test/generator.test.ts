@@ -20,8 +20,13 @@ test('can generate an interface', async () => {
 
 test('can generate interface file', async () => {
   const expectedFile = await readFile('./mocks/abi.txt');
-  const fileContents = await generateInterfaceFile({
-    contractFile: 'test/contracts/simple/simple.clar',
+  const contractFile = 'test/contracts/simple/simple.clar';
+  const abi = await generateInterface({
+    contractFile,
+  });
+  const fileContents = generateInterfaceFile({
+    contractFile,
+    abi,
   });
   expect(fileContents).toEqual(expectedFile);
 });

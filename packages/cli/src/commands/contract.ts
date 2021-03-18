@@ -1,74 +1,55 @@
 import { Command, flags } from '@oclif/command';
+import { resolve } from 'path';
+import {
+  generateIndexFile,
+  generateInterface,
+  generateInterfaceFile,
+  makeTypes,
+  getContractNameFromPath,
+} from '@clarion/proxy';
+import { mkdir, writeFile } from 'fs/promises';
 
 export class Contract extends Command {
   static description = `Info
   `;
-  // allow infinite arguments
-  static strict = false;
+  static strict = true;
 
   static flags = {
     help: flags.help({ char: 'h' }),
+    output: flags.string({
+      char: 'o',
+      description: 'Output destination folder',
+      default: 'clarion',
+    }),
   };
-  //     privateKey: flags.string({
-  //       char: 'k',
-  //       description: 'Your private key',
-  //       required: true,
-  //     }),
-  //     broadcast: flags.boolean({
-  //       char: 'b',
-  //       default: false,
-  //       description:
-  //         'Whether to broadcast this transaction. Omitting this flag will not broadcast the transaction.',
-  //     }),
-  //     network: flags.string({
-  //       char: 'n',
-  //       description: 'Which network to broadcast this to',
-  //       options: ['mocknet', 'testnet', 'mainnet'],
-  //       default: 'testnet',
-  //     }),
-  //     nodeUrl: flags.string({
-  //       required: false,
-  //       char: 'u',
-  //       description:
-  //         'A default node URL will be used based on the `network` option. Use this flag to manually override.',
-  //     }),
-  //     quiet: flags.boolean({
-  //       char: 'q',
-  //       default: false,
-  //       description: `
-  // Reduce logging from this command. If this flag is passed with the broadcast (-b) flag,
-  // only the transaction ID will be logged. If the quiet flagged is passed without broadcast,
-  // only the raw transaction hex will be logged.
-  // `,
-  //     }),
-  //     contractAddress: flags.string({
-  //       char: 'c',
-  //       description:
-  //         'Manually specify the contract address for send-many. If omitted, default contracts will be used.',
-  //     }),
-  //     nonce: flags.integer({
-  //       description: 'Optionally specify a nonce for this transaction',
-  //     }),
-  //   };
 
   static args = [
     {
-      name: 'recipients',
-      description: `
-A set of recipients in the format of "address,amount_ustx"
-Example: STADMRP577SC3MCNP7T3PRSTZBJ75FJ59JGABZTW,100 ST2WPFYAW85A0YK9ACJR8JGWPM19VWYF90J8P5ZTH,50
-      `,
+      name: 'contract',
+      description: 'The file path for your contract',
     },
   ];
 
   async run() {
     const { argv, flags } = this.parse(Contract);
 
-    // this.log(argv.map);
-    // this.log(flags);
-    console.log('argv', argv);
-    console.log('flags', flags);
+    const [contractArg] = argv;
 
-    await Promise.resolve();
+    const contractFile = resolve(process.cwd(), contractArg);
+
+    const contractName = getContractNameFromPath(contractFile);
+
+    const abi = await generateInterface({ contractFile });
+    const typesFile = makeTypes(abi, contractName);
+    const indexFile = generateIndexFile({ contractFile });
+    const abiFile = generateInterfaceFile({ contractFile, abi });
+
+    const outputPath =
+      flags.output || resolve(process.cwd(), `tmp/${contractName}`);
+    await mkdir(outputPath, { recursive: true });
+
+    await writeFile(resolve(outputPath, 'abi.ts'), abiFile);
+    await writeFile(resolve(outputPath, 'index.ts'), indexFile);
+    await writeFile(resolve(outputPath, 'types.ts'), typesFile);
   }
 }

@@ -1,21 +1,11 @@
 import { ClarityAbi } from '@stacks/transactions';
 import type { TestProvider } from './providers/test-provider';
+import { toCamelCase } from './utils';
 export * from './generator';
-export type { ClarityTypes } from './clarity-types.d';
+export type { ClarityTypes } from './clarity-types';
 export * from './declaration';
 export * from './transaction';
 export { TestProvider } from './providers/test-provider/index';
-
-export const toCamelCase = (input: string | number | symbol, titleCase?: boolean) => {
-  const inputStr = typeof input === 'string' ? input : String(input);
-  const [first, ...parts] = inputStr.split('-');
-  let result = titleCase ? `${first[0].toUpperCase()}${first.slice(1)}` : first;
-  parts.forEach(part => {
-    const capitalized = part[0].toUpperCase() + part.slice(1);
-    result += capitalized;
-  });
-  return result;
-};
 
 const makeHandler = (provider: TestProvider) => {
   const handler: ProxyHandler<ClarityAbi> = {

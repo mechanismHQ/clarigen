@@ -16,3 +16,4 @@ lib/
 coverage/
 tsconfig.tsbuildinfo
 docs
+tmp/

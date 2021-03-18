@@ -3,10 +3,39 @@
 # Usage
 
 <!-- usage -->
-
+```sh-session
+$ npm install -g @clarion/cli
+$ clarion COMMAND
+running command...
+$ clarion (-v|--version|version)
+@clarion/cli/1.0.8 darwin-arm64 node-v15.8.0
+$ clarion --help [COMMAND]
+USAGE
+  $ clarion COMMAND
+...
+```
 <!-- usagestop -->
 
 <!-- commands -->
+* [`clarion contract [CONTRACT]`](#clarion-contract-contract)
+
+## `clarion contract [CONTRACT]`
+
+Info
+
+```
+USAGE
+  $ clarion contract [CONTRACT]
+
+ARGUMENTS
+  CONTRACT  The file path for your contract
+
+OPTIONS
+  -h, --help           show CLI help
+  -o, --output=output  [default: clarion] Output destination folder
+
+DESCRIPTION
+```
 <!-- commandsstop -->
 
 ## Development

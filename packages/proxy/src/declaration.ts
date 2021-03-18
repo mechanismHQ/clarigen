@@ -10,7 +10,7 @@ import {
   isClarityAbiStringUtf8,
   isClarityAbiTuple,
 } from '@stacks/transactions';
-import { toCamelCase } from './index';
+import { toCamelCase } from './utils';
 
 export const cvFromType = (val: ClarityAbiType) => {
   if (isClarityAbiPrimitive(val)) {

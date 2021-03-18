@@ -3,9 +3,9 @@ import { getTempFilePath } from '@blockstack/clarity/lib/utils/fsUtil';
 import { getDefaultBinaryFilePath } from '@blockstack/clarity-native-bin';
 import { ClarityAbi } from '@stacks/transactions';
 import { basename, extname } from 'path';
-import { toCamelCase } from '@clarion/proxy';
+import { toCamelCase } from './utils';
 
-const getContractNameFromPath = (path: string) => {
+export const getContractNameFromPath = (path: string) => {
   return basename(path, extname(path));
 };
 
@@ -32,8 +32,13 @@ export const generateInterface = async ({
   return abi;
 };
 
-export const generateInterfaceFile = async ({ contractFile }: { contractFile: string }) => {
-  const abi = await generateInterface({ contractFile });
+export const generateInterfaceFile = ({
+  contractFile,
+  abi,
+}: {
+  contractFile: string;
+  abi: ClarityAbi;
+}) => {
   const contractName = getContractNameFromPath(contractFile);
   const variableName = toCamelCase(contractName, true);
   const abiString = JSON.stringify(abi, null, 2);

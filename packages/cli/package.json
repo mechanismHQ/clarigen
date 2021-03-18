@@ -17,16 +17,10 @@
     "start": "ts-node-script src/start.ts",
     "compile": "ncc build src/index.ts --no-source-map-register -e @oclif/command -e @oclif/errors",
     "build-single-file": "yarn compile && oclif-dev readme",
-    "build": "rm -rf dist && tsc -b && oclif-dev readme && oclif-dev manifest",
+    "build": "tsdx build && oclif-dev readme",
     "test": "tsdx test",
     "lint": "tsdx lint",
-    "size": "size-limit",
-    "analyze": "size-limit --why",
-    "docs": "oclif-dev readme",
-    "version": "yarn build",
-    "typecheck": "tsc --noEmit",
-    "postpack": "rm -f oclif.manifest.json",
-    "prepack": "yarn build"
+    "typecheck": "tsc --noEmit"
   },
   "bin": {
     "clarion": "./bin/run"
@@ -51,6 +45,7 @@
     "ts-node": "^9.1.1"
   },
   "dependencies": {
+    "@clarion/proxy": "0.1.0",
     "@oclif/command": "^1.8.0"
   },
   "publishConfig": {
