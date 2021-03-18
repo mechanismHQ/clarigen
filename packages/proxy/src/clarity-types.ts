@@ -1,5 +1,6 @@
 import type * as Clarity from '@stacks/transactions';
 
+// eslint-disable-next-line @typescript-eslint/no-namespace
 export namespace ClarityTypes {
   export type BooleanCV = Clarity.BooleanCV;
   export type TrueCV = Clarity.TrueCV;

@@ -16,7 +16,8 @@
     "build": "tsdx build",
     "test": "tsdx test",
     "lint": "tsdx lint",
-    "prepublishOnly": "tsdx build"
+    "prepublishOnly": "tsdx build",
+    "typecheck": "tsc --noEmit"
   },
   "prettier": "@blockstack/prettier-config",
   "name": "@clarion/proxy",
