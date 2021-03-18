@@ -2,8 +2,7 @@ import { Command, flags } from '@oclif/command';
 import { generateFilesForContract } from '../utils';
 
 export class Contract extends Command {
-  static description = `Info
-  `;
+  static description = `Generate files for a single contract`;
   static strict = true;
 
   static flags = {

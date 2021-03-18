@@ -26,5 +26,8 @@
   },
   "workspaces": [
     "packages/*"
-  ]
+  ],
+  "dependencies": {
+    "jsonfile": "^6.1.0"
+  }
 }

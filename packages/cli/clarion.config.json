@@ -1,0 +1,10 @@
+{
+  "contractsDir": "contracts",
+  "outputDir": "tmp/clarion",
+  "contracts": [
+    {
+      "file": "simple.clar",
+      "address": "ST50GEWRE7W5B02G3J3K19GNDDAPC3XPZPYQRQDW"
+    }
+  ]
+}

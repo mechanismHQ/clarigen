@@ -17,11 +17,26 @@ USAGE
 <!-- usagestop -->
 
 <!-- commands -->
+* [`clarion `](#clarion-)
 * [`clarion contract [CONTRACT]`](#clarion-contract-contract)
+* [`clarion generate`](#clarion-generate)
+
+## `clarion `
+
+Generate project files
+
+```
+USAGE
+  $ clarion
+
+OPTIONS
+  -h, --help   show CLI help
+  -w, --watch  Watch for changes to your contracts
+```
 
 ## `clarion contract [CONTRACT]`
 
-Info
+Generate files for a single contract
 
 ```
 USAGE
@@ -33,8 +48,19 @@ ARGUMENTS
 OPTIONS
   -h, --help           show CLI help
   -o, --output=output  [default: clarion] Output destination folder
+```
 
-DESCRIPTION
+## `clarion generate`
+
+Generate project files
+
+```
+USAGE
+  $ clarion generate
+
+OPTIONS
+  -h, --help   show CLI help
+  -w, --watch  Watch for changes to your contracts
 ```
 <!-- commandsstop -->
 
