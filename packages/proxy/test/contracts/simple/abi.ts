@@ -1,27 +1,35 @@
 import { ClarityAbi } from '@stacks/transactions';
 
 export const SimpleInterface: ClarityAbi = {
-  functions: [
+  "functions": [
     {
-      name: 'get-name',
-      access: 'public',
-      args: [],
-      outputs: {
-        type: {
-          response: {
-            ok: {
-              'string-ascii': {
-                length: 12,
-              },
+      "name": "get-name",
+      "access": "public",
+      "args": [],
+      "outputs": {
+        "type": {
+          "response": {
+            "ok": {
+              "string-ascii": {
+                "length": 12
+              }
             },
-            error: 'none',
-          },
-        },
-      },
+            "error": "none"
+          }
+        }
+      }
     },
+    {
+      "name": "get-number",
+      "access": "read_only",
+      "args": [],
+      "outputs": {
+        "type": "uint128"
+      }
+    }
   ],
-  variables: [],
-  maps: [],
-  fungible_tokens: [],
-  non_fungible_tokens: [],
+  "variables": [],
+  "maps": [],
+  "fungible_tokens": [],
+  "non_fungible_tokens": []
 };

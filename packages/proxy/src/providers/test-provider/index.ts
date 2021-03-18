@@ -11,7 +11,7 @@ import {
 } from '@stacks/transactions';
 import { ClarityAbiFunction } from '@stacks/transactions/dist/transactions/src/contract-abi';
 import { Submitter, Transaction, TransactionResult } from '../../transaction';
-import { executeJson, receiptToCV } from './utils';
+import { evalJson, executeJson } from './utils';
 
 interface Allocation {
   principal: string;
@@ -45,13 +45,14 @@ export class TestProvider {
 
   async callReadOnly(func: ClarityAbiFunction, args: any[]): Promise<ClarityValue> {
     const argsFormatted = this.formatArguments(func, args);
-    const query = this.client.createQuery({
-      atChaintip: true,
-      method: { name: func.name, args: argsFormatted },
+    const result = await evalJson({
+      contractAddress: this.client.name,
+      functionName: func.name,
+      args: argsFormatted,
+      provider: this.provider,
     });
-    const receipt = await this.client.submitQuery(query);
-    const cv = receiptToCV(receipt, func);
-    return cv;
+    const resultCV = deserializeCV(Buffer.from(result.result_raw, 'hex'));
+    return resultCV;
   }
 
   callPublic(func: ClarityAbiFunction, args: any[]): Transaction<ClarityValue, ClarityValue> {

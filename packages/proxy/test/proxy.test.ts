@@ -22,22 +22,12 @@ test('can call public function', async () => {
   const tx = contract.getName();
   const receipt = await tx.submit({ sender: 'ST1ESYCGJB5Z5NBHS39XPC70PGC14WAQK5XXNQYDW' });
   const result = await receipt.getResult();
-  console.log(result);
   if (!result.isOk) throw 'Expected ok';
   expect(result.value.data).toEqual('hello, world');
 });
 
-// test('can call read only function', async () => {
-//   const contract = await getContract();
-//   const principal: PrincipalCV = await contract.getAdministrator();
-//   const address = principalToString(principal);
-//   expect(address).toEqual('ST1ESYCGJB5Z5NBHS39XPC70PGC14WAQK5XXNQYDW');
-// });
-
-// test('can call public function', async () => {
-//   const contract = await getContract();
-//   const changeTx = contract.transferAdministrator('S1G2081040G2081040G2081040G208105NK8PE5');
-//   const receipt = await changeTx.submit({ sender: 'ST1ESYCGJB5Z5NBHS39XPC70PGC14WAQK5XXNQYDW' });
-//   const didTransfer = (await receipt.getResult()).value;
-//   expect(didTransfer.type).toEqual(ClarityType.BoolTrue);
-// });
+test('can call a read-only function', async () => {
+  const contract = await getContract();
+  const num = await contract.getNumber();
+  expect(num.value.toNumber()).toEqual(1);
+});

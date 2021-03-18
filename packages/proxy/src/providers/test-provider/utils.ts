@@ -1,70 +1,4 @@
-import { NativeClarityBinProvider, Receipt } from '@blockstack/clarity';
-import {
-  ClarityAbiFunction,
-  ClarityAbiType,
-} from '@stacks/transactions/dist/transactions/src/contract-abi';
-// import { principalCV } from '@stacks/transactions/dist/transactions/src/clarity/types/principalCV.js';
-import {
-  ClarityValue,
-  addressToString,
-  ClarityType,
-  PrincipalCV,
-  trueCV,
-  contractPrincipalCV,
-  standardPrincipalCV,
-  falseCV,
-} from '@stacks/transactions';
-// export { principalToString } from '@stacks/transactions/dist/transactions/src/clarity/types/principalCV';
-
-// export const principalToString = _principalToString;
-export function principalToString(principal: PrincipalCV): string {
-  if (principal.type === ClarityType.PrincipalStandard) {
-    return addressToString(principal.address);
-  } else if (principal.type === ClarityType.PrincipalContract) {
-    const address = addressToString(principal.address);
-    return `${address}.${principal.contractName.content}`;
-  } else {
-    throw new Error(`Unexpected principal data: ${JSON.stringify(principal)}`);
-  }
-}
-
-function principalCV(principal: string): PrincipalCV {
-  if (principal.includes('.')) {
-    const [address, contractName] = principal.split('.');
-    return contractPrincipalCV(address, contractName);
-  } else {
-    return standardPrincipalCV(principal);
-  }
-}
-
-export const receiptToCV = (receipt: Receipt, func: ClarityAbiFunction): ClarityValue => {
-  const { outputs } = func;
-  let { result } = receipt;
-  if (!result) {
-    // TODO: error result
-    return trueCV();
-  }
-  if (func.access === 'public') {
-    result = result.split('\n')[0].slice('Transaction executed and committed. Returned: '.length);
-  }
-  if (typeof outputs.type === 'object') {
-    if ('response' in outputs.type) {
-      return resultToCV(result, outputs.type.response.ok);
-    }
-  }
-  return resultToCV(result, outputs.type);
-};
-
-const resultToCV = (result: string, type: ClarityAbiType) => {
-  if (type === 'principal') {
-    return principalCV(result);
-  }
-  if (type === 'bool') {
-    return result === 'true' ? trueCV() : falseCV();
-  }
-  // TODO: all values should be handled
-  return trueCV();
-};
+import { NativeClarityBinProvider } from '@blockstack/clarity';
 
 interface ExecuteOk {
   success: true;
@@ -105,5 +39,42 @@ export const executeJson = async ({
     throw new Error(`Execution error: ${result.stderr}`);
   }
   const response: ExecuteResult = JSON.parse(result.stdout);
+  return response;
+};
+
+interface EvalOk {
+  success: true;
+  result_raw: string;
+}
+
+interface EvalErr {
+  success: false;
+  error: string;
+}
+
+type EvalResult = EvalOk | EvalErr;
+
+export const evalJson = async ({
+  contractAddress,
+  functionName,
+  provider,
+  args = [],
+}: {
+  contractAddress: string;
+  functionName: string;
+  provider: NativeClarityBinProvider;
+  args?: string[];
+}) => {
+  const evalCode = `(${functionName} ${args.join(' ')})`;
+  const receipt = await provider.runCommand(
+    ['eval_at_chaintip_json', contractAddress, provider.dbFilePath],
+    {
+      stdin: evalCode,
+    }
+  );
+  const response: EvalResult = JSON.parse(receipt.stdout);
+  if (!response.success) {
+    throw new Error(response.error);
+  }
   return response;
 };
