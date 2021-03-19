@@ -1,5 +1,6 @@
-import { ClarityAbi } from '@stacks/transactions';
+import { ClarityAbi } from '@clarion/proxy';
 
+// prettier-ignore
 export const TestProjectInterface: ClarityAbi = {
   "functions": [
     {

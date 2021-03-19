@@ -1,9 +1,10 @@
 import { NativeClarityBinProvider } from '@blockstack/clarity';
 import { getTempFilePath } from '@blockstack/clarity/lib/utils/fsUtil';
 import { getDefaultBinaryFilePath } from '@blockstack/clarity-native-bin';
-import { ClarityAbi } from '@stacks/transactions';
+import { ClarityAbi } from './clarity-types';
 import { basename, extname } from 'path';
 import { toCamelCase } from './utils';
+import { makeTypes } from './declaration';
 
 export const createProvider = async () => {
   const binFile = getDefaultBinaryFilePath();
@@ -54,8 +55,9 @@ export const generateInterfaceFile = ({
   const variableName = toCamelCase(contractName, true);
   const abiString = JSON.stringify(abi, null, 2);
 
-  const fileContents = `import { ClarityAbi } from '@stacks/transactions';
+  const fileContents = `import { ClarityAbi } from '@clarion/proxy';
 
+// prettier-ignore
 export const ${variableName}Interface: ClarityAbi = ${abiString};
 `;
 
@@ -75,6 +77,19 @@ export const ${varName}Contract = (provider: TestProvider) => {
   const contract = proxy<${contractTitle}Contract>(${contractTitle}Interface, provider);
   return contract;
 };
+`;
+
+  return fileContents;
+};
+
+export const generateTypesFile = (abi: ClarityAbi, contractName: string) => {
+  const name = toCamelCase(contractName, true);
+  const typings = makeTypes(abi);
+  const fileContents = `import { ClarityTypes, Transaction } from '@clarion/proxy';
+
+export interface ${name}Contract {
+${typings}
+}
 `;
 
   return fileContents;

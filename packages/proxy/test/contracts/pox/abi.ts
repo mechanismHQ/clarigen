@@ -1,4 +1,4 @@
-import { ClarityAbi } from '@stacks/transactions';
+import { ClarityAbi } from '@clarion/proxy';
 
 export const pox: ClarityAbi = {
   functions: [
@@ -527,128 +527,128 @@ export const pox: ClarityAbi = {
     { name: 'pox-rejection-fraction', type: 'uint128', access: 'variable' },
     { name: 'pox-reward-cycle-length', type: 'uint128', access: 'variable' },
   ],
-  maps: [],
-  // maps: [
-  //   {
-  //     name: 'allowance-contract-callers',
-  //     key: {
-  //       tuple: [
-  //         { name: 'contract-caller', type: 'principal' },
-  //         { name: 'sender', type: 'principal' },
-  //       ],
-  //     },
-  //     value: { tuple: [{ name: 'until-burn-ht', type: { optional: 'uint128' } }] },
-  //   },
-  //   {
-  //     name: 'delegation-state',
-  //     key: { tuple: [{ name: 'stacker', type: 'principal' }] },
-  //     value: {
-  //       tuple: [
-  //         { name: 'amount-ustx', type: 'uint128' },
-  //         { name: 'delegated-to', type: 'principal' },
-  //         {
-  //           name: 'pox-addr',
-  //           type: {
-  //             optional: {
-  //               tuple: [
-  //                 { name: 'hashbytes', type: { buffer: { length: 20 } } },
-  //                 { name: 'version', type: { buffer: { length: 1 } } },
-  //               ],
-  //             },
-  //           },
-  //         },
-  //         { name: 'until-burn-ht', type: { optional: 'uint128' } },
-  //       ],
-  //     },
-  //   },
-  //   {
-  //     name: 'partial-stacked-by-cycle',
-  //     key: {
-  //       tuple: [
-  //         {
-  //           name: 'pox-addr',
-  //           type: {
-  //             tuple: [
-  //               { name: 'hashbytes', type: { buffer: { length: 20 } } },
-  //               { name: 'version', type: { buffer: { length: 1 } } },
-  //             ],
-  //           },
-  //         },
-  //         { name: 'reward-cycle', type: 'uint128' },
-  //         { name: 'sender', type: 'principal' },
-  //       ],
-  //     },
-  //     value: { tuple: [{ name: 'stacked-amount', type: 'uint128' }] },
-  //   },
-  //   {
-  //     name: 'reward-cycle-pox-address-list',
-  //     key: {
-  //       tuple: [
-  //         { name: 'index', type: 'uint128' },
-  //         { name: 'reward-cycle', type: 'uint128' },
-  //       ],
-  //     },
-  //     value: {
-  //       tuple: [
-  //         {
-  //           name: 'pox-addr',
-  //           type: {
-  //             tuple: [
-  //               { name: 'hashbytes', type: { buffer: { length: 20 } } },
-  //               { name: 'version', type: { buffer: { length: 1 } } },
-  //             ],
-  //           },
-  //         },
-  //         { name: 'total-ustx', type: 'uint128' },
-  //       ],
-  //     },
-  //   },
-  //   {
-  //     name: 'reward-cycle-pox-address-list-len',
-  //     key: { tuple: [{ name: 'reward-cycle', type: 'uint128' }] },
-  //     value: { tuple: [{ name: 'len', type: 'uint128' }] },
-  //   },
-  //   {
-  //     name: 'reward-cycle-total-stacked',
-  //     key: { tuple: [{ name: 'reward-cycle', type: 'uint128' }] },
-  //     value: { tuple: [{ name: 'total-ustx', type: 'uint128' }] },
-  //   },
-  //   {
-  //     name: 'stacking-rejection',
-  //     key: { tuple: [{ name: 'reward-cycle', type: 'uint128' }] },
-  //     value: { tuple: [{ name: 'amount', type: 'uint128' }] },
-  //   },
-  //   {
-  //     name: 'stacking-rejectors',
-  //     key: {
-  //       tuple: [
-  //         { name: 'reward-cycle', type: 'uint128' },
-  //         { name: 'stacker', type: 'principal' },
-  //       ],
-  //     },
-  //     value: { tuple: [{ name: 'amount', type: 'uint128' }] },
-  //   },
-  //   {
-  //     name: 'stacking-state',
-  //     key: { tuple: [{ name: 'stacker', type: 'principal' }] },
-  //     value: {
-  //       tuple: [
-  //         { name: 'amount-ustx', type: 'uint128' },
-  //         { name: 'first-reward-cycle', type: 'uint128' },
-  //         { name: 'lock-period', type: 'uint128' },
-  //         {
-  //           name: 'pox-addr',
-  //           type: {
-  //             tuple: [
-  //               { name: 'hashbytes', type: { buffer: { length: 20 } } },
-  //               { name: 'version', type: { buffer: { length: 1 } } },
-  //             ],
-  //           },
-  //         },
-  //       ],
-  //     },
-  //   },
-  // ],
+  // maps: [],
+  maps: [
+    {
+      name: 'allowance-contract-callers',
+      key: {
+        tuple: [
+          { name: 'contract-caller', type: 'principal' },
+          { name: 'sender', type: 'principal' },
+        ],
+      },
+      value: { tuple: [{ name: 'until-burn-ht', type: { optional: 'uint128' } }] },
+    },
+    {
+      name: 'delegation-state',
+      key: { tuple: [{ name: 'stacker', type: 'principal' }] },
+      value: {
+        tuple: [
+          { name: 'amount-ustx', type: 'uint128' },
+          { name: 'delegated-to', type: 'principal' },
+          {
+            name: 'pox-addr',
+            type: {
+              optional: {
+                tuple: [
+                  { name: 'hashbytes', type: { buffer: { length: 20 } } },
+                  { name: 'version', type: { buffer: { length: 1 } } },
+                ],
+              },
+            },
+          },
+          { name: 'until-burn-ht', type: { optional: 'uint128' } },
+        ],
+      },
+    },
+    {
+      name: 'partial-stacked-by-cycle',
+      key: {
+        tuple: [
+          {
+            name: 'pox-addr',
+            type: {
+              tuple: [
+                { name: 'hashbytes', type: { buffer: { length: 20 } } },
+                { name: 'version', type: { buffer: { length: 1 } } },
+              ],
+            },
+          },
+          { name: 'reward-cycle', type: 'uint128' },
+          { name: 'sender', type: 'principal' },
+        ],
+      },
+      value: { tuple: [{ name: 'stacked-amount', type: 'uint128' }] },
+    },
+    {
+      name: 'reward-cycle-pox-address-list',
+      key: {
+        tuple: [
+          { name: 'index', type: 'uint128' },
+          { name: 'reward-cycle', type: 'uint128' },
+        ],
+      },
+      value: {
+        tuple: [
+          {
+            name: 'pox-addr',
+            type: {
+              tuple: [
+                { name: 'hashbytes', type: { buffer: { length: 20 } } },
+                { name: 'version', type: { buffer: { length: 1 } } },
+              ],
+            },
+          },
+          { name: 'total-ustx', type: 'uint128' },
+        ],
+      },
+    },
+    {
+      name: 'reward-cycle-pox-address-list-len',
+      key: { tuple: [{ name: 'reward-cycle', type: 'uint128' }] },
+      value: { tuple: [{ name: 'len', type: 'uint128' }] },
+    },
+    {
+      name: 'reward-cycle-total-stacked',
+      key: { tuple: [{ name: 'reward-cycle', type: 'uint128' }] },
+      value: { tuple: [{ name: 'total-ustx', type: 'uint128' }] },
+    },
+    {
+      name: 'stacking-rejection',
+      key: { tuple: [{ name: 'reward-cycle', type: 'uint128' }] },
+      value: { tuple: [{ name: 'amount', type: 'uint128' }] },
+    },
+    {
+      name: 'stacking-rejectors',
+      key: {
+        tuple: [
+          { name: 'reward-cycle', type: 'uint128' },
+          { name: 'stacker', type: 'principal' },
+        ],
+      },
+      value: { tuple: [{ name: 'amount', type: 'uint128' }] },
+    },
+    {
+      name: 'stacking-state',
+      key: { tuple: [{ name: 'stacker', type: 'principal' }] },
+      value: {
+        tuple: [
+          { name: 'amount-ustx', type: 'uint128' },
+          { name: 'first-reward-cycle', type: 'uint128' },
+          { name: 'lock-period', type: 'uint128' },
+          {
+            name: 'pox-addr',
+            type: {
+              tuple: [
+                { name: 'hashbytes', type: { buffer: { length: 20 } } },
+                { name: 'version', type: { buffer: { length: 1 } } },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
   fungible_tokens: [],
   non_fungible_tokens: [],
 };

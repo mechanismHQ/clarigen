@@ -1,4 +1,4 @@
-import { ClarityAbi } from '@stacks/transactions';
+import { ClarityAbi } from '@clarion/proxy';
 export const appmap: ClarityAbi = {
   functions: [
     {

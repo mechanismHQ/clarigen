@@ -1,5 +1,4 @@
 import {
-  ClarityAbi,
   ClarityAbiType,
   isClarityAbiBuffer,
   isClarityAbiList,
@@ -10,6 +9,7 @@ import {
   isClarityAbiStringUtf8,
   isClarityAbiTuple,
 } from '@stacks/transactions';
+import { ClarityAbi } from './clarity-types';
 import { toCamelCase } from './utils';
 
 export const cvFromType = (val: ClarityAbiType) => {
@@ -46,10 +46,9 @@ export const cvFromType = (val: ClarityAbiType) => {
   }
 };
 
-export const makeTypes = (abi: ClarityAbi, contractName: string) => {
-  const name = toCamelCase(contractName, true);
-  let typings = `interface ${name}Contract {`;
-  abi.functions.forEach(func => {
+export const makeTypes = (abi: ClarityAbi) => {
+  let typings = '';
+  abi.functions.forEach((func, index) => {
     if (func.access === 'private') return;
     let functionLine = `${toCamelCase(func.name)}: `;
     const args = func.args.map(arg => {
@@ -68,14 +67,8 @@ export const makeTypes = (abi: ClarityAbi, contractName: string) => {
       const type = cvFromType(func.outputs.type);
       functionLine += `Promise<${type}>;`;
     }
-    typings += `\n  ${functionLine}`;
+    typings += `${index === 0 ? '' : '\n'}  ${functionLine}`;
   });
-  typings += '\n}';
 
-  const fileContents = `import { ClarityTypes, Transaction } from '@clarion/proxy';
-
-export ${typings}
-`;
-  // console.log(fileContents);
-  return fileContents;
+  return typings;
 };

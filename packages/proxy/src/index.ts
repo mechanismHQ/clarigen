@@ -1,8 +1,8 @@
-import { ClarityAbi } from '@stacks/transactions';
 import type { TestProvider } from './providers/test-provider';
 import { toCamelCase } from './utils';
 export * from './generator';
-export type { ClarityTypes } from './clarity-types';
+import { ClarityAbi } from './clarity-types';
+export type { ClarityTypes, ClarityAbi } from './clarity-types';
 export * from './declaration';
 export * from './transaction';
 export { TestProvider } from './providers/test-provider/index';

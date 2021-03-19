@@ -1,4 +1,29 @@
 import type * as Clarity from '@stacks/transactions';
+import type {
+  ClarityAbi as _ClarityAbi,
+  ClarityAbiType,
+  ClarityAbiTypeTuple,
+} from '@stacks/transactions';
+
+export interface ClarityAbiMap {
+  name: string;
+  key:
+    | {
+        name: string;
+        type: ClarityAbiType;
+      }[]
+    | ClarityAbiTypeTuple;
+  value:
+    | {
+        name: string;
+        type: ClarityAbiType;
+      }[]
+    | ClarityAbiTypeTuple;
+}
+
+export interface ClarityAbi extends Omit<_ClarityAbi, 'maps'> {
+  maps: ClarityAbiMap[];
+}
 
 // eslint-disable-next-line @typescript-eslint/no-namespace
 export namespace ClarityTypes {

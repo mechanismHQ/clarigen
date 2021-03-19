@@ -3,7 +3,7 @@ import {
   generateInterface,
   generateInterfaceFile,
   createProvider,
-  makeTypes,
+  generateTypesFile,
   getContractNameFromPath,
 } from '@clarion/proxy';
 import { NativeClarityBinProvider } from '@blockstack/clarity';
@@ -30,7 +30,7 @@ export const generateFilesForContract = async ({
     provider,
     contractAddress,
   });
-  const typesFile = makeTypes(abi, contractName);
+  const typesFile = generateTypesFile(abi, contractName);
   const indexFile = generateIndexFile({ contractFile });
   const abiFile = generateInterfaceFile({ contractFile, abi });
 

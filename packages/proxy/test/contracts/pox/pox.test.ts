@@ -20,10 +20,7 @@ const getContract = async () => {
 test('can call read only function', async () => {
   const contract = await getContract();
   const size = await contract.getRewardSetSize('u0');
-  console.log(size);
-  // const principal: PrincipalCV = await contract.getAdministrator();
-  // const address = principalToString(principal);
-  // expect(address).toEqual('ST1ESYCGJB5Z5NBHS39XPC70PGC14WAQK5XXNQYDW');
+  expect(size.value.toNumber()).toEqual(0);
 });
 
 // test('can call public function', async () => {

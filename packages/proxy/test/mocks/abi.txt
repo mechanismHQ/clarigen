@@ -1,5 +1,6 @@
-import { ClarityAbi } from '@stacks/transactions';
+import { ClarityAbi } from '@clarion/proxy';
 
+// prettier-ignore
 export const SimpleInterface: ClarityAbi = {
   "functions": [
     {
@@ -17,6 +18,14 @@ export const SimpleInterface: ClarityAbi = {
             "error": "none"
           }
         }
+      }
+    },
+    {
+      "name": "get-number",
+      "access": "read_only",
+      "args": [],
+      "outputs": {
+        "type": "uint128"
       }
     }
   ],
