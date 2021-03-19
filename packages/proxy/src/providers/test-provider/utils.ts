@@ -1,4 +1,11 @@
 import { NativeClarityBinProvider } from '@blockstack/clarity';
+import { getTempFilePath } from '@blockstack/clarity/lib/utils/fsUtil';
+import { getDefaultBinaryFilePath } from '@blockstack/clarity-native-bin';
+
+export interface Allocation {
+  principal: string;
+  amount: number;
+}
 
 interface ExecuteOk {
   success: true;
@@ -77,4 +84,13 @@ export const evalJson = async ({
     throw new Error(response.error);
   }
   return response;
+};
+
+export const createClarityBin = async ({
+  allocations = [],
+}: { allocations?: Allocation[] } = {}) => {
+  const binFile = getDefaultBinaryFilePath();
+  const dbFileName = getTempFilePath();
+  const provider = await NativeClarityBinProvider.create(allocations, dbFileName, binFile);
+  return provider;
 };

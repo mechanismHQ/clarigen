@@ -1,6 +1,4 @@
 import { Client, NativeClarityBinProvider } from '@blockstack/clarity';
-import { getTempFilePath } from '@blockstack/clarity/lib/utils/fsUtil';
-import { getDefaultBinaryFilePath } from '@blockstack/clarity-native-bin';
 import {
   ClarityValue,
   cvToString,
@@ -11,36 +9,29 @@ import {
 } from '@stacks/transactions';
 import { ClarityAbiFunction } from '@stacks/transactions/dist/transactions/src/contract-abi';
 import { Submitter, Transaction, TransactionResult } from '../../transaction';
-import { evalJson, executeJson } from './utils';
-
-interface Allocation {
-  principal: string;
-  amount: number;
-}
+import { evalJson, executeJson, Allocation } from './utils';
+export { Allocation, createClarityBin } from './utils';
 
 interface CreateOptions {
   allocations?: Allocation[];
   contractIdentifier: string;
   contractFilePath: string;
+  clarityBin: NativeClarityBinProvider;
 }
 
 export class TestProvider {
-  provider: NativeClarityBinProvider;
+  clarityBin: NativeClarityBinProvider;
   client: Client;
 
-  constructor(provider: NativeClarityBinProvider, client: Client) {
-    this.provider = provider;
+  constructor(clarityBin: NativeClarityBinProvider, client: Client) {
+    this.clarityBin = clarityBin;
     this.client = client;
   }
 
-  static async create(opts: CreateOptions) {
-    const { allocations } = opts;
-    const binFile = getDefaultBinaryFilePath();
-    const dbFileName = getTempFilePath();
-    const provider = await NativeClarityBinProvider.create(allocations || [], dbFileName, binFile);
-    const client = new Client(opts.contractIdentifier, opts.contractFilePath, provider);
+  static async create({ clarityBin, contractFilePath, contractIdentifier }: CreateOptions) {
+    const client = new Client(contractIdentifier, contractFilePath, clarityBin);
     await client.deployContract();
-    return new this(provider, client);
+    return new this(clarityBin, client);
   }
 
   async callReadOnly(func: ClarityAbiFunction, args: any[]): Promise<ClarityValue> {
@@ -49,7 +40,7 @@ export class TestProvider {
       contractAddress: this.client.name,
       functionName: func.name,
       args: argsFormatted,
-      provider: this.provider,
+      provider: this.clarityBin,
     });
     const resultCV = deserializeCV(Buffer.from(result.result_raw, 'hex'));
     return resultCV;
@@ -62,7 +53,7 @@ export class TestProvider {
         throw new Error('Passing `sender` is required.');
       }
       const receipt = await executeJson({
-        provider: this.provider,
+        provider: this.clarityBin,
         contractAddress: this.client.name,
         senderAddress: options.sender,
         functionName: func.name,

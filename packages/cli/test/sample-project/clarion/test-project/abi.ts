@@ -19,6 +19,14 @@ export const TestProjectInterface: ClarityAbi = {
           }
         }
       }
+    },
+    {
+      "name": "get-number",
+      "access": "read_only",
+      "args": [],
+      "outputs": {
+        "type": "uint128"
+      }
     }
   ],
   "variables": [],

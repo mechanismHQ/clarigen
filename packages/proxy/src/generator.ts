@@ -6,13 +6,6 @@ import { basename, extname } from 'path';
 import { toCamelCase } from './utils';
 import { makeTypes } from './declaration';
 
-export const createProvider = async () => {
-  const binFile = getDefaultBinaryFilePath();
-  const dbFileName = getTempFilePath();
-  const provider = await NativeClarityBinProvider.create([], dbFileName, binFile);
-  return provider;
-};
-
 export const getContractNameFromPath = (path: string) => {
   return basename(path, extname(path));
 };

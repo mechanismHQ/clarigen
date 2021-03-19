@@ -4,6 +4,6 @@
   (ok "I'm a test contract")
 )
 
-(define-read-only get-number
+(define-read-only (get-number)
   u100
 )

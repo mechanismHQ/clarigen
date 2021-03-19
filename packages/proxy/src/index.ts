@@ -5,7 +5,7 @@ import { ClarityAbi } from './clarity-types';
 export type { ClarityTypes, ClarityAbi } from './clarity-types';
 export * from './declaration';
 export * from './transaction';
-export { TestProvider } from './providers/test-provider/index';
+export * from './providers/test-provider/index';
 
 const makeHandler = (provider: TestProvider) => {
   const handler: ProxyHandler<ClarityAbi> = {

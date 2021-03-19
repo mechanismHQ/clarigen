@@ -4,14 +4,16 @@ import { proxy } from '../../../src';
 // import { pox, PoxContract } from '.';
 import { pox } from './abi';
 import { PoxContract } from './contract';
-import { TestProvider } from '../../../src/providers/test-provider';
+import { TestProvider, createClarityBin } from '../../../src/providers/test-provider';
 // import { principalToString } from '../../../src/providers/test-provider/utils';
 // import { ClarityType, PrincipalCV } from '@stacks/transactions';
 
 const getContract = async () => {
+  const clarityBin = await createClarityBin();
   const provider = await TestProvider.create({
     contractFilePath: 'test/contracts/pox/pox.clar',
     contractIdentifier: 'SP000000000000000000002Q6VF78.pox',
+    clarityBin,
   });
   const contract = proxy<PoxContract>(pox, provider);
   return contract;
