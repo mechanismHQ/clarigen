@@ -2,7 +2,7 @@ import {
   generateIndexFile,
   generateInterface,
   generateInterfaceFile,
-  createProvider,
+  createClarityBin,
   generateTypesFile,
   getContractNameFromPath,
 } from '@clarion/proxy';
@@ -47,7 +47,7 @@ export const generateProject = async (projectPath: string) => {
   const configFile = await getConfigFile(projectPath);
   const { contractsDir, outputDir, contracts } = configFile;
   const outputFolder = resolve(projectPath, outputDir);
-  const provider = await createProvider();
+  const provider = await createClarityBin();
   // this needs to be serial
   for (const contract of contracts) {
     const contractFile = resolve(projectPath, contractsDir, contract.file);

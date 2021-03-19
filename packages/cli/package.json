@@ -47,7 +47,9 @@
   },
   "dependencies": {
     "@clarion/proxy": "link:../proxy",
-    "@oclif/command": "^1.8.0"
+    "@oclif/command": "^1.8.0",
+    "chalk": "4.1.0",
+    "ora": "5.4.0"
   },
   "publishConfig": {
     "access": "public"
