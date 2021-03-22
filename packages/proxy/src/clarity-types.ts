@@ -12,13 +12,15 @@ export interface ClarityAbiMap {
         name: string;
         type: ClarityAbiType;
       }[]
-    | ClarityAbiTypeTuple;
+    | ClarityAbiTypeTuple
+    | ClarityAbiType;
   value:
     | {
         name: string;
         type: ClarityAbiType;
       }[]
-    | ClarityAbiTypeTuple;
+    | ClarityAbiTypeTuple
+    | ClarityAbiType;
 }
 
 export interface ClarityAbi extends Omit<_ClarityAbi, 'maps'> {

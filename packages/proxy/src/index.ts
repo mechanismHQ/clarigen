@@ -6,6 +6,7 @@ export type { ClarityTypes, ClarityAbi } from './clarity-types';
 export * from './declaration';
 export * from './transaction';
 export * from './providers/test-provider/index';
+export * from './types';
 
 const makeHandler = (provider: TestProvider) => {
   const handler: ProxyHandler<ClarityAbi> = {
@@ -40,6 +41,6 @@ interface ProxyConstructor {
 }
 declare const Proxy: ProxyConstructor;
 
-export const proxy = <T extends object>(target: ClarityAbi, provider: TestProvider) => {
+export const proxy = <T extends object>(target: ClarityAbi, provider: TestProvider): T => {
   return new Proxy<T, ClarityAbi>(target, makeHandler(provider));
 };

@@ -33,6 +33,9 @@ test('can generate interface file', async () => {
 
 test('can generate index file', async () => {
   const expectedFile = await readFile('./contracts/simple/index.ts');
-  const indexFile = generateIndexFile({ contractFile: 'test/contracts/simple/simple.clar' });
+  const indexFile = generateIndexFile({
+    contractFile: 'test/contracts/simple/simple.clar',
+    address: 'ST3J2GVMMM2R07ZFBJDWTYEYAR8FZH5WKDTFJ9AHA',
+  });
   expect(indexFile).toEqual(expectedFile);
 });

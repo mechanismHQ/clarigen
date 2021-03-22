@@ -9,13 +9,19 @@ import {
 } from '@stacks/transactions';
 import { ClarityAbiFunction } from '@stacks/transactions/dist/transactions/src/contract-abi';
 import { Submitter, Transaction, TransactionResult } from '../../transaction';
-import { evalJson, executeJson, Allocation } from './utils';
+import { evalJson, executeJson, Allocation, createClarityBin } from './utils';
 export { Allocation, createClarityBin } from './utils';
+import { Contract, ContractInstances, Contracts } from '../../types';
 
 interface CreateOptions {
   allocations?: Allocation[];
   contractIdentifier: string;
   contractFilePath: string;
+  clarityBin: NativeClarityBinProvider;
+}
+
+interface FromContractOptions<T> {
+  contract: Contract<T>;
   clarityBin: NativeClarityBinProvider;
 }
 
@@ -32,6 +38,35 @@ export class TestProvider {
     const client = new Client(contractIdentifier, contractFilePath, clarityBin);
     await client.deployContract();
     return new this(clarityBin, client);
+  }
+
+  static async fromContract<T>({ contract, clarityBin }: FromContractOptions<T>) {
+    const { address } = contract;
+    if (!address) {
+      throw new Error('TestProvider must have an address');
+    }
+    const provider = await this.create({
+      clarityBin,
+      contractFilePath: contract.contractFile,
+      contractIdentifier: `${address}.router`,
+    });
+    return contract.contract(provider);
+  }
+
+  static async fromContracts<T extends Contracts<M>, M>(
+    contracts: T
+  ): Promise<ContractInstances<T, M>> {
+    const clarityBin = await createClarityBin();
+    const instances = {} as ContractInstances<T, M>;
+    for (const k in contracts) {
+      const contract = contracts[k];
+      const instance = this.fromContract({
+        contract,
+        clarityBin,
+      });
+      instances[k] = instance as ReturnType<T[typeof k]['contract']>;
+    }
+    return instances;
   }
 
   async callReadOnly(func: ClarityAbiFunction, args: any[]): Promise<ClarityValue> {
