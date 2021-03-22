@@ -2,8 +2,10 @@ import { Command, flags } from '@oclif/command';
 import { generateProject } from '../utils';
 import { getConfigFile } from '../config';
 import { watch } from 'chokidar';
-import ora from 'ora';
 import { basename } from 'path';
+import { red, green } from 'chalk';
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const ora = require('ora');
 
 export class Generate extends Command {
   static description = `Generate project files`;
@@ -37,18 +39,19 @@ export class Generate extends Command {
       }
       watcher.on('change', async (path) => {
         const file = basename(path);
-        spinner.start(`Change detected for ${file}, generating.`);
+        spinner.start(`Change detected for ${green(file)}, generating.`);
         try {
           await generateProject(cwd);
           spinner.succeed(
-            `Finished generating files for ${file}. Watching for changes.`
+            `Finished generating files for ${green(
+              file
+            )}. Watching for changes.`
           );
         } catch (error) {
-          spinner.fail(`Error on ${file}.\n${error.message}`);
+          spinner.fail(`Error on ${red(file)}.\n${error.message}`);
         }
       });
       process.on('SIGINT', async () => {
-        console.log('sigint');
         await watcher.close();
         process.exit();
       });

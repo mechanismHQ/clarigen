@@ -31,7 +31,10 @@ export const generateFilesForContract = async ({
     contractAddress,
   });
   const typesFile = generateTypesFile(abi, contractName);
-  const indexFile = generateIndexFile({ contractFile });
+  const indexFile = generateIndexFile({
+    contractFile,
+    address: contractAddress,
+  });
   const abiFile = generateInterfaceFile({ contractFile, abi });
 
   const baseDir = outputFolder || resolve(process.cwd(), `tmp/${contractName}`);
