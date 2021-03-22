@@ -1,3 +1,6 @@
+import { basename, extname } from 'path';
+import { Contract } from './types';
+
 export const toCamelCase = (input: string | number | symbol, titleCase?: boolean) => {
   const inputStr = typeof input === 'string' ? input : String(input);
   const [first, ...parts] = inputStr.split('-');
@@ -7,4 +10,13 @@ export const toCamelCase = (input: string | number | symbol, titleCase?: boolean
     result += capitalized;
   });
   return result;
+};
+
+export const getContractNameFromPath = (path: string) => {
+  return basename(path, extname(path));
+};
+
+export const getContractIdentifier = <T>(contract: Contract<T>) => {
+  const contractName = getContractNameFromPath(contract.contractFile);
+  return `${contract.address}.${contractName}`;
 };

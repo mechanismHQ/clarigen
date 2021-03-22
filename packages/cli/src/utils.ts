@@ -7,7 +7,7 @@ import {
   getContractNameFromPath,
 } from '@clarion/proxy';
 import { NativeClarityBinProvider } from '@blockstack/clarity';
-import { resolve } from 'path';
+import { resolve, relative } from 'path';
 import { mkdir, writeFile } from 'fs/promises';
 import { getConfigFile } from './config';
 
@@ -31,9 +31,12 @@ export const generateFilesForContract = async ({
     contractAddress,
   });
   const typesFile = generateTypesFile(abi, contractName);
+  if (!contractAddress) {
+    console.warn('Please provide an address with every contract.');
+  }
   const indexFile = generateIndexFile({
-    contractFile,
-    address: contractAddress,
+    contractFile: relative(process.cwd(), contractFile),
+    address: contractAddress || '',
   });
   const abiFile = generateInterfaceFile({ contractFile, abi });
 

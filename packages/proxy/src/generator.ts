@@ -2,13 +2,8 @@ import { NativeClarityBinProvider } from '@blockstack/clarity';
 import { getTempFilePath } from '@blockstack/clarity/lib/utils/fsUtil';
 import { getDefaultBinaryFilePath } from '@blockstack/clarity-native-bin';
 import { ClarityAbi } from './clarity-types';
-import { basename, extname } from 'path';
-import { toCamelCase } from './utils';
+import { toCamelCase, getContractNameFromPath } from './utils';
 import { makeTypes } from './declaration';
-
-export const getContractNameFromPath = (path: string) => {
-  return basename(path, extname(path));
-};
 
 export const generateInterface = async ({
   provider: _provider,
@@ -62,7 +57,7 @@ export const generateIndexFile = ({
   address,
 }: {
   contractFile: string;
-  address?: string;
+  address: string;
 }) => {
   const contractName = getContractNameFromPath(contractFile);
   const contractTitle = toCamelCase(contractName, true);
@@ -81,7 +76,7 @@ export const ${varName}Contract = (provider: TestProvider) => {
 
 export const ${varName}Info: Contract<${contractType}> = {
   contract: ${varName}Contract,
-  address: ${address ? `'${address}'` : 'undefined'},
+  address: '${address}',
   contractFile: '${contractFile}',
 };
 `;

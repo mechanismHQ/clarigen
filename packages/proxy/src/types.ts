@@ -1,7 +1,7 @@
 import type { TestProvider } from './providers/test-provider';
 
 export interface Contract<T> {
-  address?: string;
+  address: string;
   contractFile: string;
   contract: (provider: TestProvider) => T;
 }

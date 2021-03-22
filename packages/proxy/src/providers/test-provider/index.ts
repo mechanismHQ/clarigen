@@ -12,6 +12,7 @@ import { Submitter, Transaction, TransactionResult } from '../../transaction';
 import { evalJson, executeJson, Allocation, createClarityBin } from './utils';
 export { Allocation, createClarityBin } from './utils';
 import { Contract, ContractInstances, Contracts } from '../../types';
+import { getContractNameFromPath } from '../../utils';
 
 interface CreateOptions {
   allocations?: Allocation[];
@@ -45,10 +46,12 @@ export class TestProvider {
     if (!address) {
       throw new Error('TestProvider must have an address');
     }
+    const contractName = getContractNameFromPath(contract.contractFile);
+
     const provider = await this.create({
       clarityBin,
       contractFilePath: contract.contractFile,
-      contractIdentifier: `${address}.router`,
+      contractIdentifier: `${address}.${contractName}`,
     });
     return contract.contract(provider);
   }
@@ -60,7 +63,7 @@ export class TestProvider {
     const instances = {} as ContractInstances<T, M>;
     for (const k in contracts) {
       const contract = contracts[k];
-      const instance = this.fromContract({
+      const instance = await this.fromContract({
         contract,
         clarityBin,
       });
@@ -122,6 +125,9 @@ export class TestProvider {
   formatArguments(func: ClarityAbiFunction, args: any[]): string[] {
     return args.map((arg, index) => {
       const { type } = func.args[index];
+      if (type === 'trait_reference') {
+        return `'${arg}`;
+      }
       const argCV = parseToCV(arg, type);
       const cvString = cvToString(argCV);
       if (type === 'principal') {

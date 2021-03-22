@@ -7,6 +7,7 @@ export * from './declaration';
 export * from './transaction';
 export * from './providers/test-provider/index';
 export * from './types';
+export * from './utils';
 
 const makeHandler = (provider: TestProvider) => {
   const handler: ProxyHandler<ClarityAbi> = {
