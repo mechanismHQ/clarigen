@@ -39,6 +39,7 @@ export class Generate extends Command {
       }
       watcher.on('change', async (path) => {
         const file = basename(path);
+        spinner.clear();
         spinner.start(`Change detected for ${green(file)}, generating.`);
         try {
           await generateProject(cwd);
@@ -48,7 +49,7 @@ export class Generate extends Command {
             )}. Watching for changes.`
           );
         } catch (error) {
-          spinner.fail(`Error on ${red(file)}.\n${error.message}`);
+          spinner.fail(`Error after saving ${red(file)}.\n${error.message}`);
         }
       });
       process.on('SIGINT', async () => {

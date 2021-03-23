@@ -3,6 +3,7 @@ import { getTempFilePath } from '@blockstack/clarity/lib/utils/fsUtil';
 import { getDefaultBinaryFilePath } from '@blockstack/clarity-native-bin';
 import { ClarityAbi } from './clarity-types';
 import { toCamelCase, getContractNameFromPath } from './utils';
+import { basename } from 'path';
 import { makeTypes } from './declaration';
 
 export const generateInterface = async ({
@@ -26,7 +27,16 @@ export const generateInterface = async ({
     '--output_analysis',
   ]);
   if (receipt.stderr) {
-    throw new Error(receipt.stderr);
+    const contractFileBase = basename(contractFile);
+    const [error, trace] = receipt.stderr.split('\nNear:\n');
+    let startLine = '';
+    const matcher = /start_line: (\d+),/;
+    const matches = matcher.exec(trace);
+    if (matches) startLine = matches[1];
+    throw new Error(`Error on ${contractFileBase}:
+  ${error}
+  ${startLine ? `Near line ${startLine}` : ''}
+    `);
   }
   const abi = JSON.parse(receipt.stdout);
   return abi;
