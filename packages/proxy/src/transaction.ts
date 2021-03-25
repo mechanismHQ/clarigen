@@ -1,30 +1,24 @@
-import { ClarityValue, ResponseErrorCV, ResponseOkCV } from '@stacks/transactions';
+// import { ClarityValue, ResponseErrorCV, ResponseOkCV } from '@stacks/transactions';
+// import { Result } from 'neverthrow';
 // import { ClarityTypes } from './clarity-types';
 
-export interface TransactionResultOld<Ok extends ClarityValue, Err extends ClarityValue> {
-  value: ClarityValue;
-  response: Response<Ok, Err>;
-  isOk: boolean;
-}
-
-export interface TransactionResultOk<Ok extends ClarityValue> {
+export interface TransactionResultOk<Ok> {
   value: Ok;
   response: ResponseOk<Ok>;
   isOk: true;
+  events: any[];
   // TODO: add events
 }
 
-export interface TransactionResultErr<Err extends ClarityValue> {
+export interface TransactionResultErr<Err> {
   value: Err;
   response: ResponseErr<Err>;
   isOk: false;
 }
 
-export type TransactionResult<Ok extends ClarityValue, Err extends ClarityValue> =
-  | TransactionResultOk<Ok>
-  | TransactionResultErr<Err>;
+export type TransactionResult<Ok, Err> = TransactionResultOk<Ok> | TransactionResultErr<Err>;
 
-export interface TransactionReceipt<Ok extends ClarityValue, Err extends ClarityValue> {
+export interface TransactionReceipt<Ok, Err> {
   getResult: () => Promise<TransactionResult<Ok, Err>>;
 }
 
@@ -32,26 +26,22 @@ export interface SubmitOptions {
   sender?: string;
 }
 
-export type Submitter<Ok extends ClarityValue, Err extends ClarityValue> = (
-  options?: SubmitOptions
-) => Promise<TransactionReceipt<Ok, Err>>;
+export type Submitter<Ok, Err> = (options?: SubmitOptions) => Promise<TransactionReceipt<Ok, Err>>;
 
-interface ResponseOk<Ok extends ClarityValue> extends ResponseOkCV {
+interface ResponseOk<Ok> {
   value: Ok;
 }
 
-interface ResponseErr<Err extends ClarityValue> extends ResponseErrorCV {
+interface ResponseErr<Err> {
   value: Err;
 }
 
-export type Response<Ok extends ClarityValue, Err extends ClarityValue> =
-  | ResponseOk<Ok>
-  | ResponseErr<Err>;
+export type Response<Ok, Err> = ResponseOk<Ok> | ResponseErr<Err>;
 
 // export interface TransactionOld {
 //   submit: Submitter;
 // }
 
-export interface Transaction<Ok extends ClarityValue, Err extends ClarityValue> {
+export interface Transaction<Ok, Err> {
   submit: Submitter<Ok, Err>;
 }

@@ -1,9 +1,10 @@
 import type * as Clarity from '@stacks/transactions';
-import type {
+import {
   ClarityAbi as _ClarityAbi,
   ClarityAbiType,
   ClarityAbiTypeTuple,
 } from '@stacks/transactions';
+import { Result } from 'neverthrow';
 
 export interface ClarityAbiMap {
   name: string;
@@ -48,4 +49,5 @@ export namespace ClarityTypes {
   export type TupleCV = Clarity.TupleCV;
   export type StringAsciiCV = Clarity.StringAsciiCV;
   export type StringUtf8CV = Clarity.StringUtf8CV;
+  export type Response<Ok, Err> = Result<Ok, Err>;
 }

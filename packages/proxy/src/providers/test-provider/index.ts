@@ -1,18 +1,19 @@
 import { Client, NativeClarityBinProvider } from '@blockstack/clarity';
 import {
-  ClarityValue,
+  ClarityType,
   cvToString,
   deserializeCV,
   parseToCV,
   responseErrorCV,
   responseOkCV,
 } from '@stacks/transactions';
-import { ClarityAbiFunction } from '@stacks/transactions/dist/transactions/src/contract-abi';
+import type { ClarityAbiFunction } from '@stacks/transactions/dist/transactions/src/contract-abi';
+import { ok, err } from 'neverthrow';
 import { Submitter, Transaction, TransactionResult } from '../../transaction';
-import { evalJson, executeJson, Allocation, createClarityBin } from './utils';
-export { Allocation, createClarityBin } from './utils';
+import { evalJson, executeJson, Allocation, createClarityBin, cvToValue } from './utils';
+export { Allocation, createClarityBin, cvToValue } from './utils';
 import { Contract, ContractInstances, Contracts } from '../../types';
-import { getContractNameFromPath } from '../../utils';
+import { getContractNameFromPath, getContractIdentifier } from '../../utils';
 
 interface CreateOptions {
   allocations?: Allocation[];
@@ -57,22 +58,26 @@ export class TestProvider {
   }
 
   static async fromContracts<T extends Contracts<M>, M>(
-    contracts: T
+    contracts: T,
+    clarityBin?: NativeClarityBinProvider
   ): Promise<ContractInstances<T, M>> {
-    const clarityBin = await createClarityBin();
+    const _clarityBin = clarityBin ?? (await createClarityBin());
     const instances = {} as ContractInstances<T, M>;
     for (const k in contracts) {
       const contract = contracts[k];
       const instance = await this.fromContract({
         contract,
-        clarityBin,
+        clarityBin: _clarityBin,
       });
-      instances[k] = instance as ReturnType<T[typeof k]['contract']>;
+      instances[k] = {
+        identifier: getContractIdentifier(contract),
+        contract: instance as ReturnType<T[typeof k]['contract']>,
+      };
     }
     return instances;
   }
 
-  async callReadOnly(func: ClarityAbiFunction, args: any[]): Promise<ClarityValue> {
+  async callReadOnly(func: ClarityAbiFunction, args: any[]) {
     const argsFormatted = this.formatArguments(func, args);
     const result = await evalJson({
       contractAddress: this.client.name,
@@ -81,12 +86,20 @@ export class TestProvider {
       provider: this.clarityBin,
     });
     const resultCV = deserializeCV(Buffer.from(result.result_raw, 'hex'));
-    return resultCV;
+    const value = cvToValue(resultCV);
+    switch (resultCV.type) {
+      case ClarityType.ResponseOk:
+        return ok(value);
+      case ClarityType.ResponseErr:
+        return err(value);
+      default:
+        return value;
+    }
   }
 
-  callPublic(func: ClarityAbiFunction, args: any[]): Transaction<ClarityValue, ClarityValue> {
+  callPublic(func: ClarityAbiFunction, args: any[]): Transaction<any, any> {
     const argsFormatted = this.formatArguments(func, args);
-    const submit: Submitter<ClarityValue, ClarityValue> = async options => {
+    const submit: Submitter<any, any> = async options => {
       if (!options?.sender) {
         throw new Error('Passing `sender` is required.');
       }
@@ -97,19 +110,21 @@ export class TestProvider {
         functionName: func.name,
         args: argsFormatted,
       });
-      const getResult = (): Promise<TransactionResult<ClarityValue, ClarityValue>> => {
+      const getResult = (): Promise<TransactionResult<any, any>> => {
         const resultCV = deserializeCV(Buffer.from(receipt.result_raw, 'hex'));
+        const result = cvToValue(resultCV);
         if (receipt.success) {
           return Promise.resolve({
             isOk: true,
             response: responseOkCV(resultCV),
-            value: resultCV,
+            value: result,
+            events: receipt.events,
           });
         } else {
           return Promise.resolve({
             isOk: false,
             response: responseErrorCV(resultCV),
-            value: resultCV,
+            value: result,
           });
         }
       };
