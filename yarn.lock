@@ -1113,18 +1113,23 @@
   resolved "https://registry.yarnpkg.com/@blockstack/prettier-config/-/prettier-config-0.0.6.tgz#8a41cd378ba061b79770987f2a6ad0c92b64bd72"
   integrity sha512-ke0MdyblmoUqSJBEutsG8/6G7KAjCB+uOcgZHPJvJr4R+i5yRhT4GSe5nV/wREINuK0jj2GvaA6qlx4PQTKQUA==
 
-"@blockstack/stacks-blockchain-api-types@^0.34.1", "@blockstack/stacks-blockchain-api-types@^0.34.2":
+"@blockstack/stacks-blockchain-api-types@^0.34.1":
   version "0.34.2"
   resolved "https://registry.yarnpkg.com/@blockstack/stacks-blockchain-api-types/-/stacks-blockchain-api-types-0.34.2.tgz#de65f6556f8b988784718aca0d8e14284a81d914"
   integrity sha512-VNZcattjf5+7HigJhW+tLthlDbS++7y3S0drVCL5uyqmiRvXKeaN6pF1f9yDQ5B19m7xizCQPO15ZOtHf7fFqw==
+
+"@blockstack/stacks-blockchain-api-types@^0.55.2":
+  version "0.55.2"
+  resolved "https://registry.yarnpkg.com/@blockstack/stacks-blockchain-api-types/-/stacks-blockchain-api-types-0.55.2.tgz#7e690c7db8f8a7d68ac6256e41c49509f842d4ce"
+  integrity sha512-yi+AUNwLpeSse9/N/XNTPXmNgbOZEb/pbff/Ft/f1xPgoqwSBZlSISX4bb6k8oHz9rAUwMl9CDXivRigrQp9vw==
 
 "@clarion/proxy@link:packages/proxy":
   version "0.1.0"
   dependencies:
     "@blockstack/clarity" "^0.3.8"
     "@blockstack/clarity-native-bin" "^0.3.8"
-    "@blockstack/stacks-blockchain-api-types" "^0.34.2"
-    "@stacks/blockchain-api-client" "^0.34.2"
+    "@blockstack/stacks-blockchain-api-types" "^0.55.2"
+    "@stacks/blockchain-api-client" "^0.55.2"
     "@stacks/transactions" "^1.3.3"
     neverthrow "4.2.1"
 
@@ -2623,10 +2628,10 @@
   dependencies:
     "@sinonjs/commons" "^1.7.0"
 
-"@stacks/blockchain-api-client@^0.34.2":
-  version "0.34.2"
-  resolved "https://registry.yarnpkg.com/@stacks/blockchain-api-client/-/blockchain-api-client-0.34.2.tgz#8eeb4d9861562d7097483e1e8000a1744012e73b"
-  integrity sha512-rf2MavdhLHlq3C0XW4900gFXD3sQsObvX/wCoU7yoxvphnXjU2tOfU9s0XWMF7ib+IZ42bkRu44xKSBe3joe3w==
+"@stacks/blockchain-api-client@^0.55.2":
+  version "0.55.2"
+  resolved "https://registry.yarnpkg.com/@stacks/blockchain-api-client/-/blockchain-api-client-0.55.2.tgz#576c2ca3f00559ff87a670dbcc53c5552ea35d7a"
+  integrity sha512-zluZuc/HjtW4iEpCe7AZCfjrjDCc+1t7swVSt8Ro1zF1NlsKYotOTekjaMOS0V/WyOT0AWnkJ6Prw4IaplUSig==
   dependencies:
     "@blockstack/stacks-blockchain-api-types" "^0.34.1"
     "@types/ws" "^7.4.0"

@@ -1,0 +1,30 @@
+{
+  "version": "0.1.0",
+  "license": "MIT",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "engines": {
+    "node": ">=10"
+  },
+  "scripts": {
+    "start": "tsdx watch",
+    "dev": "tsdx watch",
+    "build": "tsdx build",
+    "test": "tsdx test",
+    "lint": "tsdx lint",
+    "prepublishOnly": "tsdx build",
+    "typecheck": "tsc --noEmit"
+  },
+  "prettier": "@blockstack/prettier-config",
+  "name": "@clarion/core",
+  "author": "Hank Stoever",
+  "module": "dist/core.esm.js",
+  "devDependencies": {},
+  "dependencies": {
+    "@stacks/transactions": "^1.3.3",
+    "neverthrow": "4.2.1"
+  }
+}

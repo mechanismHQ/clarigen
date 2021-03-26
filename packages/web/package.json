@@ -1,0 +1,31 @@
+{
+  "version": "0.1.0",
+  "license": "MIT",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "engines": {
+    "node": ">=10"
+  },
+  "scripts": {
+    "start": "tsdx watch",
+    "dev": "tsdx watch",
+    "build": "tsdx build",
+    "test": "tsdx test",
+    "lint": "tsdx lint",
+    "prepublishOnly": "tsdx build",
+    "typecheck": "tsc --noEmit"
+  },
+  "prettier": "@blockstack/prettier-config",
+  "name": "@clarion/web",
+  "author": "Hank Stoever",
+  "module": "dist/web.esm.js",
+  "devDependencies": {},
+  "dependencies": {
+    "@blockstack/stacks-blockchain-api-types": "^0.55.2",
+    "@stacks/blockchain-api-client": "^0.55.2",
+    "@clarion/proxy": "link:../proxy"
+  }
+}
