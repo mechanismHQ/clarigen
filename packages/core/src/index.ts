@@ -5,7 +5,7 @@ export type { ClarityTypes, ClarityAbi } from './clarity-types';
 export * from './transaction';
 export * from './types';
 export * from './utils';
-export { cvToValue } from './clarity-types';
+export { cvToValue, parseToCV } from './clarity-types';
 export { BaseProvider } from './base-provider';
 
 const makeHandler = (provider: BaseProvider) => {

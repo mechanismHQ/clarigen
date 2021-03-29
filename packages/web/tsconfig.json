@@ -8,7 +8,8 @@
     "resolveJsonModule": true,
     "moduleResolution": "node",
     "noUnusedLocals": false,
-    "noUnusedParameters": false
+    "noUnusedParameters": false,
+    "types": ["@stacks/connect"]
   },
   "include": ["./src/**/*"]
 }

@@ -1,4 +1,6 @@
 // import { ClarityValue, ResponseErrorCV, ResponseOkCV } from '@stacks/transactions';
+import { PostCondition, StacksTransaction } from '@stacks/transactions';
+import { Ok } from 'neverthrow';
 // import { Result } from 'neverthrow';
 // import { ClarityTypes } from './clarity-types';
 
@@ -18,15 +20,30 @@ export interface TransactionResultErr<Err> {
 
 export type TransactionResult<Ok, Err> = TransactionResultOk<Ok> | TransactionResultErr<Err>;
 
-export interface TransactionReceipt<Ok, Err> {
+export interface TransactionReceiptBase<Ok, Err> {
   getResult: () => Promise<TransactionResult<Ok, Err>>;
 }
 
-export interface SubmitOptions {
-  sender?: string;
+export interface WebTransactionReceipt<Ok, Err> extends TransactionReceiptBase<Ok, Err> {
+  txId: string;
+  stacksTransaction: StacksTransaction;
 }
 
-export type Submitter<Ok, Err> = (options?: SubmitOptions) => Promise<TransactionReceipt<Ok, Err>>;
+export type TransactionReceipt<Ok, Err> =
+  | WebTransactionReceipt<Ok, Err>
+  | TransactionReceiptBase<Ok, Err>;
+
+export interface WebSignerOptions {
+  postConditions?: PostCondition[];
+}
+
+export interface TestSignerOptions {
+  sender: string;
+}
+
+export type SubmitOptions = TestSignerOptions | WebSignerOptions;
+
+export type Submitter<Ok, Err> = (options: SubmitOptions) => Promise<TransactionReceipt<Ok, Err>>;
 
 interface ResponseOk<Ok> {
   value: Ok;

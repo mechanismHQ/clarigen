@@ -1,9 +1,10 @@
 import type { BaseProvider } from './base-provider';
 
+export type ContractBuilder<T> = (provider: BaseProvider) => T;
 export interface Contract<T> {
   address: string;
   contractFile: string;
-  contract: (provider: BaseProvider) => T;
+  contract: ContractBuilder<T>;
 }
 
 export interface Contracts<T> {
