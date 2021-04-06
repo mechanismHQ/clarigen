@@ -45,7 +45,7 @@ export const generateFilesForContract = async ({
     contractAddress,
   });
   const typesFile = generateTypesFile(abi, contractName);
-  if (!contractAddress) {
+  if (!contractAddress && process.env.NODE_ENV !== 'test') {
     console.warn('Please provide an address with every contract.');
   }
   const indexFile = generateIndexFile({

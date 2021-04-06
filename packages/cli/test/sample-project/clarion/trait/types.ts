@@ -1,4 +1,4 @@
-import { ClarityTypes, Transaction } from '@clarion/proxy';
+import { ClarityTypes, Transaction } from '@clarion/core';
 
 export interface TraitContract {
 

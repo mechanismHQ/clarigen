@@ -1,9 +1,9 @@
-import { proxy, TestProvider, Contract } from '@clarion/proxy';
+import { proxy, BaseProvider, Contract } from '@clarion/core';
 import type { TestProjectContract } from './types';
 import { TestProjectInterface } from './abi';
 export type { TestProjectContract } from './types';
 
-export const testProjectContract = (provider: TestProvider) => {
+export const testProjectContract = (provider: BaseProvider) => {
   const contract = proxy<TestProjectContract>(TestProjectInterface, provider);
   return contract;
 };
