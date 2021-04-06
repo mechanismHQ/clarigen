@@ -1,4 +1,4 @@
-import { ClarityAbi } from '@clarion/proxy';
+import { ClarityAbi } from '@clarion/core';
 
 // prettier-ignore
 export const TestProjectInterface: ClarityAbi = {

@@ -1,8 +1,4 @@
-// import { ClarityValue, ResponseErrorCV, ResponseOkCV } from '@stacks/transactions';
 import { PostCondition, StacksTransaction } from '@stacks/transactions';
-import { Ok } from 'neverthrow';
-// import { Result } from 'neverthrow';
-// import { ClarityTypes } from './clarity-types';
 
 export interface TransactionResultOk<Ok> {
   value: Ok;
@@ -54,10 +50,6 @@ interface ResponseErr<Err> {
 }
 
 export type Response<Ok, Err> = ResponseOk<Ok> | ResponseErr<Err>;
-
-// export interface TransactionOld {
-//   submit: Submitter;
-// }
 
 export interface Transaction<Ok, Err> {
   submit: Submitter<Ok, Err>;

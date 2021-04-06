@@ -2,25 +2,39 @@ import {
   generateIndexFile,
   generateInterface,
   generateInterfaceFile,
-  createClarityBin,
   generateTypesFile,
-  getContractNameFromPath,
-} from '@clarion/proxy';
+} from './generate/files';
+import { getContractNameFromPath } from '@clarion/core';
 import { NativeClarityBinProvider } from '@blockstack/clarity';
-import { resolve, relative } from 'path';
+import { getTempFilePath } from '@blockstack/clarity/lib/utils/fsUtil';
+import { getDefaultBinaryFilePath } from '@blockstack/clarity-native-bin';
+import { resolve, relative, dirname } from 'path';
 import { mkdir, writeFile } from 'fs/promises';
 import { getConfigFile } from './config';
+
+export const createClarityBin = async () => {
+  const binFile = getDefaultBinaryFilePath();
+  const dbFileName = getTempFilePath();
+  const provider = await NativeClarityBinProvider.create(
+    [],
+    dbFileName,
+    binFile
+  );
+  return provider;
+};
 
 export const generateFilesForContract = async ({
   contractFile: _contractFile,
   outputFolder,
   provider,
   contractAddress,
+  dirName,
 }: {
   contractFile: string;
   outputFolder?: string;
   provider?: NativeClarityBinProvider;
   contractAddress?: string;
+  dirName?: string;
 }) => {
   const contractFile = resolve(process.cwd(), _contractFile);
   const contractName = getContractNameFromPath(contractFile);
@@ -41,7 +55,7 @@ export const generateFilesForContract = async ({
   const abiFile = generateInterfaceFile({ contractFile, abi });
 
   const baseDir = outputFolder || resolve(process.cwd(), `tmp/${contractName}`);
-  const outputPath = resolve(baseDir, contractName);
+  const outputPath = resolve(baseDir, dirName || '.', contractName);
   await mkdir(outputPath, { recursive: true });
 
   await writeFile(resolve(outputPath, 'abi.ts'), abiFile);
@@ -57,11 +71,13 @@ export const generateProject = async (projectPath: string) => {
   // this needs to be serial
   for (const contract of contracts) {
     const contractFile = resolve(projectPath, contractsDir, contract.file);
+    const dirName = dirname(contract.file);
     await generateFilesForContract({
       contractFile,
       outputFolder: outputFolder,
       provider,
       contractAddress: contract.address,
+      dirName,
     });
   }
 };
