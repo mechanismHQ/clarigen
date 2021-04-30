@@ -47,6 +47,8 @@
     "ts-node": "^9.1.1"
   },
   "dependencies": {
+    "@blockstack/clarity": "^0.3.11",
+    "@blockstack/clarity-native-bin": "^0.3.11",
     "@clarion/core": "link:../core",
     "@clarion/proxy": "link:../proxy",
     "@oclif/command": "^1.8.0",
