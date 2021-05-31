@@ -29,6 +29,6 @@
     "@blockstack/clarity": "^0.3.11",
     "@blockstack/clarity-native-bin": "^0.3.11",
     "@stacks/transactions": "^1.3.3",
-    "@clarion/core": "link:../core"
+    "@clarion/core": "0.1.0"
   }
 }
