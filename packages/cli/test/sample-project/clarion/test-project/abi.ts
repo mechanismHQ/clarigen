@@ -4,33 +4,33 @@ import { ClarityAbi } from '@clarion/core';
 export const TestProjectInterface: ClarityAbi = {
   "functions": [
     {
-      "name": "get-name",
       "access": "public",
       "args": [],
+      "name": "get-name",
       "outputs": {
         "type": {
           "response": {
+            "error": "none",
             "ok": {
               "string-ascii": {
                 "length": 19
               }
-            },
-            "error": "none"
+            }
           }
         }
       }
     },
     {
-      "name": "get-number",
       "access": "read_only",
       "args": [],
+      "name": "get-number",
       "outputs": {
         "type": "uint128"
       }
     }
   ],
-  "variables": [],
-  "maps": [],
   "fungible_tokens": [],
-  "non_fungible_tokens": []
+  "maps": [],
+  "non_fungible_tokens": [],
+  "variables": []
 };

@@ -10,14 +10,25 @@ export interface Allocation {
 
 interface ExecuteOk {
   success: true;
+  message: string;
   events: any[];
-  result_raw: string;
+  output_serialized: string;
+  costs: {
+    [key: string]: any;
+    runtime: number;
+  };
+  assets: Record<string, any>;
 }
 
 interface ExecuteErr {
+  message: string;
+  output_serialized: string;
+  costs: {
+    [key: string]: any;
+    runtime: number;
+  };
+  assets: Record<string, any>;
   success: false;
-  result_raw: string;
-  events: null;
 }
 
 type ExecuteResult = ExecuteOk | ExecuteErr;
@@ -36,23 +47,30 @@ export const executeJson = async ({
   args?: string[];
 }) => {
   const result = await provider.runCommand([
-    'execute_json',
+    'execute',
+    '--costs',
+    '--assets',
     provider.dbFilePath,
     contractAddress,
     functionName,
     senderAddress,
     ...args,
   ]);
-  if (result.exitCode !== 0 || result.stderr) {
+  if (result.exitCode !== 0) {
     throw new Error(`Execution error: ${result.stderr}`);
   }
+  // console.log('result.stdout', result.stdout);
   const response: ExecuteResult = JSON.parse(result.stdout);
   return response;
 };
 
 interface EvalOk {
   success: true;
-  result_raw: string;
+  costs: {
+    [key: string]: any;
+    runtime: number;
+  };
+  output_serialized: string;
 }
 
 interface EvalErr {
@@ -75,7 +93,7 @@ export const evalJson = async ({
 }) => {
   const evalCode = `(${functionName} ${args.join(' ')})`;
   const receipt = await provider.runCommand(
-    ['eval_at_chaintip_json', contractAddress, provider.dbFilePath],
+    ['eval_at_chaintip', '--costs', contractAddress, provider.dbFilePath],
     {
       stdin: evalCode,
     }

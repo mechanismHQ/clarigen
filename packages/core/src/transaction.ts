@@ -5,12 +5,21 @@ export interface TransactionResultOk<Ok> {
   response: ResponseOk<Ok>;
   isOk: true;
   events: any[];
+  costs: {
+    [key: string]: any;
+    runtime: number;
+  };
+  assets: Record<string, any>;
   // TODO: add events
 }
 
 export interface TransactionResultErr<Err> {
   value: Err;
   response: ResponseErr<Err>;
+  costs: {
+    [key: string]: any;
+    runtime: number;
+  };
   isOk: false;
 }
 
@@ -25,8 +34,13 @@ export interface WebTransactionReceipt<Ok, Err> extends TransactionReceiptBase<O
   stacksTransaction: StacksTransaction;
 }
 
+export interface TestTransacionReceipt<Ok, Err> extends TransactionReceiptBase<Ok, Err> {
+  result: TransactionResult<Ok, Err>;
+}
+
 export type TransactionReceipt<Ok, Err> =
   | WebTransactionReceipt<Ok, Err>
+  | TestTransacionReceipt<Ok, Err>
   | TransactionReceiptBase<Ok, Err>;
 
 export interface WebSignerOptions {

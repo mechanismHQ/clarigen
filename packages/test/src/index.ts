@@ -93,7 +93,7 @@ export class TestProvider implements BaseProvider {
       args: argsFormatted,
       provider: this.clarityBin,
     });
-    const resultCV = deserializeCV(Buffer.from(result.result_raw, 'hex'));
+    const resultCV = deserializeCV(Buffer.from(result.output_serialized, 'hex'));
     const value = cvToValue(resultCV);
     switch (resultCV.type) {
       case ClarityType.ResponseOk:
@@ -119,7 +119,7 @@ export class TestProvider implements BaseProvider {
         args: argsFormatted,
       });
       const getResult = (): Promise<TransactionResult<any, any>> => {
-        const resultCV = deserializeCV(Buffer.from(receipt.result_raw, 'hex'));
+        const resultCV = deserializeCV(Buffer.from(receipt.output_serialized, 'hex'));
         const result = cvToValue(resultCV);
         if (receipt.success) {
           return Promise.resolve({
@@ -127,12 +127,15 @@ export class TestProvider implements BaseProvider {
             response: responseOkCV(resultCV),
             value: result,
             events: receipt.events,
+            costs: receipt.costs,
+            assets: receipt.assets,
           });
         } else {
           return Promise.resolve({
             isOk: false,
             response: responseErrorCV(resultCV),
             value: result,
+            costs: receipt.costs,
           });
         }
       };

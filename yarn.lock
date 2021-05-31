@@ -1078,20 +1078,20 @@
   resolved "https://registry.yarnpkg.com/@bcoe/v8-coverage/-/v8-coverage-0.2.3.tgz#75a2e8b51cb758a7553d6804a5932d7aace75c39"
   integrity sha512-0hYQ8SB4Db5zvZB4axdMHGwEaQjkZzFjQiN9LVYvIFB2nSUHW9tYpxWriPrWDASIxiaXax83REcLxuSdnGPZtw==
 
-"@blockstack/clarity-native-bin@^0.3.8":
-  version "0.3.8"
-  resolved "https://registry.yarnpkg.com/@blockstack/clarity-native-bin/-/clarity-native-bin-0.3.8.tgz#c1790f4ab397aefbd9339d38b69a2feba4f3e1d0"
-  integrity sha512-1V8E2LMGK6gI4DgIaBN1Q/gcodn5tNhXfpiwo1/rFFgYcVknFOvvm2gqxSGfSbrhgCxntLeTsrtbZ/WE8NxhLA==
+"@blockstack/clarity-native-bin@^0.3.11":
+  version "0.3.14"
+  resolved "https://registry.yarnpkg.com/@blockstack/clarity-native-bin/-/clarity-native-bin-0.3.14.tgz#c2a0f2c8fa3e5b2e75583bfe54417fd7fc3a2df8"
+  integrity sha512-I4nMqw+P2CqF9Um6cLoXB0WMDjj+Jl+8f8HgqMUFHw/NlOlEM6+XCdByrIN0fdgXVV/yLg4dZpvVvWgRoPBmRw==
   dependencies:
     fs-extra "^8.0.1"
     node-fetch "^2.6.0"
     semver "^6.1.1"
     unzipper "^0.10.11"
 
-"@blockstack/clarity@^0.3.8":
-  version "0.3.8"
-  resolved "https://registry.yarnpkg.com/@blockstack/clarity/-/clarity-0.3.8.tgz#bd0c866a3ca6089ba14d6abdbe9b313351cb77f4"
-  integrity sha512-7HfOES+f4ytcSMzT+o1u5/v4RLg3TqhMvHKFIZMR3rzJYt4Zrfu2Advg1ZgvFwqBR1U3kfCBm9H4gsop7qnx9g==
+"@blockstack/clarity@^0.3.11":
+  version "0.3.14"
+  resolved "https://registry.yarnpkg.com/@blockstack/clarity/-/clarity-0.3.14.tgz#707af855932a1fc57e4c9b542263daaf8ac4d37f"
+  integrity sha512-QOLiJ24SyFrFFBAkMUQsVu2RTD2sg9UZfup4kiJtwyGBfSPutUgcRZ5WAFgzO7zWVvSe+53V3U/z5bSaTvK0Zg==
 
 "@blockstack/eslint-config@^1.0.5":
   version "1.0.5"

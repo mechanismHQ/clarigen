@@ -29,6 +29,8 @@ export const generateInterface = async ({
     contractFile,
     provider.dbFilePath,
     '--output_analysis',
+    '--costs',
+    '--assets',
   ]);
   if (receipt.stderr) {
     const [error, trace] = receipt.stderr.split('\nNear:\n');
@@ -41,7 +43,7 @@ export const generateInterface = async ({
   ${startLine ? `Near line ${startLine}` : ''}
     `);
   }
-  const abi = JSON.parse(receipt.stdout);
+  const abi = JSON.parse(receipt.stdout).analysis;
   return abi;
 };
 
