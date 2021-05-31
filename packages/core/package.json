@@ -25,5 +25,8 @@
   "dependencies": {
     "@stacks/transactions": "^1.3.3",
     "neverthrow": "4.2.1"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }
