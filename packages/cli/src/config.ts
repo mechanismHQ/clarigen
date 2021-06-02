@@ -13,7 +13,7 @@ export interface ConfigFile {
 }
 
 export async function getConfigFile(rootPath: string) {
-  const fullPath = resolve(rootPath, 'clarion.config.json');
+  const fullPath = resolve(rootPath, 'clarigen.config.json');
   const configContents = await readFile(fullPath, { encoding: 'utf-8' });
   const configFile: ConfigFile = JSON.parse(configContents);
   if (!configFile.contracts) throw new Error('Config file missing "contracts"');
