@@ -32,18 +32,27 @@ export const generateInterface = async ({
     '--costs',
     '--assets',
   ]);
-  if (receipt.stderr) {
-    const [error, trace] = receipt.stderr.split('\nNear:\n');
-    let startLine = '';
-    const matcher = /start_line: (\d+),/;
-    const matches = matcher.exec(trace);
-    if (matches) startLine = matches[1];
+  const output = JSON.parse(receipt.stdout);
+  if (output.error) {
+    const { initialization } = output.error;
+    if (initialization?.includes('\nNear:\n')) {
+      const [error, trace] = initialization.split('\nNear:\n');
+      let startLine = '';
+      const matcher = /start_line: (\d+),/;
+      const matches = matcher.exec(trace);
+      if (matches) startLine = matches[1];
+      throw new Error(`Error on ${contractFile}:
+    ${error}
+    ${startLine ? `Near line ${startLine}` : ''}
+    Raw trace:
+    ${trace}
+      `);
+    }
     throw new Error(`Error on ${contractFile}:
-  ${error}
-  ${startLine ? `Near line ${startLine}` : ''}
+  ${JSON.stringify(output.error, null, 2)}
     `);
   }
-  const abi = JSON.parse(receipt.stdout).analysis;
+  const abi = output.analysis;
   return abi;
 };
 
