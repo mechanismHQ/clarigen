@@ -5,7 +5,7 @@ import {
   ClarityAbi,
   toCamelCase,
   getContractNameFromPath,
-} from '@clarion/core';
+} from '@clarigen/core';
 import { makeTypes } from './declaration';
 
 export const generateInterface = async ({
@@ -67,7 +67,7 @@ export const generateInterfaceFile = ({
   const variableName = toCamelCase(contractName, true);
   const abiString = JSON.stringify(abi, null, 2);
 
-  const fileContents = `import { ClarityAbi } from '@clarion/core';
+  const fileContents = `import { ClarityAbi } from '@clarigen/core';
 
 // prettier-ignore
 export const ${variableName}Interface: ClarityAbi = ${abiString};
@@ -88,7 +88,7 @@ export const generateIndexFile = ({
   const varName = toCamelCase(contractName);
   const contractType = `${contractTitle}Contract`;
 
-  const fileContents = `import { proxy, BaseProvider, Contract } from '@clarion/core';
+  const fileContents = `import { proxy, BaseProvider, Contract } from '@clarigen/core';
 import type { ${contractType} } from './types';
 import { ${contractTitle}Interface } from './abi';
 export type { ${contractType} } from './types';
@@ -111,7 +111,7 @@ export const ${varName}Info: Contract<${contractType}> = {
 export const generateTypesFile = (abi: ClarityAbi, contractName: string) => {
   const name = toCamelCase(contractName, true);
   const typings = makeTypes(abi);
-  const fileContents = `import { ClarityTypes, Transaction } from '@clarion/core';
+  const fileContents = `import { ClarityTypes, Transaction } from '@clarigen/core';
 
 export interface ${name}Contract {
 ${typings}

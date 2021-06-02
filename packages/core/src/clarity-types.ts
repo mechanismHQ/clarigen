@@ -25,6 +25,8 @@ import {
   bufferCVFromString,
   stringAsciiCV,
   stringUtf8CV,
+  noneCV,
+  someCV,
 } from '@stacks/transactions';
 import { Result } from 'neverthrow';
 
@@ -180,6 +182,8 @@ export function parseToCV(input: string, type: ClarityAbiType): ClarityValue {
   } else if (isClarityAbiResponse(type)) {
     throw new Error(`Contract function contains unsupported Clarity ABI type: ${typeString}`);
   } else if (isClarityAbiOptional(type)) {
+    if (!input) return noneCV();
+    return someCV(parseToCV(input, type.optional));
     throw new Error(`Contract function contains unsupported Clarity ABI type: ${typeString}`);
   } else if (isClarityAbiTuple(type)) {
     throw new Error(`Contract function contains unsupported Clarity ABI type: ${typeString}`);

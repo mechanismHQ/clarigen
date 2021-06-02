@@ -7,7 +7,7 @@ import {
   serializePostCondition,
 } from '@stacks/transactions';
 import type { PostCondition } from '@stacks/transactions';
-import { SubmitOptions, Transaction, WebSignerOptions, WebTransactionReceipt } from '@clarion/core';
+import { SubmitOptions, Transaction, WebSignerOptions, WebTransactionReceipt } from '@clarigen/core';
 import { StacksNetwork } from '@stacks/network';
 
 export type AppDetails = {

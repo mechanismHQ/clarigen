@@ -14,7 +14,7 @@
     "resolveJsonModule": true,
     "baseUrl": ".",
     "paths": {
-      "@clarion/cli": ["src/index"]
+      "@clarigen/cli": ["src/index"]
     }
   },
   "include": ["./src/**/*"]

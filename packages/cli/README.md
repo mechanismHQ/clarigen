@@ -1,46 +1,46 @@
-# `@clarion/cli`
+# `@clarigen/cli`
 
 # Usage
 
 <!-- usage -->
 ```sh-session
-$ npm install -g @clarion/cli
-$ clarion COMMAND
+$ npm install -g @clarigen/cli
+$ clarigen COMMAND
 running command...
-$ clarion (-v|--version|version)
-@clarion/cli/1.0.8 darwin-arm64 node-v15.8.0
-$ clarion --help [COMMAND]
+$ clarigen (-v|--version|version)
+@clarigen/cli/0.0.3 darwin-arm64 node-v15.14.0
+$ clarigen --help [COMMAND]
 USAGE
-  $ clarion COMMAND
+  $ clarigen COMMAND
 ...
 ```
 <!-- usagestop -->
 
 <!-- commands -->
-* [`clarion `](#clarion-)
-* [`clarion contract [CONTRACT]`](#clarion-contract-contract)
-* [`clarion generate`](#clarion-generate)
+* [`clarigen `](#clarigen-)
+* [`clarigen contract [CONTRACT]`](#clarigen-contract-contract)
+* [`clarigen generate`](#clarigen-generate)
 
-## `clarion `
+## `clarigen `
 
 Generate project files
 
 ```
 USAGE
-  $ clarion
+  $ clarigen
 
 OPTIONS
   -h, --help   show CLI help
   -w, --watch  Watch for changes to your contracts
 ```
 
-## `clarion contract [CONTRACT]`
+## `clarigen contract [CONTRACT]`
 
 Generate files for a single contract
 
 ```
 USAGE
-  $ clarion contract [CONTRACT]
+  $ clarigen contract [CONTRACT]
 
 ARGUMENTS
   CONTRACT  The file path for your contract
@@ -50,13 +50,13 @@ OPTIONS
   -o, --output=output  [default: clarion] Output destination folder
 ```
 
-## `clarion generate`
+## `clarigen generate`
 
 Generate project files
 
 ```
 USAGE
-  $ clarion generate
+  $ clarigen generate
 
 OPTIONS
   -h, --help   show CLI help

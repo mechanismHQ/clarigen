@@ -1,4 +1,4 @@
-import { proxy, BaseProvider, Contract } from '@clarion/core';
+import { proxy, BaseProvider, Contract } from '@clarigen/core';
 import type { TraitContract } from './types';
 import { TraitInterface } from './abi';
 export type { TraitContract } from './types';

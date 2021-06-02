@@ -18,6 +18,7 @@ interface ExecuteOk {
     runtime: number;
   };
   assets: Record<string, any>;
+  // todo: logs
 }
 
 interface ExecuteErr {
@@ -59,6 +60,7 @@ export const executeJson = async ({
   if (result.exitCode !== 0) {
     throw new Error(`Execution error: ${result.stderr}`);
   }
+  // console.log('result.stderr', result.stderr);
   // console.log('result.stdout', result.stdout);
   const response: ExecuteResult = JSON.parse(result.stdout);
   return response;

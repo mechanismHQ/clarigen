@@ -4,7 +4,7 @@ import {
   generateInterfaceFile,
   generateTypesFile,
 } from './generate/files';
-import { getContractNameFromPath } from '@clarion/core';
+import { getContractNameFromPath } from '@clarigen/core';
 import { NativeClarityBinProvider } from '@blockstack/clarity';
 import { getTempFilePath } from '@blockstack/clarity/lib/utils/fsUtil';
 import { getDefaultBinaryFilePath } from '@blockstack/clarity-native-bin';

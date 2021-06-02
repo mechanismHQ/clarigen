@@ -9,7 +9,7 @@ import {
   ContractInstances,
   cvToValue,
   parseToCV,
-} from '@clarion/core';
+} from '@clarigen/core';
 import { AppDetails, makeTx } from './utils';
 import { StacksNetwork } from '@stacks/network';
 

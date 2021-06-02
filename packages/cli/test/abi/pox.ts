@@ -1,4 +1,4 @@
-import { ClarityAbi } from '@clarion/core';
+import { ClarityAbi } from '@clarigen/core';
 
 export const pox: ClarityAbi = {
   functions: [

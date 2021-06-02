@@ -9,7 +9,7 @@ import {
   isClarityAbiStringUtf8,
   isClarityAbiTuple,
 } from '@stacks/transactions';
-import { toCamelCase, ClarityAbi } from '@clarion/core';
+import { toCamelCase, ClarityAbi } from '@clarigen/core';
 
 export const cvFromType = (val: ClarityAbiType) => {
   if (isClarityAbiPrimitive(val)) {

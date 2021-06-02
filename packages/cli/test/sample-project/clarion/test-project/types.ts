@@ -1,4 +1,4 @@
-import { ClarityTypes, Transaction } from '@clarion/core';
+import { ClarityTypes, Transaction } from '@clarigen/core';
 
 export interface TestProjectContract {
   getName: () => Transaction<string, null>;

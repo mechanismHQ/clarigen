@@ -3,7 +3,6 @@ import {
   ClarityType,
   cvToString,
   deserializeCV,
-  parseToCV,
   responseErrorCV,
   responseOkCV,
   ClarityAbiFunction,
@@ -16,10 +15,11 @@ import {
   Contract,
   ContractInstances,
   Contracts,
+  parseToCV,
   getContractNameFromPath,
   getContractIdentifier,
   BaseProvider,
-} from '@clarion/core';
+} from '@clarigen/core';
 import { evalJson, executeJson, Allocation, createClarityBin, cvToValue } from './utils';
 export { Allocation, createClarityBin, cvToValue } from './utils';
 

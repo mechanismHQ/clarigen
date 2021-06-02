@@ -19,7 +19,7 @@
     "typecheck": "tsc --noEmit"
   },
   "prettier": "@blockstack/prettier-config",
-  "name": "@clarion/core",
+  "name": "@clarigen/core",
   "author": "Hank Stoever",
   "module": "dist/core.esm.js",
   "dependencies": {
@@ -28,5 +28,6 @@
   },
   "publishConfig": {
     "access": "public"
-  }
+  },
+  "gitHead": "d3825e8cae60fc7a00bbd88a6abb84d1a5a7dfa6"
 }

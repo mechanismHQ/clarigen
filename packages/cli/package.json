@@ -1,5 +1,5 @@
 {
-  "name": "@clarion/cli",
+  "name": "@clarigen/cli",
   "description": "A CLI for generating a Typescript interface for a Clarity contract.",
   "author": "Hank Stoever",
   "version": "0.0.3",
@@ -24,11 +24,11 @@
     "typecheck": "tsc --noEmit"
   },
   "bin": {
-    "clarion": "./bin/run"
+    "clarigen": "./bin/run"
   },
   "oclif": {
     "commands": "./dist/commands",
-    "bin": "clarion"
+    "bin": "clarigen"
   },
   "prettier": {
     "printWidth": 80,
@@ -48,12 +48,13 @@
   "dependencies": {
     "@blockstack/clarity": "0.3.7-clarion",
     "@blockstack/clarity-native-bin": "0.3.7-clarion",
-    "@clarion/core": "^0.0.3",
+    "@clarigen/core": "^0.0.3",
     "@oclif/command": "^1.8.0",
     "chalk": "4.1.0",
     "ora": "5.4.0"
   },
   "publishConfig": {
     "access": "public"
-  }
+  },
+  "gitHead": "d3825e8cae60fc7a00bbd88a6abb84d1a5a7dfa6"
 }
