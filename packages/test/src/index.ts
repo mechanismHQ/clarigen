@@ -20,8 +20,15 @@ import {
   getContractIdentifier,
   BaseProvider,
 } from '@clarigen/core';
-import { evalJson, executeJson, Allocation, createClarityBin, cvToValue } from './utils';
-export { Allocation, createClarityBin, cvToValue } from './utils';
+import {
+  evalJson,
+  executeJson,
+  Allocation,
+  createClarityBin,
+  cvToValue,
+  deployContract,
+} from './utils';
+export { Allocation, createClarityBin, cvToValue, tx } from './utils';
 
 interface CreateOptions {
   allocations?: Allocation[];
@@ -46,7 +53,7 @@ export class TestProvider implements BaseProvider {
 
   static async create({ clarityBin, contractFilePath, contractIdentifier }: CreateOptions) {
     const client = new Client(contractIdentifier, contractFilePath, clarityBin);
-    await client.deployContract();
+    await deployContract(client, clarityBin);
     return new this(clarityBin, client);
   }
 

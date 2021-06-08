@@ -1,7 +1,8 @@
-import { NativeClarityBinProvider } from '@blockstack/clarity';
+import { Client, NativeClarityBinProvider } from '@blockstack/clarity';
 import { getTempFilePath } from '@blockstack/clarity/lib/utils/fsUtil';
 import { getDefaultBinaryFilePath } from '@blockstack/clarity-native-bin';
 import { ClarityType, ClarityValue, addressToString, PrincipalCV } from '@stacks/transactions';
+import { ResultAssets, Transaction } from '@clarigen/core';
 
 export interface Allocation {
   principal: string;
@@ -17,7 +18,7 @@ interface ExecuteOk {
     [key: string]: any;
     runtime: number;
   };
-  assets: Record<string, any>;
+  assets: ResultAssets;
   // todo: logs
 }
 
@@ -28,7 +29,7 @@ interface ExecuteErr {
     [key: string]: any;
     runtime: number;
   };
-  assets: Record<string, any>;
+  assets: ResultAssets;
   success: false;
 }
 
@@ -127,6 +128,37 @@ function principalToString(principal: PrincipalCV): string {
   }
 }
 
+export async function deployContract(client: Client, provider: NativeClarityBinProvider) {
+  const receipt = await provider.runCommand([
+    'launch',
+    client.name,
+    client.filePath,
+    provider.dbFilePath,
+    '--costs',
+    '--assets',
+  ]);
+  const output = JSON.parse(receipt.stdout);
+  if (output.error) {
+    const { initialization } = output.error;
+    if (initialization?.includes('\nNear:\n')) {
+      const [error, trace] = initialization.split('\nNear:\n');
+      let startLine = '';
+      const matcher = /start_line: (\d+),/;
+      const matches = matcher.exec(trace);
+      if (matches) startLine = matches[1];
+      throw new Error(`Error on ${client.filePath}:
+    ${error}
+    ${startLine ? `Near line ${startLine}` : ''}
+    Raw trace:
+    ${trace}
+      `);
+    }
+    throw new Error(`Error on ${client.filePath}:
+  ${JSON.stringify(output.error, null, 2)}
+    `);
+  }
+}
+
 export function cvToValue(val: ClarityValue): any {
   switch (val.type) {
     case ClarityType.BoolTrue:
@@ -163,4 +195,10 @@ export function cvToValue(val: ClarityValue): any {
     case ClarityType.StringUTF8:
       return val.data;
   }
+}
+
+export async function tx<A, B>(tx: Transaction<A, B>, sender: string) {
+  const receipt = await tx.submit({ sender });
+  const result = await receipt.getResult();
+  return result;
 }

@@ -1,5 +1,12 @@
 import { PostCondition, StacksTransaction } from '@stacks/transactions';
 
+export interface ResultAssets {
+  stx: Record<string, string>;
+  burns: Record<string, string>;
+  tokens: Record<string, Record<string, string>>;
+  assets: Record<string, Record<string, string>>;
+}
+
 export interface TransactionResultOk<Ok> {
   value: Ok;
   response: ResponseOk<Ok>;
@@ -9,7 +16,7 @@ export interface TransactionResultOk<Ok> {
     [key: string]: any;
     runtime: number;
   };
-  assets: Record<string, any>;
+  assets: ResultAssets;
   // TODO: add events
 }
 

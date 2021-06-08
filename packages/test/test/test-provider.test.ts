@@ -1,4 +1,4 @@
-import { TestProvider, createClarityBin } from '../src';
+import { TestProvider, createClarityBin, tx } from '../src';
 import { simpleContract as simpleProxy } from './contracts/simple';
 
 const getContract = async () => {
@@ -14,9 +14,7 @@ const getContract = async () => {
 
 test('can call public function', async () => {
   const contract = await getContract();
-  const tx = contract.getName();
-  const receipt = await tx.submit({ sender: 'ST1ESYCGJB5Z5NBHS39XPC70PGC14WAQK5XXNQYDW' });
-  const result = await receipt.getResult();
+  const result = await tx(contract.getName(), 'ST1ESYCGJB5Z5NBHS39XPC70PGC14WAQK5XXNQYDW');
   if (!result.isOk) throw 'Expected ok';
   expect(result.value).toEqual('hello, world');
 });

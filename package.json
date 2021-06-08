@@ -5,7 +5,7 @@
     "build": "lerna run build",
     "lint": "eslint packages/**/*.{ts,js}",
     "lint:fix": "eslint --fix packages/**/*.{ts,js}",
-    "test": "jest",
+    "test": "lerna run test --no-bail --parallel",
     "typecheck": "lerna run typecheck --no-bail --parallel"
   },
   "prettier": "@blockstack/prettier-config",
