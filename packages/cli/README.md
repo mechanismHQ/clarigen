@@ -1,8 +1,13 @@
 # `@clarigen/cli`
 
+For setup instructions, check out the [Clarigen setup guide](https://github.com/hstove/clarigen#setup-guide).
+
+Most of the time, you'll only need to run `clarigen` to automatically build your files. You can also run `clarigen --watch` to automatically generate files whenever you save one of your Clarity contracts.
+
 # Usage
 
 <!-- usage -->
+
 ```sh-session
 $ npm install -g @clarigen/cli
 $ clarigen COMMAND
@@ -14,12 +19,14 @@ USAGE
   $ clarigen COMMAND
 ...
 ```
+
 <!-- usagestop -->
 
 <!-- commands -->
-* [`clarigen `](#clarigen-)
-* [`clarigen contract [CONTRACT]`](#clarigen-contract-contract)
-* [`clarigen generate`](#clarigen-generate)
+
+- [`clarigen `](#clarigen-)
+- [`clarigen contract [CONTRACT]`](#clarigen-contract-contract)
+- [`clarigen generate`](#clarigen-generate)
 
 ## `clarigen `
 
@@ -62,6 +69,7 @@ OPTIONS
   -h, --help   show CLI help
   -w, --watch  Watch for changes to your contracts
 ```
+
 <!-- commandsstop -->
 
 ## Development

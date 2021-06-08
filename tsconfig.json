@@ -8,17 +8,18 @@
     "esModuleInterop": true,
     "module": "commonjs",
     "target": "es6",
-    "lib": ["es6"],
+    "lib": ["dom", "esnext"],
     // break
     "importHelpers": true,
     "jsx": "react",
     "sourceMap": true,
     "strict": true,
-    "noUnusedLocals": true,
-    "noUnusedParameters": true,
+    // "noUnusedLocals": true,
+    // "noUnusedParameters": true,
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,
-    "moduleResolution": "node"
+    "moduleResolution": "node",
+    "types": ["@stacks/connect", "jest"]
   },
   "exclude": ["node_modules", "dist"]
 }
