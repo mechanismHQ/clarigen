@@ -28,7 +28,7 @@ import {
   cvToValue,
   deployContract,
 } from './utils';
-export { Allocation, createClarityBin, cvToValue, tx } from './utils';
+export { Allocation, createClarityBin, cvToValue, tx, txOk, txErr } from './utils';
 
 interface CreateOptions {
   allocations?: Allocation[];

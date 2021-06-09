@@ -137,6 +137,11 @@ export async function deployContract(client: Client, provider: NativeClarityBinP
     '--costs',
     '--assets',
   ]);
+  if (receipt.stderr) {
+    throw new Error(`Error on ${client.filePath}:
+  ${receipt.stderr}
+    `);
+  }
   const output = JSON.parse(receipt.stdout);
   if (output.error) {
     const { initialization } = output.error;
@@ -200,5 +205,17 @@ export function cvToValue(val: ClarityValue): any {
 export async function tx<A, B>(tx: Transaction<A, B>, sender: string) {
   const receipt = await tx.submit({ sender });
   const result = await receipt.getResult();
+  return result;
+}
+
+export async function txOk<A, B>(_tx: Transaction<A, B>, sender: string) {
+  const result = await tx(_tx, sender);
+  if (!result.isOk) throw new Error(`Expected transaction ok, got error: ${result.value}`);
+  return result;
+}
+
+export async function txErr<A, B>(_tx: Transaction<A, B>, sender: string) {
+  const result = await tx(_tx, sender);
+  if (result.isOk) throw new Error(`Expected transaction error, got ok: ${result.value}`);
   return result;
 }

@@ -7,26 +7,23 @@ Most of the time, you'll only need to run `clarigen` to automatically build your
 # Usage
 
 <!-- usage -->
-
 ```sh-session
 $ npm install -g @clarigen/cli
 $ clarigen COMMAND
 running command...
 $ clarigen (-v|--version|version)
-@clarigen/cli/0.0.3 darwin-arm64 node-v15.14.0
+@clarigen/cli/0.0.4 darwin-arm64 node-v15.14.0
 $ clarigen --help [COMMAND]
 USAGE
   $ clarigen COMMAND
 ...
 ```
-
 <!-- usagestop -->
 
 <!-- commands -->
-
-- [`clarigen `](#clarigen-)
-- [`clarigen contract [CONTRACT]`](#clarigen-contract-contract)
-- [`clarigen generate`](#clarigen-generate)
+* [`clarigen `](#clarigen-)
+* [`clarigen contract [CONTRACT]`](#clarigen-contract-contract)
+* [`clarigen generate`](#clarigen-generate)
 
 ## `clarigen `
 
@@ -69,7 +66,6 @@ OPTIONS
   -h, --help   show CLI help
   -w, --watch  Watch for changes to your contracts
 ```
-
 <!-- commandsstop -->
 
 ## Development

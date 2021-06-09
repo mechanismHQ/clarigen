@@ -32,6 +32,11 @@ export const generateInterface = async ({
     '--costs',
     '--assets',
   ]);
+  if (receipt.stderr) {
+    throw new Error(`Error on ${contractFile}:
+  ${receipt.stderr}
+    `);
+  }
   const output = JSON.parse(receipt.stdout);
   if (output.error) {
     const { initialization } = output.error;
