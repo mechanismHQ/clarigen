@@ -1,8 +1,7 @@
-import { Client, NativeClarityBinProvider } from '@blockstack/clarity';
-import { getTempFilePath } from '@blockstack/clarity/lib/utils/fsUtil';
+import { NativeClarityBinProvider, Client } from '@blockstack/clarity';
 import { getDefaultBinaryFilePath } from '@blockstack/clarity-native-bin';
-import { ClarityType, ClarityValue, addressToString, PrincipalCV } from '@stacks/transactions';
-import { ResultAssets, Transaction } from '@clarigen/core';
+import { getTempFilePath } from '@blockstack/clarity/lib/utils/fsUtil';
+import { ResultAssets } from '@clarigen/core';
 
 export interface Allocation {
   principal: string;
@@ -117,17 +116,6 @@ export const createClarityBin = async ({
   return provider;
 };
 
-function principalToString(principal: PrincipalCV): string {
-  if (principal.type === ClarityType.PrincipalStandard) {
-    return addressToString(principal.address);
-  } else if (principal.type === ClarityType.PrincipalContract) {
-    const address = addressToString(principal.address);
-    return `${address}.${principal.contractName.content}`;
-  } else {
-    throw new Error(`Unexpected principal data: ${JSON.stringify(principal)}`);
-  }
-}
-
 export async function deployContract(client: Client, provider: NativeClarityBinProvider) {
   const receipt = await provider.runCommand([
     'launch',
@@ -162,60 +150,4 @@ export async function deployContract(client: Client, provider: NativeClarityBinP
   ${JSON.stringify(output.error, null, 2)}
     `);
   }
-}
-
-export function cvToValue(val: ClarityValue): any {
-  switch (val.type) {
-    case ClarityType.BoolTrue:
-      return true;
-    case ClarityType.BoolFalse:
-      return false;
-    case ClarityType.Int:
-      return val.value.fromTwos(128).toNumber();
-    case ClarityType.UInt:
-      return val.value.toNumber();
-    case ClarityType.Buffer:
-      return `0x${val.buffer.toString('hex')}`;
-    case ClarityType.OptionalNone:
-      return null;
-    case ClarityType.OptionalSome:
-      return cvToValue(val.value);
-    case ClarityType.ResponseErr:
-      return cvToValue(val.value);
-    case ClarityType.ResponseOk:
-      return cvToValue(val.value);
-    case ClarityType.PrincipalStandard:
-    case ClarityType.PrincipalContract:
-      return principalToString(val);
-    case ClarityType.List:
-      return val.list.map(v => cvToValue(v));
-    case ClarityType.Tuple:
-      const result: { [key: string]: any } = {};
-      Object.keys(val.data).forEach(key => {
-        result[key] = cvToValue(val.data[key]);
-      });
-      return result;
-    case ClarityType.StringASCII:
-      return val.data;
-    case ClarityType.StringUTF8:
-      return val.data;
-  }
-}
-
-export async function tx<A, B>(tx: Transaction<A, B>, sender: string) {
-  const receipt = await tx.submit({ sender });
-  const result = await receipt.getResult();
-  return result;
-}
-
-export async function txOk<A, B>(_tx: Transaction<A, B>, sender: string) {
-  const result = await tx(_tx, sender);
-  if (!result.isOk) throw new Error(`Expected transaction ok, got error: ${result.value}`);
-  return result;
-}
-
-export async function txErr<A, B>(_tx: Transaction<A, B>, sender: string) {
-  const result = await tx(_tx, sender);
-  if (result.isOk) throw new Error(`Expected transaction error, got ok: ${result.value}`);
-  return result;
 }

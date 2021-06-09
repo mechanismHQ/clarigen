@@ -27,8 +27,18 @@ import {
   createClarityBin,
   cvToValue,
   deployContract,
+  deployUtilContract,
 } from './utils';
-export { Allocation, createClarityBin, cvToValue, tx, txOk, txErr } from './utils';
+export {
+  Allocation,
+  createClarityBin,
+  cvToValue,
+  tx,
+  txOk,
+  txErr,
+  getBlockHeight,
+  mineBlocks,
+} from './utils';
 
 interface CreateOptions {
   allocations?: Allocation[];
@@ -40,6 +50,10 @@ interface CreateOptions {
 interface FromContractOptions<T> {
   contract: Contract<T>;
   clarityBin: NativeClarityBinProvider;
+}
+
+interface UtilsContract {
+  getBlockHeight: Promise<number>;
 }
 
 export class TestProvider implements BaseProvider {
@@ -78,6 +92,7 @@ export class TestProvider implements BaseProvider {
   ): Promise<ContractInstances<T, M>> {
     const _clarityBin = clarityBin ?? (await createClarityBin());
     const instances = {} as ContractInstances<T, M>;
+    await deployUtilContract(_clarityBin);
     for (const k in contracts) {
       const contract = contracts[k];
       const instance = await this.fromContract({

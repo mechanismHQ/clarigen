@@ -1,26 +1,28 @@
+import { NativeClarityBinProvider } from '@blockstack/clarity';
 import { TestProvider, createClarityBin, tx } from '../src';
-import { simpleContract as simpleProxy } from './contracts/simple';
+import { SimpleContract, simpleInfo } from './contracts/simple';
 
-const getContract = async () => {
+let contract: SimpleContract;
+let provider: NativeClarityBinProvider;
+
+async function deploy() {
   const clarityBin = await createClarityBin();
-  const provider = await TestProvider.create({
-    contractFilePath: 'test/contracts/simple/simple.clar',
-    contractIdentifier: 'S1G2081040G2081040G2081040G208105NK8PE5.simple',
-    clarityBin,
-  });
-  const contract = simpleProxy(provider);
-  return contract;
-};
+  const contracts = await TestProvider.fromContracts({ simple: simpleInfo }, clarityBin);
+  contract = contracts.simple.contract;
+  provider = clarityBin;
+}
+
+beforeAll(async () => {
+  await deploy();
+});
 
 test('can call public function', async () => {
-  const contract = await getContract();
   const result = await tx(contract.getName(), 'ST1ESYCGJB5Z5NBHS39XPC70PGC14WAQK5XXNQYDW');
   if (!result.isOk) throw 'Expected ok';
   expect(result.value).toEqual('hello, world');
 });
 
 test('can call a read-only function', async () => {
-  const contract = await getContract();
   const num = await contract.getNumber();
   expect(num).toEqual(1);
 });
