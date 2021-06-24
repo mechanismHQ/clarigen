@@ -1,6 +1,6 @@
 import { NativeClarityBinProvider } from '@blockstack/clarity';
 import { TestProvider, createClarityBin, tx, getBlockHeight, mineBlocks } from '../src';
-import { SimpleContract, simpleInfo } from './contracts/simple';
+import { SimpleContract } from './contracts/simple';
 
 let contract: SimpleContract;
 let provider: NativeClarityBinProvider;

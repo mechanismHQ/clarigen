@@ -23,6 +23,7 @@ interface ExecuteOk {
 
 interface ExecuteErr {
   message: string;
+  error: any;
   output_serialized: string;
   costs: {
     [key: string]: any;
@@ -57,12 +58,13 @@ export const executeJson = async ({
     senderAddress,
     ...args,
   ]);
+  const response: ExecuteResult = JSON.parse(result.stdout);
+  if (response && 'error' in response) {
+    throw new Error(`Transaction error: ${JSON.stringify(response.error, null, 2)}`);
+  }
   if (result.exitCode !== 0) {
     throw new Error(`Execution error: ${result.stderr}`);
   }
-  // console.log('result.stderr', result.stderr);
-  // console.log('result.stdout', result.stdout);
-  const response: ExecuteResult = JSON.parse(result.stdout);
   return response;
 };
 
@@ -101,8 +103,11 @@ export const evalJson = async ({
     }
   );
   const response: EvalResult = JSON.parse(receipt.stdout);
+  if (process.env.PRINT_CLARIGEN_STDERR && receipt.stderr) {
+    console.log(receipt.stderr);
+  }
   if (!response.success) {
-    throw new Error(response.error);
+    throw new Error(JSON.stringify(response.error, null, 2));
   }
   return response;
 };

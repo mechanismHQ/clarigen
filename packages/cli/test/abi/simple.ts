@@ -4,33 +4,103 @@ import { ClarityAbi } from '@clarigen/core';
 export const SimpleInterface: ClarityAbi = {
   "functions": [
     {
-      "name": "get-name",
       "access": "public",
       "args": [],
+      "name": "get-name",
       "outputs": {
         "type": {
           "response": {
+            "error": "none",
             "ok": {
               "string-ascii": {
                 "length": 12
               }
-            },
-            "error": "none"
+            }
           }
         }
       }
     },
     {
-      "name": "get-number",
+      "access": "public",
+      "args": [],
+      "name": "get-tuple-pub",
+      "outputs": {
+        "type": {
+          "response": {
+            "error": "none",
+            "ok": {
+              "tuple": [
+                {
+                  "name": "a",
+                  "type": "uint128"
+                },
+                {
+                  "name": "b",
+                  "type": "bool"
+                }
+              ]
+            }
+          }
+        }
+      }
+    },
+    {
       "access": "read_only",
       "args": [],
+      "name": "get-tuple",
       "outputs": {
-        "type": "uint128"
+        "type": {
+          "tuple": [
+            {
+              "name": "a",
+              "type": "uint128"
+            },
+            {
+              "name": "b",
+              "type": "bool"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "access": "read_only",
+      "args": [],
+      "name": "get-tuple-resp",
+      "outputs": {
+        "type": {
+          "response": {
+            "error": "none",
+            "ok": {
+              "tuple": [
+                {
+                  "name": "a",
+                  "type": "uint128"
+                },
+                {
+                  "name": "b",
+                  "type": "bool"
+                },
+                {
+                  "name": "c",
+                  "type": {
+                    "tuple": [
+                      {
+                        "name": "d",
+                        "type": "int128"
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          }
+        }
       }
     }
   ],
-  "variables": [],
-  "maps": [],
   "fungible_tokens": [],
-  "non_fungible_tokens": []
+  "maps": [],
+  "non_fungible_tokens": [],
+  "variables": []
 };

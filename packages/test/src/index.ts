@@ -15,7 +15,6 @@ import {
   Contract,
   ContractInstances,
   Contracts,
-  parseToCV,
   getContractNameFromPath,
   getContractIdentifier,
   BaseProvider,
@@ -28,6 +27,7 @@ import {
   cvToValue,
   deployContract,
   deployUtilContract,
+  parseToCV,
 } from './utils';
 export {
   Allocation,

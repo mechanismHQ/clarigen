@@ -118,6 +118,7 @@ export const generateTypesFile = (abi: ClarityAbi, contractName: string) => {
   const typings = makeTypes(abi);
   const fileContents = `import { ClarityTypes, Transaction } from '@clarigen/core';
 
+// prettier-ignore
 export interface ${name}Contract {
 ${typings}
 }

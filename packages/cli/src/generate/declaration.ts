@@ -76,7 +76,14 @@ export const jsTypeFromAbiType = (val: ClarityAbiType): string => {
     const innerType = jsTypeFromAbiType(val.optional);
     return `${innerType} | null`;
   } else if (isClarityAbiTuple(val)) {
-    return 'ClarityTypes.TupleCV';
+    const tupleDefs: string[] = [];
+    val.tuple.forEach(({ name, type }) => {
+      const innerType = jsTypeFromAbiType(type);
+      tupleDefs.push(`"${name}": ${innerType}`);
+    });
+    return `{
+  ${tupleDefs.join(';\n  ')}
+    }`;
   } else if (isClarityAbiList(val)) {
     const innerType: any = jsTypeFromAbiType(val.list.type);
     return `${innerType}[]`;
