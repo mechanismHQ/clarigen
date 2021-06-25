@@ -9,6 +9,9 @@ import {
   tupleCV,
   isClarityAbiList,
   listCV,
+  isClarityAbiOptional,
+  noneCV,
+  someCV,
 } from '@stacks/transactions';
 
 function principalToString(principal: PrincipalCV): string {
@@ -80,6 +83,9 @@ export function parseToCV(input: CVInput, type: ClarityAbiType): ClarityValue {
       return parseToCV(input, type.list.type);
     });
     return listCV(values);
+  } else if (isClarityAbiOptional(type)) {
+    if (!input) return noneCV();
+    return someCV(parseToCV(input, type.optional));
   }
   return _parseToCV(input as string, type);
 }

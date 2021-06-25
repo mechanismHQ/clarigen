@@ -36,11 +36,7 @@ You'll also want to import `TestProvider` from `@clarigen/test`. You might also 
 import { TestProvider, txErr, txOk } from '@clarigen/test';
 
 // Make sure you import from the `outputDir` specified in clarigen.config.json
-import { counterInfo, CounterContract } from '../src/clarigen/counter';
-import { CounterCoinContract, counterCoinInfo } from '../src/clarigen/counter-coin';
-
-// We don't need to later reference this contract, we're just importing it to deploy the contract
-import { ftTraitInfo } from '../src/clarigen/ft-trait';
+import { CounterContract, CounterCoinContract, contracts } from '../src/clarigen';
 ```
 
 ### Deploying contracts
@@ -52,23 +48,25 @@ You'll need to deploy contracts before running your tests. Typically, this is do
 **Important**: the order in which you specify contracts is important. Often times, one contract will depend on a different contract. Contracts are deployed in the order of which they are specified.
 
 ```ts
-const contracts = await TestProvider.fromContracts({
-  // The trait is deployed first
-  trait: ftTraitInfo,
-  // The token contract depends on the trait
-  token: counterCoinInfo,
-  // The counter contract depends on the token
-  counter: counterInfo,
-});
+// `contracts` is imported from '../src/clarigen'
+const deployed = await TestProvider.fromContracts(contracts);
 ```
 
-The result of `TestProvider.fromContracts` is an object that includes all of your contract interfaces. This result is what you'll use to actually call contract methods. The keys of this object are the same as which you've specified. In this case, the `contracts` variable has the keys `trait`, `token`, and `counter`.
+The result of `TestProvider.fromContracts` is an object that includes all of your contract interfaces. This result is what you'll use to actually call contract methods. The keys of this object are the camel-cased file names of your contracts. So, `my-token.clar` will be `myToken`.
 
 ```ts
-const { counter } = contracts;
+const { counter } = deployed;
 
 // calling contract functions:
 await counter.getCounter();
+```
+
+If you're using Clarinet with Clarigen, then you can automatically import and include your default account balances.
+
+```ts
+import { accounts, contracts } from '../src/clarigen';
+
+await TestProvider.fromContracts(contracts, accounts);
 ```
 
 ### Interacting with contracts

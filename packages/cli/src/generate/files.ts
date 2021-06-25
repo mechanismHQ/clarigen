@@ -136,7 +136,7 @@ export const generateProjectIndexFile = (config: ConfigFile) => {
 
   let accounts = '';
   if ('accounts' in config) {
-    accounts = `// prettier-ignore
+    accounts = `\n\n// prettier-ignore
 export const accounts = ${JSON.stringify(config.accounts, null, 2)};`;
   }
 
@@ -151,7 +151,7 @@ export const accounts = ${JSON.stringify(config.accounts, null, 2)};`;
     const _import = `import { ${contractInfo} } from ${importPath};`;
     imports.push(_import);
 
-    const _export = `export { ${contractInterface} } from ${importPath};`;
+    const _export = `export type { ${contractInterface} } from ${importPath};`;
     exports.push(_export);
 
     const map = `${contractVar}: ${contractInfo},`;
@@ -163,9 +163,7 @@ ${exports.join('\n')}
 
 export const contracts = {
   ${contractMap.join('\n  ')}
-};
-
-${accounts}
+};${accounts}
 `;
   return file;
 };

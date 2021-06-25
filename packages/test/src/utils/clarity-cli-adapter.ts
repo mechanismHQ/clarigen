@@ -112,14 +112,57 @@ export const evalJson = async ({
   return response;
 };
 
+export interface ClarinetAccount {
+  balance: number;
+  address: string;
+}
+
+export interface ClarinetAccounts {
+  deployer: ClarinetAccount;
+  [key: string]: ClarinetAccount;
+}
+
+type AllocationOrAccounts = ClarinetAccounts | Allocation[];
+
+export function getAllocations(allocations?: AllocationOrAccounts): Allocation[] {
+  if (!allocations) return [];
+  if ('deployer' in allocations) {
+    return Object.values(allocations).map(a => ({
+      amount: a.balance,
+      principal: a.address,
+    }));
+  } else if (Array.isArray(allocations)) {
+    return allocations;
+  }
+  return [];
+}
+
 export const createClarityBin = async ({
-  allocations = [],
-}: { allocations?: Allocation[] } = {}) => {
+  allocations,
+}: { allocations?: AllocationOrAccounts } = {}) => {
   const binFile = getDefaultBinaryFilePath();
   const dbFileName = getTempFilePath();
-  const provider = await NativeClarityBinProvider.create(allocations, dbFileName, binFile);
+  const _allocations = getAllocations(allocations);
+  const provider = await NativeClarityBinProvider.create(_allocations, dbFileName, binFile);
   return provider;
 };
+
+export async function getDefaultClarityBin(
+  clarityBinOrAccounts?: NativeClarityBinProvider | ClarinetAccounts
+) {
+  let clarityBin: NativeClarityBinProvider;
+  if (!clarityBinOrAccounts) {
+    clarityBin = await createClarityBin();
+  } else if ('deployer' in clarityBinOrAccounts) {
+    clarityBin = await createClarityBin({ allocations: clarityBinOrAccounts });
+    // } else if ('closeActions' in clarityBinOrAccounts) {
+  } else if (clarityBinOrAccounts instanceof NativeClarityBinProvider) {
+    clarityBin = clarityBinOrAccounts;
+  } else {
+    throw new Error('Should never get here');
+  }
+  return clarityBin;
+}
 
 export async function deployContract(client: Client, provider: NativeClarityBinProvider) {
   const receipt = await provider.runCommand([

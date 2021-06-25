@@ -28,6 +28,8 @@ import {
   deployContract,
   deployUtilContract,
   parseToCV,
+  ClarinetAccounts,
+  getDefaultClarityBin,
 } from './utils';
 export {
   Allocation,
@@ -86,18 +88,26 @@ export class TestProvider implements BaseProvider {
     return contract.contract(provider);
   }
 
-  static async fromContracts<T extends Contracts<M>, M>(
+  public static async fromContracts<T extends Contracts<M>, M>(
     contracts: T,
     clarityBin?: NativeClarityBinProvider
+  ): Promise<ContractInstances<T, M>>;
+  public static async fromContracts<T extends Contracts<M>, M>(
+    contracts: T,
+    accounts?: ClarinetAccounts
+  ): Promise<ContractInstances<T, M>>;
+  public static async fromContracts<T extends Contracts<M>, M>(
+    contracts: T,
+    clarityBinOrAccounts?: NativeClarityBinProvider | ClarinetAccounts
   ): Promise<ContractInstances<T, M>> {
-    const _clarityBin = clarityBin ?? (await createClarityBin());
+    const clarityBin = await getDefaultClarityBin(clarityBinOrAccounts);
     const instances = {} as ContractInstances<T, M>;
-    await deployUtilContract(_clarityBin);
+    await deployUtilContract(clarityBin);
     for (const k in contracts) {
       const contract = contracts[k];
       const instance = await this.fromContract({
         contract,
-        clarityBin: _clarityBin,
+        clarityBin,
       });
       instances[k] = {
         identifier: getContractIdentifier(contract),

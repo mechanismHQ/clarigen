@@ -12,6 +12,7 @@
   - [Create a /contracts folder](#create-a-contracts-folder)
   - [Create a clarigen.config.json file:](#create-a-clarigenconfigjson-file)
   - [Generate Clarigen interfaces](#generate-clarigen-interfaces)
+- [Usage with Clarinet](#usage-with-clarinet)
 
 <!-- /TOC -->
 
@@ -22,7 +23,7 @@ The workflow for using Clarigen is usually:
 - Write your Clarity contracts under a `/contracts` folder
 - Automatically generate interfaces for your contracts with `yarn clarigen --watch`
 - Write unit tests using [`@clarigen/test`](https://github.com/hstove/clarigen/tree/main/packages/test)
-- Build your web app using [`@clarigen/web`](https://github.com/hstove/clarigen/tree/main/packages/web)
+- _[In Development]_ Build your web app using [`@clarigen/web`](https://github.com/hstove/clarigen/tree/main/packages/web)
 - _[Coming soon]_ Write script and server-side code with `@clarigen/node`
 
 ## Why?
@@ -185,3 +186,29 @@ npx clarigen
 ```
 
 You should see a new folder created at `src/clarigen/hello-world`. You will have a different folder for each contract specified. These folders include the TypeScript interfaces, and other metadata, to allow each of Clarigen's adapters to interace with it.
+
+## Usage with Clarinet
+
+[Clarinet](https://github.com/hirosystems/clarinet) is another fantastic dev tool for building Clarity contracts.
+
+How is Clarinet different from Clarigen?
+
+- Clarigen is more intended for strictly creating an excellent Typescript developer experience, so that you can run the same exact code in any environment (unit tests, node.js scripts, and web apps)
+- Clarigen utilizes node.js, whereas Clarinet supports Typescript unit tests in Deno. At the moment, the tools are not compatible for unit testing
+- Clarinet provides an out-of-the-box REPL and notebooks experience, which is invaluable for iterating on contracts
+- Clarigen generates type-safe and convenient interfaces to your contracts, whereas Clarinet unit tests are less strongly typed
+
+**Ultimately, the two tools are best used in tandem**
+
+It's really easy to have a project that uses both Clarigen and Clarinet. You'll still need to install the dependencies listed above, but your `clarigen.config.json` file can simply reference that you're using Clarinet:
+
+```json
+{
+  "outputDir": "src/clarigen",
+  "clarinet": "my-clarinet-folder"
+}
+```
+
+Or, to indicate that Clarinet is at the root level of your project, you can set `"clarinet": "."` in your configuration.
+
+When Clarigen sees this configuration, it fetches all contract information from Clarinet's configuration files (i.e. `Clarinet.toml` and `settings/Development.toml`).
