@@ -4,7 +4,7 @@ import { readFile } from 'fs/promises';
 import { ConfigContract } from './config';
 import { generateWallet, getStxAddress } from '@stacks/wallet-sdk';
 
-interface ClarinetAccount {
+interface ClarinetConfigAccount {
   mnemonic: string;
   balance: bigint;
 }
@@ -14,8 +14,8 @@ interface ClarinetDevConfig {
     name: string;
   };
   accounts: {
-    deployer: ClarinetAccount;
-    [key: string]: ClarinetAccount;
+    deployer: ClarinetConfigAccount;
+    [key: string]: ClarinetConfigAccount;
   };
 }
 
@@ -55,17 +55,11 @@ export async function getClarinetConfig(folder: string) {
 }
 
 export async function getContractsFromClarinet(
-  folder: string
+  folder: string,
+  accounts: ClarinetAccounts
 ): Promise<ConfigContract[]> {
   const clarinetConfig = await getClarinetConfig(folder);
-  const devConfig = await getClarinetDevConfig(folder);
-  const { deployer } = devConfig.accounts;
-  const wallet = await generateWallet({
-    secretKey: deployer.mnemonic,
-    password: 'password',
-  });
-  const [account] = wallet.accounts;
-  const deployerAddress = getStxAddress({ account });
+  const deployerAddress = accounts.deployer.address;
   const contracts: ConfigContract[] = Object.entries(
     clarinetConfig.contracts
   ).map(([contractName, info]) => {
@@ -76,4 +70,38 @@ export async function getContractsFromClarinet(
     };
   });
   return contracts;
+}
+
+export interface ClarinetAccount extends ClarinetConfigAccount {
+  address: string;
+}
+
+export interface ClarinetAccounts {
+  deployer: ClarinetAccount;
+  [name: string]: ClarinetAccount;
+}
+
+export async function getClarinetAccounts(
+  folder: string
+): Promise<ClarinetAccounts> {
+  const devConfig = await getClarinetDevConfig(folder);
+  const accountEntries = await Promise.all(
+    Object.entries(devConfig.accounts).map(async ([key, info]) => {
+      const wallet = await generateWallet({
+        secretKey: info.mnemonic,
+        password: 'password',
+      });
+      const [account] = wallet.accounts;
+      const address = getStxAddress({ account });
+      return [
+        key,
+        {
+          ...info,
+          address,
+        },
+      ];
+    })
+  );
+  const accounts: ClarinetAccounts = Object.fromEntries(accountEntries);
+  return accounts;
 }

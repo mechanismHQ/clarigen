@@ -1,6 +1,10 @@
 import { resolve, join, relative } from 'path';
 import { readFile } from 'fs/promises';
-import { getContractsFromClarinet } from './clarinet-config';
+import {
+  ClarinetAccounts,
+  getClarinetAccounts,
+  getContractsFromClarinet,
+} from './clarinet-config';
 
 export interface ConfigContract {
   address: string;
@@ -22,9 +26,12 @@ export interface ConfigFileRegular extends ConfigFileBase {
 
 export type ConfigFileContents = ConfigFileRegular | ConfigFileWithClarinet;
 
-export type ConfigFile = ConfigFileRegular & {
-  clarinet?: string;
-};
+export interface ConfigFileWithClarinetInfo extends ConfigFileRegular {
+  clarinet: string;
+  accounts: ClarinetAccounts;
+}
+
+export type ConfigFile = ConfigFileRegular | ConfigFileWithClarinetInfo;
 
 export async function getConfigFile(rootPath: string): Promise<ConfigFile> {
   const fullPath = resolve(rootPath, 'clarigen.config.json');
@@ -33,7 +40,8 @@ export async function getConfigFile(rootPath: string): Promise<ConfigFile> {
   if (!configFile.outputDir) throw new Error('Config file missing "outputDir"');
   if ('clarinet' in configFile) {
     const clarinetPath = resolve(rootPath, configFile.clarinet);
-    const contracts = await getContractsFromClarinet(clarinetPath);
+    const accounts = await getClarinetAccounts(clarinetPath);
+    const contracts = await getContractsFromClarinet(clarinetPath, accounts);
     const contractsDir = relative(
       process.cwd(),
       join(configFile.clarinet, 'contracts')
@@ -42,6 +50,7 @@ export async function getConfigFile(rootPath: string): Promise<ConfigFile> {
       ...configFile,
       contracts,
       contractsDir,
+      accounts,
     };
   }
   if (!configFile.contracts) throw new Error('Config file missing "contracts"');

@@ -82,7 +82,7 @@ export const generateProject = async (projectPath: string) => {
     });
   }
 
-  const indexFile = generateProjectIndexFile(contracts);
+  const indexFile = generateProjectIndexFile(configFile);
 
   const indexPath = resolve(outputFolder, 'index.ts');
   await writeFile(indexPath, indexFile);

@@ -7,7 +7,7 @@ import {
   getContractNameFromPath,
 } from '@clarigen/core';
 import { makeTypes } from './declaration';
-import { ConfigContract } from 'src/config';
+import { ConfigContract, ConfigFile } from 'src/config';
 import { dirname, resolve, join } from 'path';
 
 export const generateInterface = async ({
@@ -129,12 +129,18 @@ ${typings}
   return fileContents;
 };
 
-export const generateProjectIndexFile = (contracts: ConfigContract[]) => {
+export const generateProjectIndexFile = (config: ConfigFile) => {
   const imports: string[] = [];
   const exports: string[] = [];
   const contractMap: string[] = [];
 
-  contracts.forEach((contract) => {
+  let accounts = '';
+  if ('accounts' in config) {
+    accounts = `// prettier-ignore
+export const accounts = ${JSON.stringify(config.accounts, null, 2)};`;
+  }
+
+  config.contracts.forEach((contract) => {
     const contractName = getContractNameFromPath(contract.file);
     const contractVar = toCamelCase(contractName);
     const contractInfo = `${contractVar}Info`;
@@ -158,6 +164,8 @@ ${exports.join('\n')}
 export const contracts = {
   ${contractMap.join('\n  ')}
 };
+
+${accounts}
 `;
   return file;
 };

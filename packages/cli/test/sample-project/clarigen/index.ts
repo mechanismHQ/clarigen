@@ -7,3 +7,5 @@ export const contracts = {
   trait: traitInfo,
   testProject: testProjectInfo,
 };
+
+
