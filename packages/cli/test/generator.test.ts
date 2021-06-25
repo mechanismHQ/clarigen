@@ -6,8 +6,11 @@ import {
   generateIndexFile,
   generateInterface,
   generateInterfaceFile,
+  generateProjectIndexFile,
+  getConfigFile,
 } from '../src';
 import { readFile } from './test-utils';
+import { resolve } from 'path';
 
 test('can generate an interface', async () => {
   const abi = await generateInterface({
@@ -45,5 +48,13 @@ test('can generate index file', async () => {
     contractFile: 'test/contracts/simple/simple.clar',
     address: 'ST3J2GVMMM2R07ZFBJDWTYEYAR8FZH5WKDTFJ9AHA',
   });
+  expect(indexFile).toEqual(expectedFile);
+});
+
+test('can generate a project index file', async () => {
+  const path = resolve(process.cwd(), 'test/clarinet-project');
+  const configFile = await getConfigFile(path);
+  const indexFile = generateProjectIndexFile(configFile.contracts);
+  const expectedFile = await readFile('./mocks/project-index.txt');
   expect(indexFile).toEqual(expectedFile);
 });

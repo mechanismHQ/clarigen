@@ -7,6 +7,8 @@ import {
   getContractNameFromPath,
 } from '@clarigen/core';
 import { makeTypes } from './declaration';
+import { ConfigContract } from 'src/config';
+import { dirname, resolve, join } from 'path';
 
 export const generateInterface = async ({
   provider: _provider,
@@ -125,4 +127,37 @@ ${typings}
 `;
 
   return fileContents;
+};
+
+export const generateProjectIndexFile = (contracts: ConfigContract[]) => {
+  const imports: string[] = [];
+  const exports: string[] = [];
+  const contractMap: string[] = [];
+
+  contracts.forEach((contract) => {
+    const contractName = getContractNameFromPath(contract.file);
+    const contractVar = toCamelCase(contractName);
+    const contractInfo = `${contractVar}Info`;
+    const contractInterface = `${toCamelCase(contractName, true)}Contract`;
+    const dirName = dirname(contract.file);
+    const importPath = `'./${join(dirName || '.', contractName)}'`;
+
+    const _import = `import { ${contractInfo} } from ${importPath};`;
+    imports.push(_import);
+
+    const _export = `export { ${contractInterface} } from ${importPath};`;
+    exports.push(_export);
+
+    const map = `${contractVar}: ${contractInfo},`;
+    contractMap.push(map);
+  });
+
+  const file = `${imports.join('\n')}
+${exports.join('\n')}
+
+export const contracts = {
+  ${contractMap.join('\n  ')}
+};
+`;
+  return file;
 };

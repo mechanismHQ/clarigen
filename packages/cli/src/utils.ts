@@ -2,6 +2,7 @@ import {
   generateIndexFile,
   generateInterface,
   generateInterfaceFile,
+  generateProjectIndexFile,
   generateTypesFile,
 } from './generate/files';
 import { getContractNameFromPath } from '@clarigen/core';
@@ -80,4 +81,9 @@ export const generateProject = async (projectPath: string) => {
       dirName,
     });
   }
+
+  const indexFile = generateProjectIndexFile(contracts);
+
+  const indexPath = resolve(outputFolder, 'index.ts');
+  await writeFile(indexPath, indexFile);
 };

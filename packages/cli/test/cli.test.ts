@@ -50,6 +50,7 @@ test('can generate a project', async () => {
   expect(
     await getFile('test/sample-project/clarigen/test-project/types.ts')
   ).toBeTruthy();
+  expect(await getFile('test/sample-project/clarigen/index.ts')).toBeTruthy();
 });
 
 test('can generate a clarion project', async () => {
@@ -76,4 +77,5 @@ test('can generate a clarion project', async () => {
   expect(
     await getFile('test/clarinet-project/clarigen/nested/nested/types.ts')
   ).toBeTruthy();
+  expect(await getFile('test/sample-project/clarigen/index.ts')).toBeTruthy();
 });
