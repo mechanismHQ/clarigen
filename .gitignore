@@ -18,3 +18,4 @@ tsconfig.tsbuildinfo
 docs
 tmp/
 doc
+lerna-debug.log
