@@ -1,5 +1,5 @@
 {
-  "version": "0.0.4",
+  "version": "0.1.0",
   "license": "MIT",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -28,7 +28,7 @@
   "dependencies": {
     "@blockstack/clarity": "0.3.7-clarion",
     "@blockstack/clarity-native-bin": "0.3.7-clarion",
-    "@clarigen/core": "^0.0.4",
+    "@clarigen/core": "^0.1.0",
     "@stacks/transactions": "^1.3.3"
   },
   "publishConfig": {
