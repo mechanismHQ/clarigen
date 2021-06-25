@@ -7,7 +7,7 @@
     "noImplicitAny": true,
     "esModuleInterop": true,
     "module": "commonjs",
-    "target": "es6",
+    "target": "es2020",
     "lib": ["dom", "esnext"],
     // break
     "importHelpers": true,

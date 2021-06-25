@@ -1,3 +1,4 @@
 node_modules/
 *.d.ts
 packages/cli/test/sample-project
+packages/cli/test/clarion-project

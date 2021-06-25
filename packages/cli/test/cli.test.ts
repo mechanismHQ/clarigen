@@ -51,3 +51,10 @@ test('can generate a project', async () => {
     await getFile('test/sample-project/clarion/test-project/types.ts')
   ).toBeTruthy();
 });
+
+test('can generate a clarion project', async () => {
+  const path = resolve(process.cwd(), 'test/clarinet-project');
+  const outputDir = resolve(path, 'clarigen');
+  await rmdir(outputDir, { recursive: true });
+  await generateProject(path);
+});
