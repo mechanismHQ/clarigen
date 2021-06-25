@@ -12,7 +12,11 @@ const config = {
       tsconfig: 'tsconfig.json',
     },
   },
-  modulePathIgnorePatterns: ['tmp', 'test/sample-project/clarion'],
+  modulePathIgnorePatterns: [
+    'tmp',
+    'test/sample-project/clarigen',
+    'test/clarinet-project/clarigen',
+  ],
 };
 
 module.exports = config;

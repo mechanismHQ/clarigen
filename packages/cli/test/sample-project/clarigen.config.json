@@ -1,6 +1,6 @@
 {
   "contractsDir": "contracts",
-  "outputDir": "clarion",
+  "outputDir": "clarigen",
   "contracts": [
     {
       "file": "trait.clar",
