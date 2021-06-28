@@ -30,7 +30,7 @@ The workflow for using Clarigen is usually:
 ## Example projects:
 
 - [Fungible token](https://github.com/hstove/stacks-fungible-token): the reference implementation that goes along with SIP-010, the standard for fungible tokens on Stacks
-- [Counter](https://github.com/hstove/counter-coin): A simple and silly counter contract that mints a fungible token any time someone calls `increment` or `decrement`
+- [Counter](https://github.com/hstove/clarigen-counter-example): A simple and silly counter contract that mints a fungible token any time someone calls `increment` or `decrement`
 
 ## Why?
 
@@ -132,7 +132,7 @@ It may take a few minutes to build from source.
 
 #### 2. Download a pre-built version
 
-You can download a built version of `clarity-cli` from [Github Actions artifacts](https://github.com/blockstack/stacks-blockchain/pull/2684/checks?check_run_id=2723310430). Make sure to download the correct build for your system. If you are on Apple Silicon, pre-built binaries are not yet available, and you'll need to install from source.
+You can download a built version of `clarity-cli` from [Github Actions artifacts](https://github.com/blockstack/stacks-blockchain/actions?query=branch%3Adevelop). Make sure to download the correct build for your system. If you are on Apple Silicon, pre-built binaries are not yet available, and you'll need to install from source.
 
 Once downloaded, use an environment variable to point to the path where `clarity-cli` is installed, inside the unzipped folder you just downloaded.
 
