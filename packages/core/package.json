@@ -15,7 +15,7 @@
     "build": "tsdx build",
     "test": "tsdx test --passWithNoTests",
     "lint": "tsdx lint",
-    "prepublishOnly": "tsdx build",
+    "prepublishOnly": "yarn build",
     "typecheck": "tsc --noEmit"
   },
   "prettier": "@blockstack/prettier-config",
