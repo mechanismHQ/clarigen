@@ -59,6 +59,9 @@ export const executeJson = async ({
     ...args,
   ]);
   const response: ExecuteResult = JSON.parse(result.stdout);
+  if (process.env.PRINT_CLARIGEN_STDERR && result.stderr) {
+    console.log(result.stderr);
+  }
   if (response && 'error' in response) {
     throw new Error(`Transaction error: ${JSON.stringify(response.error, null, 2)}`);
   }
