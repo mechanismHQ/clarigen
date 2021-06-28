@@ -1,7 +1,7 @@
 import { ClarityAbi } from '@clarigen/core';
 
 // prettier-ignore
-export const SimpleInterface: ClarityAbi = {
+export const FuzzerInterface: ClarityAbi = {
   "functions": [
     {
       "access": "public",

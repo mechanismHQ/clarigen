@@ -1,11 +1,14 @@
 import { echoInfo } from './echo';
 import { nestedInfo } from './nested/nested';
-export { EchoContract } from './echo';
-export { NestedContract } from './nested/nested';
+import { fuzzerInfo } from './fuzzer';
+export type { EchoContract } from './echo';
+export type { NestedContract } from './nested/nested';
+export type { FuzzerContract } from './fuzzer';
 
 export const contracts = {
   echo: echoInfo,
   nested: nestedInfo,
+  fuzzer: fuzzerInfo,
 };
 
 // prettier-ignore

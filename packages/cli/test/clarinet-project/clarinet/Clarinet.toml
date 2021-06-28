@@ -9,3 +9,7 @@ depends_on = []
 [contracts.nested]
 path = "contracts/nested/nested.clar"
 depends_on = []
+
+[contracts.fuzzer]
+path = "contracts/fuzzer.clar"
+depends_on = []

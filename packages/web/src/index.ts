@@ -1,5 +1,11 @@
 import { Configuration, SmartContractsApi } from '@stacks/blockchain-api-client';
-import { ClarityAbiFunction, ClarityType, deserializeCV, serializeCV } from '@stacks/transactions';
+import {
+  ClarityAbiFunction,
+  ClarityAbiVariable,
+  ClarityType,
+  deserializeCV,
+  serializeCV,
+} from '@stacks/transactions';
 import { ok, err } from 'neverthrow';
 import {
   BaseProvider,
@@ -9,6 +15,7 @@ import {
   ContractInstances,
   cvToValue,
   parseToCV,
+  ClarityAbiMap,
 } from '@clarigen/core';
 import { AppDetails, makeTx } from './utils';
 import { StacksNetwork } from '@stacks/network';
@@ -118,5 +125,15 @@ export class WebProvider implements BaseProvider {
       appDetails: this.appDetails,
     });
     // throw new Error('Not implemented');
+  }
+
+  // eslint-disable-next-line @typescript-eslint/require-await
+  async callMap(map: ClarityAbiMap, key: any) {
+    throw new Error('Not implemented');
+  }
+
+  // eslint-disable-next-line @typescript-eslint/require-await
+  async callVariable(variable: ClarityAbiVariable) {
+    throw new Error('Not implemented');
   }
 }

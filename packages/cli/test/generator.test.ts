@@ -7,6 +7,7 @@ import {
   generateInterface,
   generateInterfaceFile,
   generateProjectIndexFile,
+  generateTypesFile,
   getConfigFile,
 } from '../src';
 import { readFile } from './test-utils';
@@ -57,4 +58,14 @@ test('can generate a project index file', async () => {
   const indexFile = generateProjectIndexFile(configFile);
   const expectedFile = await readFile('./mocks/project-index.txt');
   expect(indexFile).toEqual(expectedFile);
+});
+
+test('can generate a typings file', async () => {
+  const expectedFile = await readFile('./mocks/types.txt');
+  const contractFile = 'test/contracts/simple/simple.clar';
+  const abi = await generateInterface({
+    contractFile,
+  });
+  const fileContents = generateTypesFile(abi, 'simple');
+  expect(fileContents).toEqual(expectedFile);
 });

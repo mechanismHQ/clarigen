@@ -16,7 +16,8 @@
     "test": "tsdx test",
     "lint": "tsdx lint",
     "prepublishOnly": "tsdx build",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "copy-fuzzer": "cp -r ../cli/test/clarinet-project/clarigen/fuzzer/ test/contracts/fuzzer/ && cp ../cli/test/clarinet-project/clarinet/contracts/fuzzer.clar test/contracts/fuzzer/"
   },
   "prettier": "@blockstack/prettier-config",
   "name": "@clarigen/test",

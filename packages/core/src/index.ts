@@ -1,7 +1,7 @@
 import { toCamelCase } from './utils';
 import { ClarityAbi } from './clarity-types';
 import { BaseProvider } from './base-provider';
-export type { ClarityTypes, ClarityAbi } from './clarity-types';
+export type { ClarityTypes, ClarityAbi, ClarityAbiMap } from './clarity-types';
 export * from './transaction';
 export * from './types';
 export * from './utils';
@@ -24,6 +24,22 @@ const makeHandler = (provider: BaseProvider) => {
             return provider.callPublic(foundFunction, args);
           };
         }
+      }
+      const foundVariable = contract.variables.find(variable => {
+        return toCamelCase(variable.name) === property;
+      });
+      if (foundVariable) {
+        return () => {
+          return provider.callVariable(foundVariable);
+        };
+      }
+      const foundMap = contract.maps.find(map => {
+        return toCamelCase(map.name) === property;
+      });
+      if (foundMap) {
+        return (key: any) => {
+          return provider.callMap(foundMap, key);
+        };
       }
       return null;
     },

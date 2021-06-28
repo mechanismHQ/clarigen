@@ -71,7 +71,7 @@ export const executeJson = async ({
   return response;
 };
 
-interface EvalOk {
+export interface EvalOk {
   success: true;
   costs: {
     [key: string]: any;
@@ -87,7 +87,7 @@ interface EvalErr {
 
 type EvalResult = EvalOk | EvalErr;
 
-export const evalJson = async ({
+export const evalJson = ({
   contractAddress,
   functionName,
   provider,
@@ -99,6 +99,22 @@ export const evalJson = async ({
   args?: string[];
 }) => {
   const evalCode = `(${functionName} ${args.join(' ')})`;
+  return evalWithCode({
+    evalCode,
+    provider,
+    contractAddress,
+  });
+};
+
+export const evalWithCode = async ({
+  evalCode,
+  provider,
+  contractAddress,
+}: {
+  evalCode: string;
+  provider: NativeClarityBinProvider;
+  contractAddress: string;
+}) => {
   const receipt = await provider.runCommand(
     ['eval_at_chaintip', '--costs', contractAddress, provider.dbFilePath],
     {
