@@ -12,7 +12,7 @@ $ npm install -g @clarigen/cli
 $ clarigen COMMAND
 running command...
 $ clarigen (-v|--version|version)
-@clarigen/cli/0.0.4 darwin-arm64 node-v15.14.0
+@clarigen/cli/0.1.0 darwin-arm64 node-v15.14.0
 $ clarigen --help [COMMAND]
 USAGE
   $ clarigen COMMAND

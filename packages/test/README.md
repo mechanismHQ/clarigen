@@ -23,6 +23,11 @@ Under the hood, this package uses the [`@blockstack/clarity`](https://github.com
 
 All code samples are taken from the [Clarigen counter example](https://github.com/hstove/clarigen-counter-example) repository.
 
+You can also see some real-world usage to better understand how to use it:
+
+- [CounterCoin unit tests](https://github.com/hstove/clarigen-counter-example/blob/main/test/counter.test.ts)
+- [Fungible token unit tests](https://github.com/hstove/stacks-fungible-token/blob/main/test/token.test.ts)
+
 ### Importing Clarigen packages and modules
 
 When writing tests, you'll need to import each contract that you wish to deploy and use. Clarigen automatically generates and exports a few variables for each of your Clarity contracts. The one's you'll typically use are:

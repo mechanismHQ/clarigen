@@ -2,6 +2,7 @@
 
 <!-- TOC depthfrom:2 -->
 
+- [Example projects:](#example-projects)
 - [Why?](#why)
 - [How it works](#how-it-works)
   - [The "provider pattern"](#the-provider-pattern)
@@ -25,6 +26,11 @@ The workflow for using Clarigen is usually:
 - Write unit tests using [`@clarigen/test`](https://github.com/hstove/clarigen/tree/main/packages/test)
 - _[In Development]_ Build your web app using [`@clarigen/web`](https://github.com/hstove/clarigen/tree/main/packages/web)
 - _[Coming soon]_ Write script and server-side code with `@clarigen/node`
+
+## Example projects:
+
+- [Fungible token](https://github.com/hstove/stacks-fungible-token): the reference implementation that goes along with SIP-010, the standard for fungible tokens on Stacks
+- [Counter](https://github.com/hstove/counter-coin): A simple and silly counter contract that mints a fungible token any time someone calls `increment` or `decrement`
 
 ## Why?
 
