@@ -1,4 +1,4 @@
-import { PostCondition, StacksTransaction } from '@stacks/transactions';
+import { PostCondition, PostConditionMode, StacksTransaction } from '@stacks/transactions';
 
 export interface ResultAssets {
   stx: Record<string, string>;
@@ -11,7 +11,7 @@ export interface TransactionResultOk<Ok> {
   value: Ok;
   response: ResponseOk<Ok>;
   isOk: true;
-  events: any[];
+  events: Record<string, any>[];
   costs: {
     [key: string]: any;
     runtime: number;
@@ -51,6 +51,7 @@ export type TransactionReceipt<Ok, Err> =
   | TransactionReceiptBase<Ok, Err>;
 
 export interface WebSignerOptions {
+  postConditionMode?: PostConditionMode;
   postConditions?: PostCondition[];
 }
 
@@ -58,7 +59,13 @@ export interface TestSignerOptions {
   sender: string;
 }
 
-export type SubmitOptions = TestSignerOptions | WebSignerOptions;
+export interface NodeSignerOptions {
+  postConditionMode?: PostConditionMode;
+  nonce?: number;
+  postConditions?: PostCondition[];
+}
+
+export type SubmitOptions = TestSignerOptions | WebSignerOptions | NodeSignerOptions;
 
 export type Submitter<Ok, Err> = (options: SubmitOptions) => Promise<TransactionReceipt<Ok, Err>>;
 
