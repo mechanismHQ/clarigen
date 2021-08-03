@@ -1,7 +1,7 @@
 import { Client, NativeClarityBinProvider } from '@blockstack/clarity';
 import { deserializeCV } from '@stacks/transactions';
 import { join } from 'path';
-import { cvToValue } from './clarity';
+import { cvToValue } from '@clarigen/core';
 import { deployContract, evalJson, executeJson } from './clarity-cli-adapter';
 
 export const UTIL_CONTRACT_ID = 'ST000000000000000000002AMW42H.clarigen-test-utils';

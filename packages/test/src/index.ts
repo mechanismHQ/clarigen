@@ -1,7 +1,6 @@
 import { Client, NativeClarityBinProvider } from '@blockstack/clarity';
 import {
   ClarityType,
-  cvToString,
   deserializeCV,
   responseErrorCV,
   responseOkCV,
@@ -18,29 +17,20 @@ import {
   getContractNameFromPath,
   getContractIdentifier,
   BaseProvider,
+  parseToCV,
+  cvToValue,
+  cvToString,
 } from '@clarigen/core';
 import {
   evalJson,
   executeJson,
   Allocation,
-  createClarityBin,
-  cvToValue,
   deployContract,
   deployUtilContract,
-  parseToCV,
   ClarinetAccounts,
   getDefaultClarityBin,
 } from './utils';
-export {
-  Allocation,
-  createClarityBin,
-  cvToValue,
-  tx,
-  txOk,
-  txErr,
-  getBlockHeight,
-  mineBlocks,
-} from './utils';
+export { Allocation, createClarityBin, tx, txOk, txErr, getBlockHeight, mineBlocks } from './utils';
 
 interface CreateOptions {
   allocations?: Allocation[];
@@ -188,9 +178,6 @@ export class TestProvider implements BaseProvider {
       }
       const argCV = parseToCV(arg, type);
       const cvString = cvToString(argCV);
-      if (type === 'principal') {
-        return `'${cvString}`;
-      }
       return cvString;
     });
   }

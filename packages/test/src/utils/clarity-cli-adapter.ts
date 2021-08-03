@@ -58,6 +58,9 @@ export const executeJson = async ({
     senderAddress,
     ...args,
   ]);
+  if (result.stderr) {
+    console.log('stderr:', result.stderr);
+  }
   const response: ExecuteResult = JSON.parse(result.stdout);
   if (process.env.PRINT_CLARIGEN_STDERR && result.stderr) {
     console.log(result.stderr);
