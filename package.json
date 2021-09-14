@@ -12,6 +12,7 @@
   "devDependencies": {
     "@blockstack/eslint-config": "^1.0.5",
     "@blockstack/prettier-config": "^0.0.6",
+    "@stacks/stacks-blockchain-api-types": "^0.66.1",
     "@strictsoftware/typedoc-plugin-monorepo": "^0.4.2",
     "eslint": "^7.0.0",
     "eslint-plugin-jest": "^23.16.0",
