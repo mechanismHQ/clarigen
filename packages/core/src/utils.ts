@@ -1,6 +1,9 @@
 import { contractPrincipalCV } from '@stacks/transactions';
 import { Contract } from './types';
 
+export const TESTNET_BURN_ADDRESS = 'ST000000000000000000002AMW42H';
+export const MAINNET_BURN_ADDRESS = 'SP000000000000000000002Q6VF78';
+
 export const toCamelCase = (input: string | number | symbol, titleCase?: boolean) => {
   const inputStr = typeof input === 'string' ? input : String(input);
   const [first, ...parts] = inputStr.replace('!', '').replace('?', '').split('-');
@@ -28,3 +31,8 @@ export const getContractPrincipalCV = <T>(contract: Contract<T>) => {
   const contractName = getContractNameFromPath(contract.contractFile);
   return contractPrincipalCV(contract.address, contractName);
 };
+
+export function bootContractIdentifier(name: string, mainnet: boolean) {
+  const addr = mainnet ? MAINNET_BURN_ADDRESS : TESTNET_BURN_ADDRESS;
+  return `${addr}.${name}`;
+}
