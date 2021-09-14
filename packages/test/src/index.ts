@@ -30,7 +30,16 @@ import {
   ClarinetAccounts,
   getDefaultClarityBin,
 } from './utils';
-export { Allocation, createClarityBin, tx, txOk, txErr, getBlockHeight, mineBlocks } from './utils';
+export {
+  Allocation,
+  createClarityBin,
+  tx,
+  txOk,
+  txErr,
+  getBlockHeight,
+  mineBlocks,
+  getStxBalance,
+} from './utils';
 
 interface CreateOptions {
   allocations?: Allocation[];

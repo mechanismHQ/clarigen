@@ -5,3 +5,7 @@
 (define-public (mine-block)
   (ok true)
 )
+
+(define-read-only (get-stx-balance (account principal))
+  (stx-get-balance account)
+)
