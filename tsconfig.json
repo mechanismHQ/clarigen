@@ -19,7 +19,7 @@
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,
     "moduleResolution": "node",
-    "types": ["@stacks/connect", "jest"]
+    "types": ["jest"]
   },
   "exclude": ["node_modules", "dist"]
 }

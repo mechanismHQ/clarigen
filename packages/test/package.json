@@ -22,9 +22,7 @@
   "name": "@clarigen/test",
   "author": "Hank Stoever",
   "module": "dist/test.esm.js",
-  "devDependencies": {
-    "@stacks/connect": "5.0.5"
-  },
+  "devDependencies": {},
   "dependencies": {
     "@blockstack/clarity": "0.3.7-clarion",
     "@blockstack/clarity-native-bin": "0.3.7-clarion",
