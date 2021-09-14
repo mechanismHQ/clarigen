@@ -55,8 +55,8 @@ export function verifyOutputFile(
       fs.mkdirpSync(outputDirectory);
     }
     return true;
-  } catch (error: any) {
-    logger.error(error);
+  } catch (error) {
+    logger.error(error as Error);
     const fsErr = error as NodeJS.ErrnoException;
     if (fsErr.code === 'EACCES' || fsErr.code === 'EPERM') {
       logger.error(`Permission error writing to ${fullFilePath}`);
