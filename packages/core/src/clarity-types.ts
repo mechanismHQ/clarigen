@@ -97,9 +97,9 @@ export function cvToValue(val: ClarityValue): any {
     case ClarityType.BoolFalse:
       return false;
     case ClarityType.Int:
-      return val.value.fromTwos(128).toNumber();
+      return BigInt(`0x${val.value.toString('hex')}`);
     case ClarityType.UInt:
-      return val.value.toNumber();
+      return BigInt(`0x${val.value.toString('hex')}`);
     case ClarityType.Buffer:
       return val.buffer;
     case ClarityType.OptionalNone:
@@ -129,11 +129,22 @@ export function cvToValue(val: ClarityValue): any {
 }
 
 type TupleInput = Record<string, any>;
-type CVInput = string | TupleInput;
+type CVInput = string | boolean | TupleInput | number | bigint;
+
+function inputToBigInt(input: CVInput) {
+  const isBigInt = typeof input === 'bigint';
+  const isNumber = typeof input === 'number';
+  const isString = typeof input === 'string';
+  const isOk = isBigInt || isNumber || isString;
+  if (!isOk) {
+    throw new Error('Invalid input type for integer');
+  }
+  return BigInt(input);
+}
 
 export function parseToCV(input: CVInput, type: ClarityAbiType): ClarityValue {
   if (isClarityAbiTuple(type)) {
-    if (typeof input === 'string') {
+    if (typeof input !== 'object') {
       throw new Error('Invalid tuple input');
     }
     const tuple: Record<string, ClarityValue> = {};
@@ -161,6 +172,12 @@ export function parseToCV(input: CVInput, type: ClarityAbiType): ClarityValue {
       throw new Error('Invalid string-ascii input');
     }
     return stringUtf8CV(input);
+  } else if (type === 'uint128') {
+    const bigi = inputToBigInt(input);
+    return uintCV(bigi.toString());
+  } else if (type === 'int128') {
+    const bigi = inputToBigInt(input);
+    return uintCV(bigi.toString());
   }
   return _parseToCV(input as string, type);
 }
