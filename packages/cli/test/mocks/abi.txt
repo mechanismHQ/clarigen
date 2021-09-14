@@ -2,6 +2,7 @@ import { ClarityAbi } from '@clarigen/core';
 
 // prettier-ignore
 export const SimpleInterface: ClarityAbi = {
+  "clarity_version": "Clarity2",
   "functions": [
     {
       "access": "public",
