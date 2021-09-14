@@ -42,3 +42,15 @@ export async function mineBlocks(blocks: number, provider: NativeClarityBinProvi
     await mineBlock(provider);
   }
 }
+
+export async function getStxBalance(provider: NativeClarityBinProvider, account: string) {
+  const { output_serialized } = await evalJson({
+    contractAddress: UTIL_CONTRACT_ID,
+    functionName: 'get-stx-balance',
+    args: [`'${account}`],
+    provider,
+  });
+  const outputCV = deserializeCV(Buffer.from(output_serialized, 'hex'));
+  const balance: number = cvToValue(outputCV);
+  return balance;
+}
