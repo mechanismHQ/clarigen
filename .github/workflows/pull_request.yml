@@ -22,7 +22,7 @@ jobs:
             */*/node_modules
           key: ${{ runner.os }}-${{ hashFiles('**/yarn.lock') }}
       - name: Lerna bootstrap
-        run: yarn lerna bootstrap
+        run: npx lerna bootstrap
       - name: Type checks
         run: yarn typecheck
       - name: Tests
