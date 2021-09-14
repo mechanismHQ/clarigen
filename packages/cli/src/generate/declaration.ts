@@ -47,12 +47,17 @@ export const cvFromType = (val: ClarityAbiType) => {
   }
 };
 
-export const jsTypeFromAbiType = (val: ClarityAbiType): string => {
+export const jsTypeFromAbiType = (
+  val: ClarityAbiType,
+  isArgument = false
+): string => {
   if (isClarityAbiPrimitive(val)) {
     if (val === 'uint128') {
-      return 'number';
+      if (isArgument) return 'number | bigint';
+      return 'bigint';
     } else if (val === 'int128') {
-      return 'number';
+      if (isArgument) return 'number | bigint';
+      return 'bigint';
     } else if (val === 'bool') {
       return 'boolean';
     } else if (val === 'principal') {
@@ -104,7 +109,7 @@ export const makeTypes = (abi: ClarityAbi) => {
     if (func.access === 'private') return;
     let functionLine = `${toCamelCase(func.name)}: `;
     const args = func.args.map((arg) => {
-      return `${toCamelCase(arg.name)}: ${jsTypeFromAbiType(arg.type)}`;
+      return `${toCamelCase(arg.name)}: ${jsTypeFromAbiType(arg.type, true)}`;
     });
     functionLine += `(${args.join(', ')}) => `;
     if (func.access === 'public') {
