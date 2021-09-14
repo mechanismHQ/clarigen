@@ -8,8 +8,6 @@
   - [The "provider pattern"](#the-provider-pattern)
 - [Setup guide](#setup-guide)
   - [Install NPM package](#install-npm-package)
-    - [Install from source](#install-from-source)
-    - [Download a pre-built version](#download-a-pre-built-version)
   - [Create a /contracts folder](#create-a-contracts-folder)
   - [Create a clarigen.config.json file:](#create-a-clarigenconfigjson-file)
   - [Generate Clarigen interfaces](#generate-clarigen-interfaces)
@@ -114,35 +112,26 @@ npx tsdx create my-clarigen-project
 
 To setup a project, install the `@clarigen/cli` package.
 
-**Important**: Right now, Clarigen relies on an unreleased version of `clarity-cli`, which is created from the [`stacks-blockchain`](https://github.com/blockstack/stacks-blockchain) repository. When installing, you'll need to specify this custom version. You have two options:
+```bash
+# npm
+npm install --save-dev @clarigen/cli
 
-#### 1. Install from source
-
-You can build `clarity-cli` from source by specifying the correct branch of the `stack-blockchain` repo to build from. You may need to have the Rust toolchain already installed. Docs can be found on the [`stacks-blockchain` README](https://github.com/blockstack/stacks-blockchain).
-
-```sh
-# with yarn
-BLOCKSTACK_CORE_SOURCE_BRANCH=feat/clarity-cli-serialized-output yarn add --dev @clarigen/cli
-
-# with npm
-BLOCKSTACK_CORE_SOURCE_BRANCH=feat/clarity-cli-serialized-output npm install --save-dev @clarigen/cli
+# yarn
+yarn add --dev @clarigen/cli
 ```
 
-It may take a few minutes to build from source.
+<details>
+  <summary>(Optional) Using a local `clarity-cli` binary</summary>
+  
+  Behind the scenes, installing this package will download a `clarity-cli` binary from the [`stacks-blockchain`](https://github.com/blockstack/stacks-blockchain) repository. If you want to use a custom version of `clarity-cli`, you can use the `CLARITY_CLI_SOURCE_PATH` environment variable to specify the path to that file.
 
-#### 2. Download a pre-built version
+You might need to include `--force` to correctly run post-install scripts.
 
-You can download a built version of `clarity-cli` from [Github Actions artifacts](https://github.com/blockstack/stacks-blockchain/actions?query=branch%3Adevelop). Make sure to download the correct build for your system. If you are on Apple Silicon, pre-built binaries are not yet available, and you'll need to install from source.
-
-Once downloaded, use an environment variable to point to the path where `clarity-cli` is installed, inside the unzipped folder you just downloaded.
-
-```sh
-# with yarn
-BLOCKSTACK_CORE_SOURCE_PATH=/path-to-file/clarity-cli yarn add --dev @clarigen/cli
-
-# with npm
-BLOCKSTACK_CORE_SOURCE_PATH=/path-to-file/clarity-cli npm install --save-dev @clarigen/cli
+```bash
+CLARITY_CLI_SOURCE_PATH=/path/to/clarity-cli yarn --force
 ```
+
+</details>
 
 ### Create a `/contracts` folder
 
