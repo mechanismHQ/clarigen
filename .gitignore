@@ -19,3 +19,4 @@ docs
 tmp/
 doc
 lerna-debug.log
+*.native-bin
