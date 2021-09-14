@@ -22,9 +22,7 @@
   "name": "@clarigen/node",
   "author": "Hank Stoever",
   "module": "dist/web.esm.js",
-  "devDependencies": {
-    "@stacks/connect": "5.0.5"
-  },
+  "devDependencies": {},
   "dependencies": {
     "@clarigen/core": "^0.1.0",
     "@stacks/blockchain-api-client": "^0.55.2",
