@@ -79,3 +79,9 @@ export const moveFromPath = (opts: {
   fs.copyFileSync(opts.inputFilePAth, opts.outputFilePath);
   return true;
 };
+
+export function getTempFilePath(fileNameTemplate = 'temp-{uniqueID}-file') {
+  const uniqueID = `${(Date.now() / 1000) | 0}-${Math.random().toString(36).substr(2, 6)}`;
+  const fileName = fileNameTemplate.replace('{uniqueID}', uniqueID);
+  return path.join(os.tmpdir(), fileName);
+}

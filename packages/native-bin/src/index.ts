@@ -1,8 +1,11 @@
 import path from 'path';
 import fs from 'fs';
-import { getExecutableFileName, moveFromPath, verifyOutputFile } from './fs-util';
+import { getExecutableFileName, getTempFilePath, moveFromPath, verifyOutputFile } from './fs-util';
 import { Logger, ConsoleLogger } from './logger';
 import { fetchDistributable, getDownloadUrl } from './fetch-dist';
+import { NativeClarityBinProvider } from './provider';
+export { NativeClarityBinProvider } from './provider';
+export { getTempFilePath } from './fs-util';
 
 /**
  * Should correspond to both a git tag on the blockstack-core repo and a
@@ -103,3 +106,19 @@ export function install(opts: {
   }
   return fetchDistributable(opts);
 }
+
+export function makeProvider() {
+  const binFile = getDefaultBinaryFilePath();
+  const dbFileName = getTempFilePath();
+  return new NativeClarityBinProvider(dbFileName, binFile);
+}
+
+export const createClarityBin = async () => {
+  const provider = makeProvider();
+  // TODO: allow testnet/mainnet flag
+  const args = ['initialize', '-', provider.dbFilePath, '--testnet'];
+  await provider.runCommand(args, {
+    stdin: JSON.stringify([]),
+  });
+  return provider;
+};
