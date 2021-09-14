@@ -3,5 +3,5 @@ import { ClarityTypes, Transaction } from '@clarigen/core';
 // prettier-ignore
 export interface TestProjectContract {
   getName: () => Transaction<string, null>;
-  getNumber: () => Promise<number>;
+  getNumber: () => Promise<bigint>;
 }

@@ -95,7 +95,7 @@ Clarigen will automatically expose a JS-friendly method for calling this functio
 
 ```ts
 const value = await counter.getCounter();
-console.log(value); // prints "0"
+console.log(value); // prints "0n"
 ```
 
 For most Clarity types, Clarigen converts values into JS-friendly values, and all methods are strongly typed to TypeScript types. In the above example, `getCounter` returns a `number`.

@@ -4,18 +4,18 @@ import { ClarityTypes, Transaction } from '@clarigen/core';
 export interface SimpleContract {
   getName: () => Transaction<string, null>;
   getTuplePub: () => Transaction<{
-  "a": number;
+  "a": bigint;
   "b": boolean
     }, null>;
   getTuple: () => Promise<{
-  "a": number;
+  "a": bigint;
   "b": boolean
     }>;
   getTupleResp: () => Promise<ClarityTypes.Response<{
-  "a": number;
+  "a": bigint;
   "b": boolean;
   "c": {
-  "d": number
+  "d": bigint
     }
     }, null>>;
 }
