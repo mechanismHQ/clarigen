@@ -32,6 +32,7 @@
     "packages/*"
   ],
   "dependencies": {
+    "@changesets/cli": "^2.17.0",
     "jsonfile": "^6.1.0"
   }
 }

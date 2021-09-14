@@ -1,0 +1,45 @@
+name: Publish
+on:
+  push:
+    branches:
+      - 'main'
+  workflow_dispatch:
+
+jobs:
+  publish_npm:
+    name: Publish production NPM packages
+    runs-on: ubuntu-latest
+    if: "contains(github.event.head_commit.message, 'chore: version packages')"
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Prepare repository
+        run: git checkout main
+      - name: Set Node Version
+        uses: actions/setup-node@v2-beta
+        with:
+          node-version: 12.16.1
+      - name: Restore lerna cache
+        id: lerna-cache
+        uses: actions/cache@v2
+        with:
+          path: |
+            node_modules
+            */*/node_modules
+          key: ${{ runner.os }}-${{ hashFiles('**/yarn.lock') }}
+      - name: Install monorepo deps
+        run: yarn --frozen-lockfile
+      - name: Create Release Pull Request or Publish to npm
+        uses: changesets/action@c3d88279fd9abe11410de073005e34863f735b1c
+        with:
+          publish: yarn lerna publish from-package --yes
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+      # - name: Setup .npmrc
+      #   env:
+      #     NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+      #   run: echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" > .npmrc
+      # - name: Publish
+      #   run: yarn lerna publish from-package --yes
