@@ -1,0 +1,13 @@
+{
+  "$schema": "https://unpkg.com/@changesets/config@1.6.1/schema.json",
+  "changelog": [
+    "@changesets/cli/changelog",
+    { "repo": "obylabs/clarigen" }
+  ],
+  "commit": false,
+  "linked": [],
+  "access": "public",
+  "baseBranch": "main",
+  "updateInternalDependencies": "patch",
+  "ignore": []
+}
