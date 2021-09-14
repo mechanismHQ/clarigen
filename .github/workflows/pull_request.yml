@@ -1,0 +1,29 @@
+name: Pull Request
+on: [pull_request, workflow_dispatch]
+
+jobs:
+  code_checks:
+    name: Code checks
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          ref: ${{ github.event.pull_request.head.ref }}
+      - name: Set Node Version
+        uses: actions/setup-node@v2-beta
+        with:
+          node-version: 16.9.1
+      - name: Restore lerna cache
+        uses: actions/cache@v2
+        with:
+          path: |
+            node_modules
+            */*/node_modules
+          key: ${{ runner.os }}-${{ hashFiles('**/yarn.lock') }}
+      - name: Lerna bootstrap
+        run: yarn lerna bootstrap
+      - name: Type checks
+        run: yarn typecheck
+      - name: Tests
+        run: yarn test

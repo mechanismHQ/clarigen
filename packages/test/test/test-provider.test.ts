@@ -1,4 +1,4 @@
-import { NativeClarityBinProvider } from '@blockstack/clarity';
+import { NativeClarityBinProvider } from '@clarigen/native-bin';
 import { TestProvider, createClarityBin, tx } from '../src';
 import { SimpleContract, simpleInfo } from './contracts/simple';
 

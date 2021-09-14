@@ -1,6 +1,8 @@
-import { NativeClarityBinProvider, Client } from '@blockstack/clarity';
-import { getDefaultBinaryFilePath } from '@blockstack/clarity-native-bin';
-import { getTempFilePath } from '@blockstack/clarity/lib/utils/fsUtil';
+import {
+  getTempFilePath,
+  NativeClarityBinProvider,
+  getDefaultBinaryFilePath,
+} from '@clarigen/native-bin';
 import { ResultAssets } from '@clarigen/core';
 
 export interface Allocation {
@@ -150,7 +152,7 @@ export const createClarityBin = async ({
   const binFile = getDefaultBinaryFilePath();
   const dbFileName = getTempFilePath();
   const _allocations = getAllocations(allocations);
-  const provider = new NativeClarityBinProvider(_allocations, dbFileName, binFile);
+  const provider = new NativeClarityBinProvider(dbFileName, binFile);
   const args = ['initialize', '-', dbFileName];
   if (testnet) args.push('--testnet');
   await provider.runCommand(args, {
@@ -182,17 +184,25 @@ function hasStdErr(stderr: string) {
   return true;
 }
 
-export async function deployContract(client: Client, provider: NativeClarityBinProvider) {
+export async function deployContract({
+  contractIdentifier,
+  contractFilePath,
+  provider,
+}: {
+  contractIdentifier: string;
+  contractFilePath: string;
+  provider: NativeClarityBinProvider;
+}) {
   const receipt = await provider.runCommand([
     'launch',
-    client.name,
-    client.filePath,
+    contractIdentifier,
+    contractFilePath,
     provider.dbFilePath,
     '--costs',
     '--assets',
   ]);
   if (hasStdErr(receipt.stderr)) {
-    throw new Error(`Error on ${client.filePath}:
+    throw new Error(`Error on ${contractFilePath}:
   ${receipt.stderr}
     `);
   }
@@ -205,14 +215,14 @@ export async function deployContract(client: Client, provider: NativeClarityBinP
       const matcher = /start_line: (\d+),/;
       const matches = matcher.exec(trace);
       if (matches) startLine = matches[1];
-      throw new Error(`Error on ${client.filePath}:
+      throw new Error(`Error on ${contractFilePath}:
     ${error}
     ${startLine ? `Near line ${startLine}` : ''}
     Raw trace:
     ${trace}
       `);
     }
-    throw new Error(`Error on ${client.filePath}:
+    throw new Error(`Error on ${contractFilePath}:
   ${JSON.stringify(output.error, null, 2)}
     `);
   }

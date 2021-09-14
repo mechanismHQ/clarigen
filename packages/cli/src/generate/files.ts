@@ -1,6 +1,7 @@
-import { NativeClarityBinProvider } from '@blockstack/clarity';
-import { getTempFilePath } from '@blockstack/clarity/lib/utils/fsUtil';
-import { getDefaultBinaryFilePath } from '@blockstack/clarity-native-bin';
+import {
+  NativeClarityBinProvider,
+  createClarityBin,
+} from '@clarigen/native-bin';
 import {
   ClarityAbi,
   toCamelCase,
@@ -19,11 +20,7 @@ export const generateInterface = async ({
   provider?: NativeClarityBinProvider;
   contractAddress?: string;
 }): Promise<ClarityAbi> => {
-  const binFile = getDefaultBinaryFilePath();
-  const dbFileName = getTempFilePath();
-  const provider =
-    _provider ||
-    (await NativeClarityBinProvider.create([], dbFileName, binFile));
+  const provider = _provider || (await createClarityBin());
   const contractName = getContractNameFromPath(contractFile);
   const receipt = await provider.runCommand([
     'launch',

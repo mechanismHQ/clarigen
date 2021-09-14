@@ -1085,21 +1085,6 @@
   resolved "https://registry.yarnpkg.com/@bcoe/v8-coverage/-/v8-coverage-0.2.3.tgz#75a2e8b51cb758a7553d6804a5932d7aace75c39"
   integrity sha512-0hYQ8SB4Db5zvZB4axdMHGwEaQjkZzFjQiN9LVYvIFB2nSUHW9tYpxWriPrWDASIxiaXax83REcLxuSdnGPZtw==
 
-"@blockstack/clarity-native-bin@0.3.7-clarion":
-  version "0.3.7-clarion"
-  resolved "https://registry.yarnpkg.com/@blockstack/clarity-native-bin/-/clarity-native-bin-0.3.7-clarion.tgz#2435cded50884219f459a825803796e68c8fab79"
-  integrity sha512-k8njMl4XgklXOexYy5HzC3aNcJI47Unq3CZVSs8VwDze/rjZ2jWglpR23are3ddKsThefqKF60AhkX8MA/o2gA==
-  dependencies:
-    fs-extra "^8.0.1"
-    node-fetch "^2.6.0"
-    semver "^6.1.1"
-    unzipper "^0.10.11"
-
-"@blockstack/clarity@0.3.7-clarion":
-  version "0.3.7-clarion"
-  resolved "https://registry.yarnpkg.com/@blockstack/clarity/-/clarity-0.3.7-clarion.tgz#fadcb607f31f8b4c3381e147d95edcfc5f34a660"
-  integrity sha512-wyM6zEBbcl2x0K/j9z+O5xBimxziHdB8lNudpd+VYtSGZ3L+rjS/kg3lKpNY4YKk7LWrd2B95NX22AHOXbSrag==
-
 "@blockstack/eslint-config@^1.0.5":
   version "1.0.5"
   resolved "https://registry.yarnpkg.com/@blockstack/eslint-config/-/eslint-config-1.0.5.tgz#a745661123c5e6c2682b5eb7400a4bc72390959d"
@@ -6770,7 +6755,7 @@ fs-constants@^1.0.0:
   resolved "https://registry.yarnpkg.com/fs-constants/-/fs-constants-1.0.0.tgz#6be0de9be998ce16af8afc24497b9ee9b7ccd9ad"
   integrity sha512-y6OAwoSIf7FyjMIv94u+b5rdheZEjzR63GTyZJm5qh4Bi+2YgwLCcI/fPFZkL5PSixOt6ZNKm+w+Hfp/Bciwow==
 
-fs-extra@8.1.0, fs-extra@^8.0.1, fs-extra@^8.1, fs-extra@^8.1.0:
+fs-extra@8.1.0, fs-extra@^8.1, fs-extra@^8.1.0:
   version "8.1.0"
   resolved "https://registry.yarnpkg.com/fs-extra/-/fs-extra-8.1.0.tgz#49d43c45a88cd9677668cb7be1b46efdb8d2e1c0"
   integrity sha512-yhlQgA6mnOJUKOsRUFsgJdQCvkKhcz8tlZG5HBQfReYZy46OwLcY+Zia0mtdHsOo9y/hP+CxMN0TU9QxoOtG4g==
