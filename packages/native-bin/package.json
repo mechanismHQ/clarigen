@@ -19,7 +19,7 @@
     "lint": "tsdx lint",
     "prepublishOnly": "yarn build",
     "typecheck": "tsc --noEmit",
-    "postinstall": "node installer/direct-install.js"
+    "postinstall": "node post-install.js"
   },
   "prettier": "@blockstack/prettier-config",
   "name": "@clarigen/native-bin",
