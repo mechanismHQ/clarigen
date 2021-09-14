@@ -34,7 +34,7 @@ export class Generate extends Command {
       try {
         await generateProject(cwd);
         spinner.succeed(`Finished generating files. Watching for changes.`);
-      } catch (error) {
+      } catch (error: any) {
         spinner.fail(`Error generating files.\n${error.message}`);
       }
       watcher.on('change', async (path) => {
@@ -48,7 +48,7 @@ export class Generate extends Command {
               file
             )}. Watching for changes.`
           );
-        } catch (error) {
+        } catch (error: any) {
           spinner.fail(`Error after saving ${red(file)}.\n${error.message}`);
         }
       });
