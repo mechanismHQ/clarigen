@@ -53,6 +53,7 @@ export interface ClarityAbiMap {
 
 export interface ClarityAbi extends Omit<_ClarityAbi, 'maps'> {
   maps: ClarityAbiMap[];
+  clarity_version?: string;
 }
 
 // eslint-disable-next-line @typescript-eslint/no-namespace
@@ -172,6 +173,9 @@ export function parseToCV(input: CVInput, type: ClarityAbiType): ClarityValue {
       throw new Error('Invalid string-ascii input');
     }
     return stringUtf8CV(input);
+  } else if (type === 'bool') {
+    const inputString = typeof input === 'boolean' ? input.toString() : input;
+    return _parseToCV(inputString as string, type);
   } else if (type === 'uint128') {
     const bigi = inputToBigInt(input);
     return uintCV(bigi.toString());
