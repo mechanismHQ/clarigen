@@ -16,11 +16,12 @@ import { getConfigFile } from './config';
 export const createClarityBin = async () => {
   const binFile = getDefaultBinaryFilePath();
   const dbFileName = getTempFilePath();
-  const provider = await NativeClarityBinProvider.create(
-    [],
-    dbFileName,
-    binFile
-  );
+  const provider = new NativeClarityBinProvider([], dbFileName, binFile);
+  // TODO: allow testnet/mainnet flag
+  const args = ['initialize', '-', dbFileName, '--testnet'];
+  await provider.runCommand(args, {
+    stdin: JSON.stringify([]),
+  });
   return provider;
 };
 
