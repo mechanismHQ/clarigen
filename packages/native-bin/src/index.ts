@@ -10,9 +10,8 @@ import { fetchDistributable, getDownloadUrl } from './fetch-dist';
  */
 export const CORE_SDK_TAG = '2.0.11.3.0';
 
-export const BLOCKSTACK_CORE_SOURCE_TAG_ENV_VAR = 'BLOCKSTACK_CORE_SOURCE_TAG';
-export const BLOCKSTACK_CORE_SOURCE_BRANCH_ENV_VAR = 'BLOCKSTACK_CORE_SOURCE_BRANCH';
 export const BLOCKSTACK_CORE_SOURCE_PATH_ENV_VAR = 'BLOCKSTACK_CORE_SOURCE_PATH';
+export const CLARITY_CLI_SOURCE_PATH = 'CLARITY_CLI_SOURCE_PATH';
 
 /**
  * A git tag or branch name can be specified as an env var.
@@ -21,7 +20,8 @@ export const BLOCKSTACK_CORE_SOURCE_PATH_ENV_VAR = 'BLOCKSTACK_CORE_SOURCE_PATH'
  * Otherwise returns false.
  */
 function getOverriddenCoreSource(): string | undefined {
-  const env = process.env[BLOCKSTACK_CORE_SOURCE_PATH_ENV_VAR];
+  const oldEnv = process.env[BLOCKSTACK_CORE_SOURCE_PATH_ENV_VAR];
+  const env = process.env[CLARITY_CLI_SOURCE_PATH] || oldEnv;
   if (env) return env;
   return;
 }
