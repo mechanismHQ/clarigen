@@ -17,7 +17,7 @@ beforeAll(async () => {
 
 test('can get block height and mine blocks', async () => {
   const startHeight = await getBlockHeight(provider);
-  expect(startHeight).toEqual(3);
+  expect(startHeight).toEqual(3n);
   await mineBlocks(5, provider);
-  expect(await getBlockHeight(provider)).toEqual(8);
+  expect(await getBlockHeight(provider)).toEqual(8n);
 });

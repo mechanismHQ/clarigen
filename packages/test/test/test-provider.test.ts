@@ -24,5 +24,5 @@ test('can call public function', async () => {
 
 test('can call a read-only function', async () => {
   const num = await contract.getNumber();
-  expect(num).toEqual(1);
+  expect(num).toEqual(1n);
 });
