@@ -1,0 +1,39 @@
+{
+  "version": "0.1.1",
+  "license": "MIT",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "engines": {
+    "node": ">=10"
+  },
+  "scripts": {
+    "start": "tsdx watch",
+    "dev": "tsdx watch",
+    "build": "tsdx build",
+    "test": "tsdx test",
+    "lint": "tsdx lint",
+    "prepublishOnly": "tsdx build",
+    "typecheck": "tsc --noEmit"
+  },
+  "prettier": "@blockstack/prettier-config",
+  "name": "@clarigen/native-bin",
+  "author": "Hank Stoever",
+  "module": "dist/native-bin.esm.js",
+  "devDependencies": {
+    "@types/fs-extra": "^8.0.0",
+    "@types/node-fetch": "^2.3.4",
+    "@types/unzipper": "^0.10.3"
+  },
+  "dependencies": {
+    "@clarigen/core": "^0.1.0",
+    "fs-extra": "^10.0.0",
+    "node-fetch": "^2.6.0",
+    "unzipper": "^0.10.11"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}
