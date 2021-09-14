@@ -4,7 +4,8 @@
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "files": [
-    "dist"
+    "dist",
+    "installer"
   ],
   "engines": {
     "node": ">=10"
@@ -12,10 +13,11 @@
   "scripts": {
     "start": "tsdx watch",
     "dev": "tsdx watch",
-    "build": "tsdx build",
+    "build": "tsdx build && yarn build-installer",
+    "build-installer": "yarn tsc --esModuleInterop --outDir ./installer src/direct-install.ts",
     "test": "tsdx test",
     "lint": "tsdx lint",
-    "prepublishOnly": "tsdx build",
+    "prepublishOnly": "yarn build",
     "typecheck": "tsc --noEmit"
   },
   "prettier": "@blockstack/prettier-config",
