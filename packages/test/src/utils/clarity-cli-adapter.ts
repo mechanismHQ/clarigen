@@ -58,9 +58,9 @@ export const executeJson = async ({
     senderAddress,
     ...args,
   ]);
-  if (result.stderr) {
-    console.log('stderr:', result.stderr);
-  }
+  // if (result.stderr) {
+  //   console.log('stderr:', result.stderr);
+  // }
   const response: ExecuteResult = JSON.parse(result.stdout);
   if (process.env.PRINT_CLARIGEN_STDERR && result.stderr) {
     console.log(result.stderr);
@@ -145,11 +145,17 @@ export function getAllocations(allocations?: AllocationOrAccounts): Allocation[]
 
 export const createClarityBin = async ({
   allocations,
-}: { allocations?: AllocationOrAccounts } = {}) => {
+  testnet = true,
+}: { allocations?: AllocationOrAccounts; testnet?: boolean } = {}) => {
   const binFile = getDefaultBinaryFilePath();
   const dbFileName = getTempFilePath();
   const _allocations = getAllocations(allocations);
-  const provider = await NativeClarityBinProvider.create(_allocations, dbFileName, binFile);
+  const provider = new NativeClarityBinProvider(_allocations, dbFileName, binFile);
+  const args = ['initialize', '-', dbFileName];
+  if (testnet) args.push('--testnet');
+  await provider.runCommand(args, {
+    stdin: JSON.stringify(_allocations),
+  });
   return provider;
 };
 
@@ -170,6 +176,12 @@ export async function getDefaultClarityBin(
   return clarityBin;
 }
 
+function hasStdErr(stderr: string) {
+  if (!stderr) return false;
+  if (stderr.includes('Used unimplemented cost function')) return false;
+  return true;
+}
+
 export async function deployContract(client: Client, provider: NativeClarityBinProvider) {
   const receipt = await provider.runCommand([
     'launch',
@@ -179,7 +191,7 @@ export async function deployContract(client: Client, provider: NativeClarityBinP
     '--costs',
     '--assets',
   ]);
-  if (receipt.stderr) {
+  if (hasStdErr(receipt.stderr)) {
     throw new Error(`Error on ${client.filePath}:
   ${receipt.stderr}
     `);
