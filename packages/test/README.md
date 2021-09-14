@@ -6,7 +6,7 @@ For project setup instructions, check out the [Clarigen setup guide](https://git
 
 This tool is agnostic to whichever testing framework you like to use. You're free to use Jest, Mocha, or whatever node.js testing library you enjoy.
 
-Under the hood, this package uses the [`@blockstack/clarity`](https://github.com/blockstack/clarity-js-sdk) package. At a lower level, the `clarity-cli` binary (from [`stacks-blockchain`](https://github.com/blockstack/stacks-blockchain)) is used to simulate a Stacks blockchain environment, especially for tests.
+Under the hood, this package uses the [`@clarigen/native-bin`](https://github.com/obylabs/clarigen/tree/main/packages/native-bin) package. At a lower level, the `clarity-cli` binary (from [`stacks-blockchain`](https://github.com/blockstack/stacks-blockchain)) is used to simulate a Stacks blockchain environment, especially for tests.
 
 <!-- TOC depthfrom:2 -->
 

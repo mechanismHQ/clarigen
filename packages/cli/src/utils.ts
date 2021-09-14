@@ -6,24 +6,13 @@ import {
   generateTypesFile,
 } from './generate/files';
 import { getContractNameFromPath } from '@clarigen/core';
-import { NativeClarityBinProvider } from '@blockstack/clarity';
-import { getTempFilePath } from '@blockstack/clarity/lib/utils/fsUtil';
-import { getDefaultBinaryFilePath } from '@blockstack/clarity-native-bin';
+import {
+  NativeClarityBinProvider,
+  createClarityBin,
+} from '@clarigen/native-bin';
 import { resolve, relative, dirname } from 'path';
 import { mkdir, writeFile } from 'fs/promises';
 import { getConfigFile } from './config';
-
-export const createClarityBin = async () => {
-  const binFile = getDefaultBinaryFilePath();
-  const dbFileName = getTempFilePath();
-  const provider = new NativeClarityBinProvider([], dbFileName, binFile);
-  // TODO: allow testnet/mainnet flag
-  const args = ['initialize', '-', dbFileName, '--testnet'];
-  await provider.runCommand(args, {
-    stdin: JSON.stringify([]),
-  });
-  return provider;
-};
 
 export const generateFilesForContract = async ({
   contractFile: _contractFile,

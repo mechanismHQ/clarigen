@@ -1,8 +1,8 @@
-import { Client, NativeClarityBinProvider } from '@blockstack/clarity';
 import { deserializeCV } from '@stacks/transactions';
 import { join } from 'path';
 import { cvToValue } from '@clarigen/core';
 import { deployContract, evalJson, executeJson } from './clarity-cli-adapter';
+import { NativeClarityBinProvider } from '@clarigen/native-bin';
 
 export const UTIL_CONTRACT_ID = 'ST000000000000000000002AMW42H.clarigen-test-utils';
 
@@ -11,8 +11,11 @@ export async function deployUtilContract(clarityBin: NativeClarityBinProvider) {
   if (__dirname.includes('dist')) {
     contractFilePath = join(__dirname, '..', 'contracts', 'test-utils.clar');
   }
-  const client = new Client(UTIL_CONTRACT_ID, contractFilePath, clarityBin);
-  await deployContract(client, clarityBin);
+  await deployContract({
+    contractIdentifier: UTIL_CONTRACT_ID,
+    provider: clarityBin,
+    contractFilePath,
+  });
 }
 
 export async function getBlockHeight(provider: NativeClarityBinProvider) {

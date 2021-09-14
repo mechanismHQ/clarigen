@@ -15,10 +15,11 @@
     "dev": "tsdx watch",
     "build": "tsdx build && yarn build-installer",
     "build-installer": "yarn tsc --esModuleInterop --outDir ./installer src/direct-install.ts",
-    "test": "tsdx test",
+    "test": "tsdx test --passWithNoTests",
     "lint": "tsdx lint",
     "prepublishOnly": "yarn build",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "postinstall": "node installer/direct-install.js"
   },
   "prettier": "@blockstack/prettier-config",
   "name": "@clarigen/native-bin",

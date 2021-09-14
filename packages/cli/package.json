@@ -46,9 +46,8 @@
     "ts-node": "^9.1.1"
   },
   "dependencies": {
-    "@blockstack/clarity": "0.3.7-clarion",
-    "@blockstack/clarity-native-bin": "0.3.7-clarion",
     "@clarigen/core": "^0.1.0",
+    "@clarigen/native-bin": "^0.1.1",
     "@ltd/j-toml": "1.12.2",
     "@oclif/command": "^1.8.0",
     "@stacks/wallet-sdk": "1.0.0-wallet-sdk.4",

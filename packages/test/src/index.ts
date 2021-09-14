@@ -1,4 +1,4 @@
-import { Client, NativeClarityBinProvider } from '@blockstack/clarity';
+import { NativeClarityBinProvider } from '@clarigen/native-bin';
 import {
   ClarityType,
   deserializeCV,
@@ -59,17 +59,22 @@ interface UtilsContract {
 
 export class TestProvider implements BaseProvider {
   clarityBin: NativeClarityBinProvider;
-  client: Client;
+  contractIdentifier: string;
+  contractFile: string;
 
-  constructor(clarityBin: NativeClarityBinProvider, client: Client) {
+  constructor(
+    clarityBin: NativeClarityBinProvider,
+    contractIdentifier: string,
+    contractFile: string
+  ) {
     this.clarityBin = clarityBin;
-    this.client = client;
+    this.contractIdentifier = contractIdentifier;
+    this.contractFile = contractFile;
   }
 
   static async create({ clarityBin, contractFilePath, contractIdentifier }: CreateOptions) {
-    const client = new Client(contractIdentifier, contractFilePath, clarityBin);
-    await deployContract(client, clarityBin);
-    return new this(clarityBin, client);
+    await deployContract({ contractIdentifier, contractFilePath, provider: clarityBin });
+    return new this(clarityBin, contractIdentifier, contractFilePath);
   }
 
   static async fromContract<T>({ contract, clarityBin }: FromContractOptions<T>) {
@@ -119,7 +124,7 @@ export class TestProvider implements BaseProvider {
   async callReadOnly(func: ClarityAbiFunction, args: any[]) {
     const argsFormatted = this.formatArguments(func, args);
     const result = await evalJson({
-      contractAddress: this.client.name,
+      contractAddress: this.contractIdentifier,
       functionName: func.name,
       args: argsFormatted,
       provider: this.clarityBin,
@@ -144,7 +149,7 @@ export class TestProvider implements BaseProvider {
       }
       const receipt = await executeJson({
         provider: this.clarityBin,
-        contractAddress: this.client.name,
+        contractAddress: this.contractIdentifier,
         senderAddress: options.sender,
         functionName: func.name,
         args: argsFormatted,
