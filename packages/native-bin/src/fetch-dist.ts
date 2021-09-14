@@ -13,6 +13,9 @@ const DIST_DOWNLOAD_URL_TEMPLATE =
   'https://github.com/blockstack/stacks-blockchain/releases/' +
   'download/{tag}/{platform}-{arch}.zip';
 
+export const MACOS_ARM_URL =
+  'https://gateway.pinata.cloud/ipfs/QmT66UdArWY3hYTcvimRer5orHEfMNgbWLBe8Rj5LJtKs9';
+
 const enum SupportedDistPlatform {
   WINDOWS = 'windows',
   MACOS = 'macos',
@@ -39,7 +42,7 @@ export function isDistAvailable(
       arch = SupportedDistArch.x64;
       break;
     default:
-      if (logger) {
+      if (logger && !isMacArm()) {
         logger.error(`System arch "${detectedArch}" not supported. Must build from source.`);
       }
       return false;
@@ -100,9 +103,11 @@ export async function fetchDistributable(opts: {
   versionTag: string;
 }): Promise<boolean> {
   const downloadUrl = getDownloadUrl(opts.logger, opts.versionTag);
-  if (!downloadUrl) {
-    return false;
-  }
+
+  const didMacDownload = await downloadMacArm(opts.outputFilePath, opts.logger);
+  if (didMacDownload) return true;
+
+  if (!downloadUrl) return false;
 
   opts.logger.log(`Fetching ${downloadUrl}`);
   const httpResponse = await fetch(downloadUrl, { redirect: 'follow' });
@@ -126,4 +131,25 @@ export async function fetchDistributable(opts: {
   fs.chmodSync(opts.outputFilePath, 0o775);
 
   return true;
+}
+
+export function isMacArm() {
+  return os.platform() === 'darwin' && os.arch() === 'arm64';
+}
+
+export async function downloadMacArm(outputFilePath: string, logger: Logger) {
+  if (isMacArm()) {
+    logger.log('Fetching Apple Silicon version of clarity-cli');
+    const downloadUrl = MACOS_ARM_URL;
+    const httpResponse = await fetch(downloadUrl, { redirect: 'follow' });
+    if (!httpResponse.ok) {
+      logger.error(`Bad http response ${httpResponse.status} ${httpResponse.statusText}`);
+      return false;
+    }
+    await pipelineAsync(httpResponse.body, fs.createWriteStream(outputFilePath));
+    fs.chmodSync(outputFilePath, 0o775);
+    return true;
+  } else {
+    return false;
+  }
 }
