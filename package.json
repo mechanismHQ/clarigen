@@ -7,7 +7,7 @@
     "lint:fix": "eslint --fix packages/**/*.{ts,js}",
     "test": "lerna run test --no-bail --parallel",
     "typecheck": "lerna run typecheck --no-bail --parallel",
-    "publish": "yarn build && yarn lerna publish from-package --yes"
+    "publish-packages": "yarn build && yarn lerna publish from-package --yes"
   },
   "prettier": "@blockstack/prettier-config",
   "devDependencies": {
