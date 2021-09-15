@@ -5,7 +5,7 @@
     { "repo": "obylabs/clarigen" }
   ],
   "commit": false,
-  "linked": [],
+  "linked": [["@clarigen/*"]],
   "access": "public",
   "baseBranch": "main",
   "updateInternalDependencies": "patch",

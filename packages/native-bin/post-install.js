@@ -18,11 +18,11 @@ if (fs.existsSync(tsConfigBuildFile)) {
   tsNodeInstall();
 } else {
   try {
-    require('./dist/direct-install');
+    require('./installer/direct-install');
   } catch (e) {
     if (e.code === 'MODULE_NOT_FOUND') {
       console.error(
-        'Script "./dist/direct-install.js" not found, and dev environment to run "./src/direct-install.ts" not detected.'
+        'Script "./installer/direct-install.js" not found, and dev environment to run "./src/direct-install.ts" not detected.'
       );
     }
     throw e;
