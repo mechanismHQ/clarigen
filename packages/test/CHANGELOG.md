@@ -1,5 +1,15 @@
 # @clarigen/test
 
+## 0.2.3
+
+### Patch Changes
+
+- [`3e68eb1`](https://github.com/obylabs/clarigen/commit/3e68eb107c19c71af536a42d8120ac9e9a3b2c78) Thanks [@hstove](https://github.com/hstove)! - Fixed CI publish script
+
+- Updated dependencies [[`3e68eb1`](https://github.com/obylabs/clarigen/commit/3e68eb107c19c71af536a42d8120ac9e9a3b2c78)]:
+  - @clarigen/native-bin@0.2.3
+  - @clarigen/core@0.2.3
+
 ## 0.2.2
 
 ### Patch Changes
