@@ -2,7 +2,7 @@
   "name": "@clarigen/cli",
   "description": "A CLI for generating a Typescript interface for a Clarity contract.",
   "author": "Hank Stoever",
-  "version": "0.2.3",
+  "version": "0.2.4",
   "license": "MIT",
   "main": "dist/index.js",
   "files": [
