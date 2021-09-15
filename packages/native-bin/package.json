@@ -5,7 +5,8 @@
   "types": "dist/index.d.ts",
   "files": [
     "dist",
-    "installer"
+    "installer",
+    "post-install.js"
   ],
   "engines": {
     "node": ">=10"
