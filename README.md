@@ -21,8 +21,8 @@ The workflow for using Clarigen is usually:
 
 - Write your Clarity contracts under a `/contracts` folder
 - Automatically generate interfaces for your contracts with `yarn clarigen --watch`
-- Write unit tests using [`@clarigen/test`](https://github.com/hstove/clarigen/tree/main/packages/test)
-- _[In Development]_ Build your web app using [`@clarigen/web`](https://github.com/hstove/clarigen/tree/main/packages/web)
+- Write unit tests using [`@clarigen/test`](https://github.com/obylabs/clarigen/tree/main/packages/test)
+- _[In Development]_ Build your web app using [`@clarigen/web`](https://github.com/obylabs/clarigen/tree/main/packages/web)
 - _[Coming soon]_ Write script and server-side code with `@clarigen/node`
 
 ## Example projects:
