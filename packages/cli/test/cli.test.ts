@@ -1,7 +1,7 @@
 import { generateFilesForContract, generateProject } from '../src/utils';
 import { getConfigFile } from '../src/config';
 import { resolve } from 'path';
-import { readFile, rm } from 'fs/promises';
+import { readFile, rm, mkdir } from 'fs/promises';
 
 const getFile = async (path: string) => {
   const fullPath = resolve(process.cwd(), path);
@@ -9,8 +9,15 @@ const getFile = async (path: string) => {
   return contents;
 };
 
+async function rmdir(path: string) {
+  try {
+    await rm(path, { recursive: true });
+  } catch {}
+}
+
 test('generates files appropriately', async () => {
-  await rm(resolve(process.cwd(), 'tmp/test-1'), { recursive: true });
+  await rmdir(resolve(process.cwd(), 'tmp'));
+  await mkdir(resolve(process.cwd(), 'tmp'));
   await generateFilesForContract({
     contractFile: 'contracts/simple.clar',
     outputFolder: 'tmp/test-1',
@@ -30,7 +37,7 @@ test('can get a config file', async () => {
 test('can generate a project', async () => {
   const path = resolve(process.cwd(), 'test/sample-project');
   const outputDir = resolve(path, 'clarigen');
-  await rm(outputDir, { recursive: true });
+  await rmdir(outputDir);
   await generateProject(path);
   expect(
     await getFile('test/sample-project/clarigen/trait/index.ts')
@@ -56,9 +63,7 @@ test('can generate a project', async () => {
 test('can generate a clarion project', async () => {
   const path = resolve(process.cwd(), 'test/clarinet-project');
   const outputDir = resolve(path, 'clarigen');
-  try {
-    await rm(outputDir, { recursive: true });
-  } catch {}
+  await rmdir(outputDir);
   await generateProject(path);
 
   expect(
