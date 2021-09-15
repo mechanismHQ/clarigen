@@ -1,5 +1,11 @@
 # @clarigen/cli
 
+## 0.2.4
+
+### Patch Changes
+
+- [`227cc16`](https://github.com/obylabs/clarigen/commit/227cc16c7fad3e41f15fb24d4d11f0ea32e200a3) Thanks [@hstove](https://github.com/hstove)! - Updated CLI README.md to only include `clarigen` command
+
 ## 0.2.3
 
 ### Patch Changes
