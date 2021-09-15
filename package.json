@@ -6,7 +6,8 @@
     "lint": "eslint packages/**/*.{ts,js}",
     "lint:fix": "eslint --fix packages/**/*.{ts,js}",
     "test": "lerna run test --no-bail --parallel",
-    "typecheck": "lerna run typecheck --no-bail --parallel"
+    "typecheck": "lerna run typecheck --no-bail --parallel",
+    "publish": "yarn build && yarn lerna publish from-package --yes"
   },
   "prettier": "@blockstack/prettier-config",
   "devDependencies": {
@@ -21,7 +22,7 @@
     "husky": "^4.2.5",
     "jest": "^26.0.1",
     "jest-cli": "^26.6.3",
-    "lerna": "^3.22.1",
+    "lerna": "^4.0.0",
     "prettier": "^2.0.5",
     "ts-jest": "^26.1.0",
     "tsdx": "^0.14.1",
