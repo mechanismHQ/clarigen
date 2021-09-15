@@ -1,5 +1,11 @@
 # @clarigen/native-bin
 
+## 0.2.2
+
+### Patch Changes
+
+- [`a375c62`](https://github.com/obylabs/clarigen/commit/a375c622395b580821c0e53281ddd8233ccadf65) Thanks [@hstove](https://github.com/hstove)! - Fixed a typo in `post-install` for `native-bin`, which pointed to the wrong compiled file.
+
 ## 0.2.1
 
 ### Patch Changes

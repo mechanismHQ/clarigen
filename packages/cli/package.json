@@ -2,7 +2,7 @@
   "name": "@clarigen/cli",
   "description": "A CLI for generating a Typescript interface for a Clarity contract.",
   "author": "Hank Stoever",
-  "version": "0.2.0",
+  "version": "0.2.2",
   "license": "MIT",
   "main": "dist/index.js",
   "files": [
@@ -47,7 +47,7 @@
   },
   "dependencies": {
     "@clarigen/core": "0.2.0",
-    "@clarigen/native-bin": "0.2.1",
+    "@clarigen/native-bin": "0.2.2",
     "@ltd/j-toml": "1.12.2",
     "@oclif/command": "^1.8.0",
     "@stacks/wallet-sdk": "1.0.0-wallet-sdk.4",
