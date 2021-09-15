@@ -10,6 +10,7 @@ const ora = require('ora');
 export class Generate extends Command {
   static description = `Generate project files`;
   static strict = true;
+  static hidden = true;
 
   static flags = {
     help: flags.help({ char: 'h' }),

@@ -1,3 +1,5 @@
-import { Generate } from './generate';
+import { Generate as InnerGenerate } from './generate';
 
-export default Generate;
+export class Generate extends InnerGenerate {
+  static hidden = false;
+}

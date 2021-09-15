@@ -4,6 +4,7 @@ import { generateFilesForContract } from '../utils';
 export class Contract extends Command {
   static description = `Generate files for a single contract`;
   static strict = true;
+  static hidden = true;
 
   static flags = {
     help: flags.help({ char: 'h' }),

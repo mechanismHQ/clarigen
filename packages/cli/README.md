@@ -6,24 +6,8 @@ Most of the time, you'll only need to run `clarigen` to automatically build your
 
 # Usage
 
-<!-- usage -->
-```sh-session
-$ npm install -g @clarigen/cli
-$ clarigen COMMAND
-running command...
-$ clarigen (-v|--version|version)
-@clarigen/cli/0.1.1 darwin-arm64 node-v16.4.2
-$ clarigen --help [COMMAND]
-USAGE
-  $ clarigen COMMAND
-...
-```
-<!-- usagestop -->
-
 <!-- commands -->
 * [`clarigen `](#clarigen-)
-* [`clarigen contract [CONTRACT]`](#clarigen-contract-contract)
-* [`clarigen generate`](#clarigen-generate)
 
 ## `clarigen `
 
@@ -32,35 +16,6 @@ Generate project files
 ```
 USAGE
   $ clarigen
-
-OPTIONS
-  -h, --help   show CLI help
-  -w, --watch  Watch for changes to your contracts
-```
-
-## `clarigen contract [CONTRACT]`
-
-Generate files for a single contract
-
-```
-USAGE
-  $ clarigen contract [CONTRACT]
-
-ARGUMENTS
-  CONTRACT  The file path for your contract
-
-OPTIONS
-  -h, --help           show CLI help
-  -o, --output=output  [default: clarion] Output destination folder
-```
-
-## `clarigen generate`
-
-Generate project files
-
-```
-USAGE
-  $ clarigen generate
 
 OPTIONS
   -h, --help   show CLI help
