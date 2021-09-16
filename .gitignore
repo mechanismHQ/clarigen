@@ -21,3 +21,4 @@ doc
 lerna-debug.log
 *.native-bin
 installer/
+.yalc

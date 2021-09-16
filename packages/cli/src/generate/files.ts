@@ -8,7 +8,7 @@ import {
   getContractNameFromPath,
 } from '@clarigen/core';
 import { makeTypes } from './declaration';
-import { ConfigContract, ConfigFile } from 'src/config';
+import { ConfigContract, ConfigFile } from '../config';
 import { dirname, resolve, join } from 'path';
 
 export const generateInterface = async ({

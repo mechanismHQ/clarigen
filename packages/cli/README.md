@@ -7,20 +7,7 @@ Most of the time, you'll only need to run `clarigen` to automatically build your
 # Usage
 
 <!-- commands -->
-* [`clarigen `](#clarigen-)
 
-## `clarigen `
-
-Generate project files
-
-```
-USAGE
-  $ clarigen
-
-OPTIONS
-  -h, --help   show CLI help
-  -w, --watch  Watch for changes to your contracts
-```
 <!-- commandsstop -->
 
 ## Development

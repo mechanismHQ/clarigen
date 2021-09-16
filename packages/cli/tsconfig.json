@@ -1,12 +1,11 @@
 {
-  "extends": "../../tsconfig.json",
   "ts-node": {
     "compilerOptions": {
       "module": "CommonJS"
     }
   },
   "compilerOptions": {
-    "module": "esnext",
+    "module": "commonjs",
     "moduleResolution": "node",
     "lib": ["dom", "esnext"],
     "target": "ES2020",
@@ -14,9 +13,11 @@
     "rootDir": "./src",
     "resolveJsonModule": true,
     "baseUrl": ".",
+    "noEmit": false,
+    "esModuleInterop": true,
     "paths": {
       "@clarigen/cli": ["src/index"]
     }
   },
-  "include": ["./src/**/*"]
+  "include": ["./src/index.ts", "./src/**/*"]
 }

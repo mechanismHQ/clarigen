@@ -8,7 +8,7 @@
   "files": [
     "dist",
     "src",
-    "/oclif.manifest.json"
+    "oclif.manifest.json"
   ],
   "engines": {
     "node": ">=10"
@@ -18,7 +18,7 @@
     "start": "ts-node-script src/start.ts",
     "compile": "ncc build src/index.ts --no-source-map-register -e @oclif/command -e @oclif/errors",
     "build-single-file": "yarn compile && oclif-dev readme",
-    "build": "tsdx build && oclif-dev readme",
+    "build": "rm -rf dist && tsc -b",
     "test": "tsdx test",
     "lint": "tsdx lint",
     "typecheck": "tsc --noEmit"
@@ -41,7 +41,6 @@
     "@oclif/dev-cli": "^1.26.0",
     "@oclif/errors": "^1.3.4",
     "@vercel/ncc": "0.27.0",
-    "chokidar": "3.5.1",
     "oclif": "^1.16.1",
     "ts-node": "^9.1.1"
   },
@@ -52,6 +51,7 @@
     "@oclif/command": "^1.8.0",
     "@stacks/wallet-sdk": "1.0.0-wallet-sdk.4",
     "chalk": "4.1.0",
+    "chokidar": "3.5.1",
     "ora": "5.4.0"
   },
   "publishConfig": {
