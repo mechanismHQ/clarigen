@@ -1,5 +1,11 @@
 # @clarigen/cli
 
+## 0.2.5
+
+### Patch Changes
+
+- [`88f9e16`](https://github.com/obylabs/clarigen/commit/88f9e16db5cb983e78d087241d5b47868629e5d7) Thanks [@hstove](https://github.com/hstove)! - Fixed packaging to support `clarigen` bin file in external repos
+
 ## 0.2.4
 
 ### Patch Changes
