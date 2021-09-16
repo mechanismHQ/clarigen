@@ -1,5 +1,11 @@
 # @clarigen/test
 
+## 0.2.6
+
+### Patch Changes
+
+- [`4b23df1`](https://github.com/obylabs/clarigen/commit/4b23df1390d0f9759eff5b3bab0a4b3ea3a707c2) Thanks [@hstove](https://github.com/hstove)! - Added the `test-utils.clar` contract to NPM files
+
 ## 0.2.3
 
 ### Patch Changes
