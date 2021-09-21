@@ -39,6 +39,8 @@ export {
   getBlockHeight,
   mineBlocks,
   getStxBalance,
+  executeJson,
+  evalJson,
 } from './utils';
 
 interface CreateOptions {

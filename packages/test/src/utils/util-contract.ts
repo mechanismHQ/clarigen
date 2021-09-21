@@ -26,7 +26,7 @@ export async function getBlockHeight(provider: NativeClarityBinProvider) {
     provider,
   });
   const outputCV = deserializeCV(Buffer.from(output_serialized, 'hex'));
-  const blockHeight: number = cvToValue(outputCV);
+  const blockHeight: bigint = cvToValue(outputCV);
   return blockHeight;
 }
 
@@ -54,6 +54,6 @@ export async function getStxBalance(provider: NativeClarityBinProvider, account:
     provider,
   });
   const outputCV = deserializeCV(Buffer.from(output_serialized, 'hex'));
-  const balance: number = cvToValue(outputCV);
+  const balance: bigint = cvToValue(outputCV);
   return balance;
 }
