@@ -37,7 +37,6 @@
     "trailingComma": "es5"
   },
   "devDependencies": {
-    "@oclif/config": "^1.17.0",
     "@oclif/dev-cli": "^1.26.0",
     "@oclif/errors": "^1.3.4",
     "@vercel/ncc": "0.27.0",
@@ -49,6 +48,8 @@
     "@clarigen/native-bin": "0.2.3",
     "@ltd/j-toml": "1.12.2",
     "@oclif/command": "^1.8.0",
+    "@oclif/config": "^1.17.0",
+    "@oclif/plugin-help": "3.2.3",
     "@stacks/wallet-sdk": "1.0.0-wallet-sdk.4",
     "chalk": "4.1.0",
     "chokidar": "3.5.1",
