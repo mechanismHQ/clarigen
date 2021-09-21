@@ -24,12 +24,9 @@ export async function getClarinetDevConfig(
 ): Promise<ClarinetDevConfig> {
   const baseConfigPath = resolve(folder, 'settings', 'Devnet.toml');
   const configContents = await readFile(baseConfigPath, { encoding: 'utf-8' });
-  const config = (parse(
-    configContents,
-    1.0,
-    '\n',
-    false
-  ) as unknown) as ClarinetDevConfig;
+  const config = (parse(configContents, 1.0, '\n', true, {
+    longer: true,
+  }) as unknown) as ClarinetDevConfig;
   return config;
 }
 
@@ -49,7 +46,7 @@ export async function getClarinetConfig(folder: string) {
     configContents,
     1.0,
     '\n',
-    false
+    true
   ) as unknown) as ClarinetConfig;
   return config;
 }

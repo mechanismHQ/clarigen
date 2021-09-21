@@ -136,8 +136,19 @@ export const generateProjectIndexFile = (config: ConfigFile) => {
 
   let accounts = '';
   if ('accounts' in config) {
+    const accountLines = Object.keys(config.accounts).map((key) => {
+      const account = config.accounts[key];
+      return `"${key}": {
+    mnemonic: "${account.mnemonic}",
+    balance: ${account.balance.toString()}n,
+    address: "${account.address}",
+  },`;
+    });
+
     accounts = `\n\n// prettier-ignore
-export const accounts = ${JSON.stringify(config.accounts, null, 2)};`;
+export const accounts = {
+  ${accountLines.join('\n  ')}
+};`;
   }
 
   config.contracts.forEach((contract) => {

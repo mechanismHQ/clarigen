@@ -10,7 +10,7 @@ test('can get development config', async () => {
   const path = resolve(process.cwd(), 'test/clarinet-project/clarinet');
   const config = await getClarinetDevConfig(path);
   const { network, accounts } = config;
-  expect(accounts.deployer.balance).toEqual(1000000);
+  expect(accounts.deployer.balance).toEqual(1000000000000000000000n);
   expect(accounts.deployer.mnemonic).toEqual(
     'fetch outside black test wash cover just actual execute nice door want airport betray quantum stamp fish act pen trust portion fatigue scissors vague'
   );

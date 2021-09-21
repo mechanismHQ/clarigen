@@ -7,7 +7,7 @@ import { ResultAssets } from '@clarigen/core';
 
 export interface Allocation {
   principal: string;
-  amount: number;
+  amount: bigint;
 }
 
 interface ExecuteOk {
@@ -118,7 +118,7 @@ export const evalJson = async ({
 };
 
 export interface ClarinetAccount {
-  balance: number;
+  balance: bigint;
   address: string;
 }
 
@@ -142,6 +142,16 @@ export function getAllocations(allocations?: AllocationOrAccounts): Allocation[]
   return [];
 }
 
+function bigintReplacer(key: string, value: any) {
+  if (typeof value === 'bigint') return `${value}n`;
+  return value;
+}
+
+function stringifyAllocations(allocations: Allocation[]) {
+  const json = JSON.stringify(allocations, bigintReplacer);
+  return json.replace(/"(-?\d+)n"/g, (_, a) => a);
+}
+
 export const createClarityBin = async ({
   allocations,
   testnet = true,
@@ -153,7 +163,7 @@ export const createClarityBin = async ({
   const args = ['initialize', '-', dbFileName];
   if (testnet) args.push('--testnet');
   await provider.runCommand(args, {
-    stdin: JSON.stringify(_allocations),
+    stdin: stringifyAllocations(_allocations),
   });
   return provider;
 };
