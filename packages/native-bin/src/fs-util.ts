@@ -71,12 +71,15 @@ export function verifyOutputFile(
 export const moveFromPath = (opts: {
   logger: Logger;
   outputFilePath: string;
-  inputFilePAth: string;
+  inputFilePath: string;
 }) => {
-  opts.logger.log(`Copying ${opts.inputFilePAth} to ${opts.outputFilePath}`);
+  opts.logger.log(`Copying ${opts.inputFilePath} to ${opts.outputFilePath}`);
   const dirName = path.dirname(opts.outputFilePath);
+  try {
+    fs.rmSync(dirName, { recursive: true });
+  } catch {}
   fs.mkdirpSync(dirName);
-  fs.copyFileSync(opts.inputFilePAth, opts.outputFilePath);
+  fs.copyFileSync(opts.inputFilePath, opts.outputFilePath);
   return true;
 };
 

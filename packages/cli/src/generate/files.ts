@@ -31,7 +31,10 @@ export const generateInterface = async ({
     '--costs',
     '--assets',
   ]);
-  if (receipt.stderr) {
+  if (
+    receipt.stderr &&
+    !receipt.stderr.includes('Used unimplemented cost function')
+  ) {
     throw new Error(`Error on ${contractFile}:
   ${receipt.stderr}
     `);

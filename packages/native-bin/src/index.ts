@@ -74,7 +74,7 @@ export async function installDefaultPath(): Promise<boolean> {
     return moveFromPath({
       logger,
       outputFilePath: installPath,
-      inputFilePAth: localPath,
+      inputFilePath: localPath,
     });
   }
 
