@@ -2,7 +2,6 @@ import { ClarityAbi } from '@clarigen/core';
 
 // prettier-ignore
 export const TestProjectInterface: ClarityAbi = {
-  "clarity_version": "Clarity2",
   "functions": [
     {
       "access": "public",

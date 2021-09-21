@@ -21,7 +21,8 @@
     "build": "rm -rf dist && tsc -b",
     "test": "tsdx test",
     "lint": "tsdx lint",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "prepublishOnly": "yarn build"
   },
   "bin": {
     "clarigen": "./bin/run"
