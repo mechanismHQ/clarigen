@@ -1,5 +1,9 @@
 import { Configuration, SmartContractsApi } from '@stacks/blockchain-api-client';
-import { ClarityAbiFunction, ClarityType, deserializeCV, serializeCV } from '@stacks/transactions';
+import { ClarityType, deserializeCV, serializeCV } from 'micro-stacks/clarity';
+import { ClarityAbiFunction, makeContractCallToken, openTransactionPopup, AuthOptions } from 'micro-stacks/connect';
+import { StacksNetwork } from 'micro-stacks/network';
+import { bytesToHex, hexToBytes } from 'micro-stacks/common';
+
 import { ok, err } from 'neverthrow';
 import {
   BaseProvider,
@@ -10,14 +14,12 @@ import {
   cvToValue,
   parseToCV,
 } from '@clarigen/core';
-import { AppDetails, makeTx } from './utils';
-import { StacksNetwork } from '@stacks/network';
 
 export interface WebConfig {
   stxAddress: string;
   privateKey: string;
   network: StacksNetwork;
-  appDetails: AppDetails;
+  appDetails: AuthOptions['appDetails'];
 }
 
 export class WebProvider implements BaseProvider {
@@ -26,7 +28,7 @@ export class WebProvider implements BaseProvider {
   stxAddress: string;
   privateKey: string;
   network: StacksNetwork;
-  appDetails: AppDetails;
+  appDetails: AuthOptions['appDetails'];
 
   constructor({
     network,
@@ -72,7 +74,7 @@ export class WebProvider implements BaseProvider {
     const argumentsFormatted = args.map((arg, index) => {
       const { type } = func.args[index];
       const valueCV = parseToCV(arg, type);
-      return serializeCV(valueCV).toString('hex');
+      return bytesToHex(serializeCV(valueCV));
     });
     const [contractAddress, contractName] = this.identifier.split('.');
     const response = await this.apiClient.callReadOnlyFunction({
@@ -88,7 +90,7 @@ export class WebProvider implements BaseProvider {
       console.log(response);
       throw new Error('Error calling read-only function');
     }
-    const resultCV = deserializeCV(Buffer.from(response.result.replace(/^0x/, ''), 'hex'));
+    const resultCV = deserializeCV(hexToBytes(response.result.replace(/^0x/, '')));
     const value = cvToValue(resultCV);
     switch (resultCV.type) {
       case ClarityType.ResponseOk:
@@ -100,14 +102,14 @@ export class WebProvider implements BaseProvider {
     }
   }
 
-  callPublic(func: ClarityAbiFunction, args: any[]): Transaction<any, any> {
+  async callPublic(func: ClarityAbiFunction, args: any[]): Transaction<any, any> {
     const argumentsFormatted = args.map((arg, index) => {
       const { type } = func.args[index];
       const valueCV = parseToCV(arg, type);
-      return serializeCV(valueCV).toString('hex');
+      return bytesToHex(serializeCV(valueCV));
     });
     const [contractAddress, contractName] = this.identifier.split('.');
-    return makeTx({
+    const token = await makeContractCallToken({
       contractAddress,
       contractName,
       functionName: func.name,
@@ -117,6 +119,6 @@ export class WebProvider implements BaseProvider {
       privateKey: this.privateKey,
       appDetails: this.appDetails,
     });
-    // throw new Error('Not implemented');
+    return openTransactionPopup({ token });
   }
 }
