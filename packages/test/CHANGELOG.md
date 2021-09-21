@@ -1,5 +1,14 @@
 # @clarigen/test
 
+## 0.2.7
+
+### Patch Changes
+
+- [`d5d9dc6`](https://github.com/obylabs/clarigen/commit/d5d9dc6b039bfb7c5e39d294594b753bb924b435) Thanks [@hstove](https://github.com/hstove)! - Fixed the return type for the test util contract's methods (from number to bigint)
+
+- Updated dependencies [[`d5d9dc6`](https://github.com/obylabs/clarigen/commit/d5d9dc6b039bfb7c5e39d294594b753bb924b435)]:
+  - @clarigen/native-bin@0.2.7
+
 ## 0.2.6
 
 ### Patch Changes

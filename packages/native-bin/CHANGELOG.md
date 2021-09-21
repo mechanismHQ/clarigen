@@ -1,5 +1,11 @@
 # @clarigen/native-bin
 
+## 0.2.7
+
+### Patch Changes
+
+- [`d5d9dc6`](https://github.com/obylabs/clarigen/commit/d5d9dc6b039bfb7c5e39d294594b753bb924b435) Thanks [@hstove](https://github.com/hstove)! - Fixed a bug when re-installing the native bin from a local file
+
 ## 0.2.3
 
 ### Patch Changes
