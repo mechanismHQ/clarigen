@@ -1,5 +1,16 @@
 # @clarigen/cli
 
+## 0.2.7
+
+### Patch Changes
+
+- [`d5d9dc6`](https://github.com/obylabs/clarigen/commit/d5d9dc6b039bfb7c5e39d294594b753bb924b435) Thanks [@hstove](https://github.com/hstove)! - Fixed a bug when re-installing the native bin from a local file
+
+* [`d3fa0e5`](https://github.com/obylabs/clarigen/commit/d3fa0e5478893340a4466bba76b5188c7aea114f) Thanks [@hstove](https://github.com/hstove)! - Added `@oclif/command` and `@oclif/plugin-help` to dependencies for CLI
+
+* Updated dependencies [[`d5d9dc6`](https://github.com/obylabs/clarigen/commit/d5d9dc6b039bfb7c5e39d294594b753bb924b435)]:
+  - @clarigen/native-bin@0.2.7
+
 ## 0.2.5
 
 ### Patch Changes
