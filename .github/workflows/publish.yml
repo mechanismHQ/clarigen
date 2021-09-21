@@ -28,6 +28,12 @@ jobs:
           key: ${{ runner.os }}-${{ hashFiles('**/yarn.lock') }}
       - name: Install monorepo deps
         run: npx lerna bootstrap
+      - name: Build packages
+        run: yarn build
+      - name: Type checks
+        run: yarn typecheck
+      - name: Tests
+        run: yarn test
       - name: Create Release Pull Request or Publish to npm
         uses: changesets/action@c3d88279fd9abe11410de073005e34863f735b1c
         with:
