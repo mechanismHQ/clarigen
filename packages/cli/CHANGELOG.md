@@ -1,5 +1,13 @@
 # @clarigen/cli
 
+## 0.3.0
+
+### Minor Changes
+
+- [`31432eb`](https://github.com/obylabs/clarigen/commit/31432eb84947956deb64b392407050c59c2da409) Thanks [@hstove](https://github.com/hstove)! - Updates the CLI to use `BigInt` for account balances that come from Clarinet's `Devnet.toml`. This allows for much larger balances than supported by JS numbers.
+
+  This change is used downstream in `@clarigen/test`, in the `createNativeBin` function. You are now required to pass a `bigint` as the user's balance.
+
 ## 0.2.7
 
 ### Patch Changes
