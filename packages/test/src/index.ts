@@ -84,7 +84,7 @@ export class TestProvider implements BaseProvider {
     if (!address) {
       throw new Error('TestProvider must have an address');
     }
-    const contractName = getContractNameFromPath(contract.contractFile);
+    const contractName = contract.name || getContractNameFromPath(contract.contractFile);
 
     const provider = await this.create({
       clarityBin,

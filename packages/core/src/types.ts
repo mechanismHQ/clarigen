@@ -5,6 +5,7 @@ export interface Contract<T> {
   address: string;
   contractFile: string;
   contract: ContractBuilder<T>;
+  name?: string;
 }
 
 export interface Contracts<T> {
