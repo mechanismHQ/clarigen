@@ -1,5 +1,11 @@
 # @clarigen/core
 
+## 0.3.1
+
+### Patch Changes
+
+- [`5a4e434`](https://github.com/obylabs/clarigen/commit/5a4e43484c9134db102a9ef8745a273a0c6c3018) Thanks [@hstove](https://github.com/hstove)! - Fixed an issue with integer conversion with clarity values. Resolved by updating `@stacks/transactions` dependency version
+
 ## 0.2.3
 
 ### Patch Changes
