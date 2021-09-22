@@ -98,9 +98,9 @@ export function cvToValue(val: ClarityValue): any {
     case ClarityType.BoolFalse:
       return false;
     case ClarityType.Int:
-      return BigInt(`0x${val.value.toString('hex')}`);
+      return val.value;
     case ClarityType.UInt:
-      return BigInt(`0x${val.value.toString('hex')}`);
+      return val.value;
     case ClarityType.Buffer:
       return val.buffer;
     case ClarityType.OptionalNone:
@@ -181,12 +181,10 @@ export function parseToCV(input: CVInput, type: ClarityAbiType): ClarityValue {
     return uintCV(bigi.toString());
   } else if (type === 'int128') {
     const bigi = inputToBigInt(input);
-    return uintCV(bigi.toString());
+    return intCV(bigi.toString());
   }
   return _parseToCV(input as string, type);
 }
-
-const CLARITY_INT_SIZE = 128;
 
 export function cvToString(val: ClarityValue, encoding: 'tryAscii' | 'hex' = 'hex'): string {
   switch (val.type) {
@@ -195,7 +193,7 @@ export function cvToString(val: ClarityValue, encoding: 'tryAscii' | 'hex' = 'he
     case ClarityType.BoolFalse:
       return 'false';
     case ClarityType.Int:
-      return val.value.fromTwos(CLARITY_INT_SIZE).toString();
+      return val.value.toString();
     case ClarityType.UInt:
       return `u${val.value.toString()}`;
     case ClarityType.Buffer:

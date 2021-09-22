@@ -13,7 +13,7 @@
     "start": "tsdx watch",
     "dev": "tsdx watch",
     "build": "tsdx build",
-    "test": "tsdx test --passWithNoTests",
+    "test": "tsdx test",
     "lint": "tsdx lint",
     "prepublishOnly": "yarn build",
     "typecheck": "tsc --noEmit"
@@ -23,7 +23,7 @@
   "author": "Hank Stoever",
   "module": "dist/core.esm.js",
   "dependencies": {
-    "@stacks/transactions": "^1.3.3",
+    "@stacks/transactions": "^2.0.1",
     "neverthrow": "4.2.1"
   },
   "devDependencies": {
