@@ -5,6 +5,7 @@ import {
   ClarityValue,
   SignedContractCallOptions,
   broadcastTransaction,
+  AnchorMode,
 } from '@stacks/transactions';
 import BN from 'bn.js';
 
@@ -45,6 +46,7 @@ export function makeTx<Ok, Err>(payload: TxPayload): NodeTransaction<Ok, Err> {
         network: payload.network,
         postConditions: options.postConditions,
         postConditionMode: options.postConditionMode,
+        anchorMode: AnchorMode.Any,
         // fee: new BN(10000, 10),
       };
       if ('nonce' in options && options.nonce) {

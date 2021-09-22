@@ -1,4 +1,4 @@
-import { contractPrincipalCV } from '@stacks/transactions';
+import { contractPrincipalCV, ContractPrincipalCV } from '@stacks/transactions';
 import { Contract } from './types';
 
 export const TESTNET_BURN_ADDRESS = 'ST000000000000000000002AMW42H';
@@ -27,7 +27,7 @@ export const getContractIdentifier = <T>(contract: Contract<T>) => {
   return `${contract.address}.${contractName}`;
 };
 
-export const getContractPrincipalCV = <T>(contract: Contract<T>) => {
+export const getContractPrincipalCV = <T>(contract: Contract<T>): ContractPrincipalCV => {
   const contractName = getContractNameFromPath(contract.contractFile);
   return contractPrincipalCV(contract.address, contractName);
 };
