@@ -182,6 +182,10 @@ export function parseToCV(input: CVInput, type: ClarityAbiType): ClarityValue {
   } else if (type === 'int128') {
     const bigi = inputToBigInt(input);
     return intCV(bigi.toString());
+  } else if (type === 'trait_reference') {
+    if (typeof input !== 'string') throw new Error('Invalid input for trait_reference');
+    const [addr, name] = input.split('.');
+    return contractPrincipalCV(addr, name);
   }
   return _parseToCV(input as string, type);
 }

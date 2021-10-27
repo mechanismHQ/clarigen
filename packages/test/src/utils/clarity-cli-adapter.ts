@@ -2,6 +2,7 @@ import {
   getTempFilePath,
   NativeClarityBinProvider,
   getDefaultBinaryFilePath,
+  hasStdErr,
 } from '@clarigen/native-bin';
 import { ResultAssets } from '@clarigen/core';
 
@@ -107,10 +108,10 @@ export const evalJson = async ({
       stdin: evalCode,
     }
   );
-  const response: EvalResult = JSON.parse(receipt.stdout);
   if (process.env.PRINT_CLARIGEN_STDERR && receipt.stderr) {
     console.log(receipt.stderr);
   }
+  const response: EvalResult = JSON.parse(receipt.stdout);
   if (!response.success) {
     throw new Error(JSON.stringify(response.error, null, 2));
   }
@@ -183,12 +184,6 @@ export async function getDefaultClarityBin(
     throw new Error('Should never get here');
   }
   return clarityBin;
-}
-
-function hasStdErr(stderr: string) {
-  if (!stderr) return false;
-  if (stderr.includes('Used unimplemented cost function')) return false;
-  return true;
 }
 
 export async function deployContract({

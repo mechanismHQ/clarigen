@@ -1,6 +1,7 @@
 import {
   NativeClarityBinProvider,
   createClarityBin,
+  hasStdErr,
 } from '@clarigen/native-bin';
 import {
   ClarityAbi,
@@ -31,10 +32,7 @@ export const generateInterface = async ({
     '--costs',
     '--assets',
   ]);
-  if (
-    receipt.stderr &&
-    !receipt.stderr.includes('Used unimplemented cost function')
-  ) {
+  if (hasStdErr(receipt.stderr)) {
     throw new Error(`Error on ${contractFile}:
   ${receipt.stderr}
     `);
