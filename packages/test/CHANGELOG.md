@@ -1,5 +1,37 @@
 # @clarigen/test
 
+## 0.3.2
+
+### Patch Changes
+
+- [`529cff2`](https://github.com/obylabs/clarigen/commit/529cff2a42263ff801f4a20d62bf7adfbd92ee0a) Thanks [@hstove](https://github.com/hstove)! - Fixed a bug where contracts that printed output on contract deploys would throw an error. For example, this contract:
+
+  ```clar
+  (define-public (say-hi) (print "hello"))
+
+  (say-hi)
+  ```
+
+  Would `print` when the contract deployed and cause an when Clarigen deployed it.
+
+* [`d72e4e4`](https://github.com/obylabs/clarigen/commit/d72e4e4e160311d4ed39cf36f105ec9f0df92c81) Thanks [@hstove](https://github.com/hstove)! - Adds the ability to specify a contract name manually when deploying test contracts. Previously, the contract name would be automatically generated from the contract's file.
+
+  For example, `my-contract.clar` would have the identifier `ST123.my-contract`. Now, in `TestProvider.fromContracts`, you can specify a name manually:
+
+  ```ts
+  await TestProvider.fromContracts({
+    ...contracts,
+    myContract2: {
+      ...contracts.myContract,
+      name: 'my-contract-2',
+    },
+  });
+  ```
+
+* Updated dependencies [[`529cff2`](https://github.com/obylabs/clarigen/commit/529cff2a42263ff801f4a20d62bf7adfbd92ee0a), [`d72e4e4`](https://github.com/obylabs/clarigen/commit/d72e4e4e160311d4ed39cf36f105ec9f0df92c81)]:
+  - @clarigen/core@0.3.2
+  - @clarigen/native-bin@0.3.2
+
 ## 0.3.1
 
 ### Patch Changes

@@ -1,5 +1,12 @@
 # @clarigen/web
 
+## 0.3.2
+
+### Patch Changes
+
+- Updated dependencies [[`529cff2`](https://github.com/obylabs/clarigen/commit/529cff2a42263ff801f4a20d62bf7adfbd92ee0a), [`d72e4e4`](https://github.com/obylabs/clarigen/commit/d72e4e4e160311d4ed39cf36f105ec9f0df92c81)]:
+  - @clarigen/core@0.3.2
+
 ## 0.3.1
 
 ### Patch Changes

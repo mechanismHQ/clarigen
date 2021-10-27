@@ -1,5 +1,5 @@
 {
-  "version": "0.3.1",
+  "version": "0.3.2",
   "license": "MIT",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -25,8 +25,8 @@
   "module": "dist/test.esm.js",
   "devDependencies": {},
   "dependencies": {
-    "@clarigen/core": "0.3.1",
-    "@clarigen/native-bin": "0.3.1",
+    "@clarigen/core": "0.3.2",
+    "@clarigen/native-bin": "0.3.2",
     "@stacks/transactions": "^2.0.1"
   },
   "publishConfig": {
