@@ -1,5 +1,5 @@
 {
-  "version": "0.3.2",
+  "version": "0.3.3",
   "license": "MIT",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -26,7 +26,7 @@
   "devDependencies": {},
   "dependencies": {
     "@clarigen/core": "0.3.2",
-    "@clarigen/native-bin": "0.3.2",
+    "@clarigen/native-bin": "0.3.3",
     "@stacks/transactions": "^2.0.1"
   },
   "publishConfig": {

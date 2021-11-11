@@ -1,5 +1,12 @@
 # @clarigen/test
 
+## 0.3.3
+
+### Patch Changes
+
+- Updated dependencies [[`7278ff6`](https://github.com/obylabs/clarigen/commit/7278ff662c98a6723e9f26579684dd36f35cdeea)]:
+  - @clarigen/native-bin@0.3.3
+
 ## 0.3.2
 
 ### Patch Changes

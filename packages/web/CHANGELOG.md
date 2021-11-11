@@ -1,5 +1,11 @@
 # @clarigen/web
 
+## 0.3.3
+
+### Patch Changes
+
+- [`7278ff6`](https://github.com/obylabs/clarigen/commit/7278ff662c98a6723e9f26579684dd36f35cdeea) Thanks [@hstove](https://github.com/hstove)! - Fixes a bug where WebProvider read-only calls wouldn't work in a node.js context.
+
 ## 0.3.2
 
 ### Patch Changes
