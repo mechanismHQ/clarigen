@@ -12,6 +12,7 @@ import {
 } from '@clarigen/core';
 import { AppDetails, makeTx } from './utils';
 import { StacksNetwork } from '@stacks/network';
+import { fetch } from 'cross-fetch';
 
 export interface WebConfig {
   stxAddress: string;
@@ -35,8 +36,9 @@ export class WebProvider implements BaseProvider {
     privateKey,
     appDetails,
   }: WebConfig & { identifier: string }) {
+    const _fetch = typeof window !== 'undefined' ? window.fetch.bind(window) : fetch;
     const apiConfig = new Configuration({
-      fetchApi: window.fetch.bind(window),
+      fetchApi: _fetch,
       basePath: network.coreApiUrl,
     });
 

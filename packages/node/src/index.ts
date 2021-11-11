@@ -13,7 +13,7 @@ import { StacksNetwork } from '@stacks/network';
 import { ClarityAbiFunction, ClarityType, deserializeCV, serializeCV } from '@stacks/transactions';
 import fetch from 'cross-fetch';
 import { makeTx } from './utils';
-export { NodeTransaction } from './utils';
+export { NodeTransaction, tx } from './utils';
 
 export interface NodeConfig {
   privateKey: string;

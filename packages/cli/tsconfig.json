@@ -15,6 +15,7 @@
     "baseUrl": ".",
     "noEmit": false,
     "esModuleInterop": true,
+    "skipLibCheck": true,
     "paths": {
       "@clarigen/cli": ["src/index"]
     }

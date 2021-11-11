@@ -13,7 +13,8 @@
     "resolveJsonModule": true,
     "moduleResolution": "node",
     "noUnusedLocals": false,
-    "noUnusedParameters": false
+    "noUnusedParameters": false,
+    "types": ["jest", "node"]
   },
   "include": ["./src/**/*"]
 }

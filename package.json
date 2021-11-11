@@ -16,6 +16,7 @@
     "@changesets/changelog-github": "0.4.1",
     "@stacks/stacks-blockchain-api-types": "^0.66.1",
     "@strictsoftware/typedoc-plugin-monorepo": "^0.4.2",
+    "@types/node": "16.11.7",
     "eslint": "^7.0.0",
     "eslint-plugin-jest": "^23.16.0",
     "eslint-plugin-prettier": "^3.1.4",

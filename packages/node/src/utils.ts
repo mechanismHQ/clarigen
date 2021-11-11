@@ -28,12 +28,14 @@ export interface ContractCallPayload extends Omit<TxPayload, 'privateKey'> {
 
 export interface NodeTransaction<Ok, Err> extends Transaction<Ok, Err> {
   payload: TxPayload;
+  submit: (options?: SubmitOptions) => Promise<WebTransactionReceipt<Ok, Err>>;
 }
 
 export function makeTx<Ok, Err>(payload: TxPayload): NodeTransaction<Ok, Err> {
   return {
     payload,
-    submit: async (options: SubmitOptions): Promise<WebTransactionReceipt<Ok, Err>> => {
+    submit: async (_options?: SubmitOptions): Promise<WebTransactionReceipt<Ok, Err>> => {
+      const options: SubmitOptions = _options || {};
       if ('sender' in options) {
         throw new Error('Cannot use test options');
       }
@@ -54,18 +56,27 @@ export function makeTx<Ok, Err>(payload: TxPayload): NodeTransaction<Ok, Err> {
       }
       const tx = await makeContractCall(contractOptions);
       const broadcastResponse = await broadcastTransaction(tx, payload.network);
-      if (typeof broadcastResponse === 'string') {
-        return {
-          txId: broadcastResponse,
-          stacksTransaction: tx,
-          getResult: () => {
-            throw new Error('Not implemented');
-          },
-        };
+      if (broadcastResponse.error) {
+        throw new Error(
+          `Error broadcasting transaction: ${broadcastResponse.error} - ${broadcastResponse.reason}`
+        );
       }
-      throw new Error(
-        `Error broadcasting transaction: ${broadcastResponse.error} - ${broadcastResponse.reason}`
-      );
+      return {
+        txId: broadcastResponse.txid,
+        stacksTransaction: tx,
+        getResult: () => {
+          throw new Error('Not implemented');
+        },
+      };
     },
   };
+}
+
+export async function tx<A, B>(
+  _tx: Transaction<A, B>,
+  options?: SubmitOptions
+): Promise<WebTransactionReceipt<A, B>> {
+  const tx = _tx as NodeTransaction<A, B>;
+  const receipt = await tx.submit(options);
+  return receipt;
 }

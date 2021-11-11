@@ -9,6 +9,7 @@
     "moduleResolution": "node",
     "noUnusedLocals": false,
     "noUnusedParameters": false,
+    "skipLibCheck": true,
     "types": ["@stacks/connect"]
   },
   "include": ["./src/**/*"]
