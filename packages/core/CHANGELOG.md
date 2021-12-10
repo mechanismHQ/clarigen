@@ -1,5 +1,11 @@
 # @clarigen/core
 
+## 0.3.4
+
+### Patch Changes
+
+- [`3f04d0d`](https://github.com/obylabs/clarigen/commit/3f04d0d5cf0e5e23e52ac2c6d598b08f6c0d58d1) Thanks [@hstove](https://github.com/hstove)! - Adds support for the `sponsored` flag when signing a transaction
+
 ## 0.3.2
 
 ### Patch Changes

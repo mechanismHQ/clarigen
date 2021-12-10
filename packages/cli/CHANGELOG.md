@@ -1,5 +1,13 @@
 # @clarigen/cli
 
+## 0.3.4
+
+### Patch Changes
+
+- Updated dependencies [[`3f04d0d`](https://github.com/obylabs/clarigen/commit/3f04d0d5cf0e5e23e52ac2c6d598b08f6c0d58d1)]:
+  - @clarigen/core@0.3.4
+  - @clarigen/native-bin@0.3.4
+
 ## 0.3.3
 
 ### Patch Changes
