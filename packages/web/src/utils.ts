@@ -3,6 +3,7 @@ import { TokenSigner, Json } from 'stacks-crypto';
 import {
   BufferReader,
   deserializeTransaction,
+  PostConditionMode,
   serializeCV,
   serializePostCondition,
 } from '@stacks/transactions';
@@ -46,6 +47,9 @@ export function makeTx<Ok, Err>(payload: TxPayload): WebTransaction<Ok, Err> {
       const postConditions = serializePostConditions(options.postConditions);
       const token = await makeContractCallToken({
         postConditions,
+        postConditionMode: options.postConditionMode || PostConditionMode.Deny,
+        sponsored: options.sponsored,
+        fee: options.fee,
         ...payload,
       });
       if (!window.StacksProvider) {
@@ -66,7 +70,14 @@ export function makeTx<Ok, Err>(payload: TxPayload): WebTransaction<Ok, Err> {
   };
 }
 
-async function makeContractCallToken(options: TxPayload & { postConditions?: string[] }) {
+async function makeContractCallToken(
+  options: TxPayload & {
+    postConditions?: string[];
+    postConditionMode?: PostConditionMode;
+    sponsored?: boolean;
+    fee?: number;
+  }
+) {
   const { functionArgs, privateKey, ...rest } = options;
   const args: string[] = functionArgs.map(arg => {
     if (typeof arg === 'string') {

@@ -49,6 +49,7 @@ export function makeTx<Ok, Err>(payload: TxPayload): NodeTransaction<Ok, Err> {
         postConditions: options.postConditions,
         postConditionMode: options.postConditionMode,
         anchorMode: AnchorMode.Any,
+        sponsored: options.sponsored,
         // fee: new BN(10000, 10),
       };
       if ('nonce' in options && options.nonce) {
