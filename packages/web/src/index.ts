@@ -19,6 +19,7 @@ export interface WebConfig {
   privateKey: string;
   network: StacksNetwork;
   appDetails: AppDetails;
+  deployerAddress?: string;
 }
 
 export class WebProvider implements BaseProvider {
@@ -58,6 +59,7 @@ export class WebProvider implements BaseProvider {
     const instances = {} as ContractInstances<T, M>;
     for (const k in contracts) {
       const contract = contracts[k];
+      contract.address = config.deployerAddress || contract.address;
       const identifier = getContractIdentifier(contract);
       const provider = new this({ ...config, identifier });
       // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
