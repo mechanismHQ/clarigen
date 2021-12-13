@@ -1,5 +1,11 @@
 # @clarigen/web
 
+## 0.3.5
+
+### Patch Changes
+
+- [`d31ea8a`](https://github.com/obylabs/clarigen/commit/d31ea8a3438454a2cffde6528cf8d42b3909b82a) Thanks [@hstove](https://github.com/hstove)! - Allow setting `deployerAddress` on WebProvider
+
 ## 0.3.4
 
 ### Patch Changes
