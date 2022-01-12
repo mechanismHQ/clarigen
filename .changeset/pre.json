@@ -1,0 +1,13 @@
+{
+  "mode": "pre",
+  "tag": "next",
+  "initialVersions": {
+    "@clarigen/cli": "0.3.6",
+    "@clarigen/core": "0.3.4",
+    "@clarigen/native-bin": "0.3.4",
+    "@clarigen/node": "0.3.4",
+    "@clarigen/test": "0.3.6",
+    "@clarigen/web": "0.3.5"
+  },
+  "changesets": []
+}
