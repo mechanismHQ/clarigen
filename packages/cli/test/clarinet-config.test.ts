@@ -1,8 +1,10 @@
 import {
+  ClarinetContracts,
   getClarinetAccounts,
   getClarinetConfig,
   getClarinetDevConfig,
   getContractsFromClarinet,
+  sortClarinetContracts,
 } from '../src/clarinet-config';
 import { resolve } from 'path';
 
@@ -34,3 +36,22 @@ test('getting contracts from clarinet', async () => {
 
   expect(nested.file).toEqual('nested/nested.clar');
 }, 10000);
+
+test('can correctly sort contracts based on depends_on', async () => {
+  const contracts: ClarinetContracts = {
+    dao: {
+      path: 'asdf',
+      depends_on: ['token'],
+    },
+    token: {
+      path: 'asdf',
+      depends_on: ['trait'],
+    },
+    trait: {
+      path: 'asdf',
+      depends_on: [],
+    },
+  };
+  const sorted = sortClarinetContracts(contracts);
+  expect(sorted).toEqual(['trait', 'token', 'dao']);
+});

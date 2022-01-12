@@ -2,10 +2,10 @@
 [project]
 name = "clarinet"
 
-[contracts.echo]
-path = "contracts/echo.clar"
-depends_on = []
-
 [contracts.nested]
 path = "contracts/nested/nested.clar"
+depends_on = ['echo']
+
+[contracts.echo]
+path = "contracts/echo.clar"
 depends_on = []
