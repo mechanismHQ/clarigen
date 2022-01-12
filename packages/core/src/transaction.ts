@@ -1,4 +1,4 @@
-import { PostCondition, PostConditionMode, StacksTransaction } from '@stacks/transactions';
+import { PostCondition, PostConditionMode, StacksTransaction } from 'micro-stacks/transactions';
 import { CoreNodeEvent } from './events';
 
 export interface ResultAssets {

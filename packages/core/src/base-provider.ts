@@ -1,4 +1,4 @@
-import { ClarityAbiFunction } from '@stacks/transactions';
+import { ClarityAbiFunction } from 'micro-stacks/clarity';
 import { Transaction } from './transaction';
 
 export abstract class BaseProvider {

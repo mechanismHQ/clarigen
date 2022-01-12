@@ -1,4 +1,4 @@
-import { contractPrincipalCV, ContractPrincipalCV } from '@stacks/transactions';
+import { contractPrincipalCV, ContractPrincipalCV } from 'micro-stacks/clarity';
 import { Contract } from './types';
 
 export const TESTNET_BURN_ADDRESS = 'ST000000000000000000002AMW42H';

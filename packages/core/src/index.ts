@@ -6,7 +6,7 @@ export * from './transaction';
 export * from './types';
 export * from './utils';
 export * from './events';
-export { cvToValue, parseToCV, cvToString } from './clarity-types';
+export { cvToValue, parseToCV, cvToString, hexToCvValue } from './clarity-types';
 export { BaseProvider } from './base-provider';
 
 const makeHandler = (provider: BaseProvider) => {
