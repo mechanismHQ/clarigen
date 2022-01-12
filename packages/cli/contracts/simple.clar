@@ -13,3 +13,5 @@
 (define-read-only (get-tuple-resp)
   (ok { a: u1, b: true, c: { d: 1 } })
 )
+
+(define-read-only (get-buff) 0xaaaa)

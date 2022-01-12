@@ -1,0 +1,8 @@
+import { ClarityTypes, Transaction } from '@clarigen/core';
+
+// prettier-ignore
+export interface Simple.clarContract {
+  getName: () => Transaction<string, null>;
+  getBuff: () => Promise<Uint8Array>;
+  getNumber: () => Promise<bigint>;
+}

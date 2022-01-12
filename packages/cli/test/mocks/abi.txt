@@ -23,6 +23,18 @@ export const SimpleInterface: ClarityAbi = {
     {
       "access": "read_only",
       "args": [],
+      "name": "get-buff",
+      "outputs": {
+        "type": {
+          "buffer": {
+            "length": 2
+          }
+        }
+      }
+    },
+    {
+      "access": "read_only",
+      "args": [],
       "name": "get-number",
       "outputs": {
         "type": "uint128"
