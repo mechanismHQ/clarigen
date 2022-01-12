@@ -11,42 +11,6 @@ import {
 import { ClarityAbiType } from 'micro-stacks/clarity';
 import { toCamelCase, ClarityAbi } from '@clarigen/core';
 
-export const cvFromType = (val: ClarityAbiType) => {
-  if (isClarityAbiPrimitive(val)) {
-    if (val === 'uint128') {
-      return 'ClarityTypes.UIntCV';
-    } else if (val === 'int128') {
-      return 'ClarityTypes.IntCV';
-    } else if (val === 'bool') {
-      return 'ClarityTypes.BooleanCV';
-    } else if (val === 'principal') {
-      return 'ClarityTypes.PrincipalCV';
-    } else if (val === 'none') {
-      return 'ClarityTypes.NoneCV';
-    } else {
-      throw new Error(
-        `Unexpected Clarity ABI type primitive: ${JSON.stringify(val)}`
-      );
-    }
-  } else if (isClarityAbiBuffer(val)) {
-    return 'ClarityTypes.BufferCV';
-  } else if (isClarityAbiResponse(val)) {
-    return 'ClarityTypes.ResponseCV';
-  } else if (isClarityAbiOptional(val)) {
-    return 'ClarityTypes.OptionalCV';
-  } else if (isClarityAbiTuple(val)) {
-    return 'ClarityTypes.TupleCV';
-  } else if (isClarityAbiList(val)) {
-    return 'ClarityTypes.ListCV';
-  } else if (isClarityAbiStringAscii(val)) {
-    return 'ClarityTypes.StringAsciiCV';
-  } else if (isClarityAbiStringUtf8(val)) {
-    return 'ClarityTypes.StringUtf8CV';
-  } else {
-    throw new Error(`Unexpected Clarity ABI type: ${JSON.stringify(val)}`);
-  }
-};
-
 export const jsTypeFromAbiType = (
   val: ClarityAbiType,
   isArgument = false
@@ -72,7 +36,7 @@ export const jsTypeFromAbiType = (
       );
     }
   } else if (isClarityAbiBuffer(val)) {
-    return 'Buffer';
+    return 'Uint8Array';
   } else if (isClarityAbiResponse(val)) {
     const ok: any = jsTypeFromAbiType(val.response.ok);
     const err: any = jsTypeFromAbiType(val.response.error);
