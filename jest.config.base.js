@@ -1,11 +1,6 @@
 module.exports = {
-  preset: 'ts-jest',
-  testEnvironment: 'node',
-  globals: {
-    'ts-jest': {
-      diagnostics: {
-        ignoreCodes: ['TS151001'],
-      },
-    },
+  transform: {
+    '^.+\\.(t|j)sx?$': ['@swc-node/jest', { sourcemap: 'inline', dynamicImport: true }],
   },
+  testEnvironment: 'node',
 };

@@ -13,7 +13,7 @@
     "start": "tsdx watch",
     "dev": "tsdx watch",
     "build": "tsdx build",
-    "test": "tsdx test",
+    "test": "jest",
     "lint": "tsdx lint",
     "prepublishOnly": "yarn build",
     "typecheck": "tsc --noEmit"
