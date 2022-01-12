@@ -9,5 +9,7 @@
     "@clarigen/test": "0.3.6",
     "@clarigen/web": "0.3.5"
   },
-  "changesets": []
+  "changesets": [
+    "fresh-dancers-trade"
+  ]
 }
