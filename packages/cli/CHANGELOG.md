@@ -1,5 +1,11 @@
 # @clarigen/cli
 
+## 0.3.6
+
+### Patch Changes
+
+- [`354fe7d`](https://github.com/obylabs/clarigen/commit/354fe7dd0a1af7ed460e31b5a70753e16caab850) Thanks [@hstove](https://github.com/hstove)! - Contracts are now sorted using the `depends_on` property for Clarinet-integrated projects. Previously, contracts needed to be sorted in deploy order in `Clarinet.toml`.
+
 ## 0.3.4
 
 ### Patch Changes
