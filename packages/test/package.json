@@ -27,7 +27,7 @@
   "dependencies": {
     "@clarigen/core": "0.3.4",
     "@clarigen/native-bin": "0.3.4",
-    "@stacks/transactions": "^2.0.1"
+    "micro-stacks": "^0.1.17"
   },
   "publishConfig": {
     "access": "public"
