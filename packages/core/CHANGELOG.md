@@ -1,5 +1,16 @@
 # @clarigen/core
 
+## 1.0.0-next.0
+
+### Major Changes
+
+- [#28](https://github.com/obylabs/clarigen/pull/28) [`574834a`](https://github.com/obylabs/clarigen/commit/574834a950d8b8cfcff620c66f3f22b62c191c51) Thanks [@hstove](https://github.com/hstove)! - Migrates all packages to depend on `micro-stacks`. This allows for simplicity and much reduced bundle sizes.
+
+  Most APIs do not change at all, however, there are some breaking changes:
+
+  - The `buff` Clarity type now uses the `Uint8Array` native JS type, instead of `Buffer`
+  - Some TypeScript types that came from `@stacks/transactions` will break, like the `PostCondition` type
+
 ## 0.3.4
 
 ### Patch Changes
