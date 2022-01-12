@@ -1,4 +1,3 @@
-import type * as Clarity from '@stacks/transactions';
 import {
   addressToString,
   ClarityAbi as _ClarityAbi,
@@ -7,31 +6,33 @@ import {
   ClarityType,
   ClarityValue,
   PrincipalCV,
-  getTypeString,
   uintCV,
-  standardPrincipalCV,
   contractPrincipalCV,
   intCV,
-  trueCV,
-  falseCV,
-  isClarityAbiPrimitive,
-  isClarityAbiBuffer,
-  isClarityAbiList,
-  isClarityAbiOptional,
-  isClarityAbiResponse,
-  isClarityAbiStringAscii,
-  isClarityAbiStringUtf8,
-  isClarityAbiTuple,
-  bufferCVFromString,
   stringAsciiCV,
   stringUtf8CV,
   noneCV,
   someCV,
   tupleCV,
   listCV,
+  cvToJSON,
+  hexToCV,
+} from 'micro-stacks/clarity';
+import {
+  isClarityAbiList,
+  isClarityAbiOptional,
+  isClarityAbiStringAscii,
+  isClarityAbiStringUtf8,
+  isClarityAbiTuple,
   parseToCV as _parseToCV,
-} from '@stacks/transactions';
+} from 'micro-stacks/transactions';
+import { bytesToAscii, bytesToHex } from 'micro-stacks/common';
 import { Result } from 'neverthrow';
+
+// eslint-disable-next-line @typescript-eslint/no-namespace
+export namespace ClarityTypes {
+  export type Response<Ok, Err> = Result<Ok, Err>;
+}
 
 export interface ClarityAbiMap {
   name: string;
@@ -51,33 +52,9 @@ export interface ClarityAbiMap {
     | ClarityAbiType;
 }
 
-export interface ClarityAbi extends Omit<_ClarityAbi, 'maps'> {
-  maps: ClarityAbiMap[];
+export interface ClarityAbi extends _ClarityAbi {
+  // maps: ClarityAbiMap[];
   clarity_version?: string;
-}
-
-// eslint-disable-next-line @typescript-eslint/no-namespace
-export namespace ClarityTypes {
-  export type BooleanCV = Clarity.BooleanCV;
-  export type TrueCV = Clarity.TrueCV;
-  export type FalseCV = Clarity.FalseCV;
-  export type IntCV = Clarity.IntCV;
-  export type UIntCV = Clarity.UIntCV;
-  export type BufferCV = Clarity.BufferCV;
-  export type OptionalCV = Clarity.OptionalCV;
-  export type NoneCV = Clarity.NoneCV;
-  export type SomeCV = Clarity.SomeCV;
-  export type ResponseCV = Clarity.ResponseCV;
-  export type ResponseOkCV = Clarity.ResponseOkCV;
-  export type ResponseErrorCV = Clarity.ResponseErrorCV;
-  export type PrincipalCV = Clarity.PrincipalCV;
-  export type StandardPrincipalCV = Clarity.StandardPrincipalCV;
-  export type ContractPrincipalCV = Clarity.ContractPrincipalCV;
-  export type ListCV = Clarity.ListCV;
-  export type TupleCV = Clarity.TupleCV;
-  export type StringAsciiCV = Clarity.StringAsciiCV;
-  export type StringUtf8CV = Clarity.StringUtf8CV;
-  export type Response<Ok, Err> = Result<Ok, Err>;
 }
 
 function principalToString(principal: PrincipalCV): string {
@@ -91,20 +68,26 @@ function principalToString(principal: PrincipalCV): string {
   }
 }
 
-export function cvToValue(val: ClarityValue): any {
+/**
+ * @param val - ClarityValue
+ * @param strictJsonCompat If true then ints and uints are returned as JSON serializable numbers when
+ * less than or equal to 53 bit length, otherwise string wrapped integers when larger than 53 bits.
+ * If false, they are returned as js native `bigint`s which are _not_ JSON serializable.
+ */
+export function cvToValue<T = any>(val: ClarityValue, strictJsonCompat = false): T {
   switch (val.type) {
     case ClarityType.BoolTrue:
-      return true;
+      return (true as unknown) as T;
     case ClarityType.BoolFalse:
-      return false;
+      return (false as unknown) as T;
     case ClarityType.Int:
-      return val.value;
     case ClarityType.UInt:
-      return val.value;
+      if (strictJsonCompat) return (val.value.toString() as unknown) as T;
+      return (val.value as unknown) as T;
     case ClarityType.Buffer:
-      return val.buffer;
+      return (val.buffer as unknown) as T;
     case ClarityType.OptionalNone:
-      return null;
+      return (null as unknown) as T;
     case ClarityType.OptionalSome:
       return cvToValue(val.value);
     case ClarityType.ResponseErr:
@@ -113,20 +96,32 @@ export function cvToValue(val: ClarityValue): any {
       return cvToValue(val.value);
     case ClarityType.PrincipalStandard:
     case ClarityType.PrincipalContract:
-      return principalToString(val);
+      return (principalToString(val) as unknown) as T;
     case ClarityType.List:
-      return val.list.map(v => cvToValue(v));
+      return (val.list.map(v => cvToValue(v)) as unknown) as T;
     case ClarityType.Tuple:
       const result: { [key: string]: any } = {};
-      Object.keys(val.data).forEach(key => {
-        result[key] = cvToValue(val.data[key]);
+      const arr = Object.keys(val.data).map(key => {
+        return [key, cvToValue(val.data[key])];
       });
-      return result;
+      arr.forEach(([key, value]) => {
+        result[key] = value;
+      });
+      return result as T;
     case ClarityType.StringASCII:
-      return val.data;
+      return (val.data as unknown) as T;
     case ClarityType.StringUTF8:
-      return val.data;
+      return (val.data as unknown) as T;
   }
+}
+
+/**
+ * Converts a hex encoded string to the javascript clarity value object {type: string; value: any}
+ * @param hex - the hex encoded string with or without `0x` prefix
+ * @param jsonCompat - enable to serialize bigints to strings
+ */
+export function hexToCvValue<T>(hex: string, jsonCompat = false) {
+  return cvToValue(hexToCV(hex), jsonCompat);
 }
 
 type TupleInput = Record<string, any>;
@@ -202,12 +197,12 @@ export function cvToString(val: ClarityValue, encoding: 'tryAscii' | 'hex' = 'he
       return `u${val.value.toString()}`;
     case ClarityType.Buffer:
       if (encoding === 'tryAscii') {
-        const str = val.buffer.toString('ascii');
+        const str = bytesToAscii(val.buffer);
         if (/[ -~]/.test(str)) {
           return JSON.stringify(str);
         }
       }
-      return `0x${val.buffer.toString('hex')}`;
+      return `0x${bytesToHex(val.buffer)}`;
     case ClarityType.OptionalNone:
       return 'none';
     case ClarityType.OptionalSome:
