@@ -1,13 +1,12 @@
-import { StacksNetwork } from '@stacks/network';
+import { StacksNetwork } from 'micro-stacks/network';
 import { SubmitOptions, Transaction, WebTransactionReceipt } from '@clarigen/core';
 import {
   makeContractCall,
-  ClarityValue,
   SignedContractCallOptions,
   broadcastTransaction,
   AnchorMode,
-} from '@stacks/transactions';
-import BN from 'bn.js';
+} from 'micro-stacks/transactions';
+import { ClarityValue } from 'micro-stacks/clarity';
 
 interface TxPayload {
   contractAddress: string;
@@ -17,7 +16,6 @@ interface TxPayload {
   network: StacksNetwork;
   privateKey: string;
   nonce?: string;
-  // privateKey: string;
 }
 
 export interface ContractCallPayload extends Omit<TxPayload, 'privateKey'> {
@@ -52,18 +50,25 @@ export function makeTx<Ok, Err>(payload: TxPayload): NodeTransaction<Ok, Err> {
         sponsored: options.sponsored,
         // fee: new BN(10000, 10),
       };
-      if ('nonce' in options && options.nonce) {
-        contractOptions.nonce = new BN(options.nonce, 10);
+      if ('nonce' in options && typeof options.nonce !== 'undefined') {
+        contractOptions.nonce = options.nonce;
       }
       const tx = await makeContractCall(contractOptions);
-      const broadcastResponse = await broadcastTransaction(tx, payload.network);
-      if (broadcastResponse.error) {
+      // TEMP: workaround for micro-stacks issue: https://github.com/fungible-systems/micro-stacks/pull/75
+      const broadcastResponse: any = await broadcastTransaction(tx, payload.network);
+      if ('error' in broadcastResponse) {
         throw new Error(
           `Error broadcasting transaction: ${broadcastResponse.error} - ${broadcastResponse.reason}`
         );
       }
+      let txid: string;
+      if ('txid' in broadcastResponse) {
+        txid = broadcastResponse.txid;
+      } else {
+        txid = broadcastResponse;
+      }
       return {
-        txId: broadcastResponse.txid,
+        txId: txid,
         stacksTransaction: tx,
         getResult: () => {
           throw new Error('Not implemented');

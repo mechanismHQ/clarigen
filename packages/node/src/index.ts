@@ -8,11 +8,10 @@ import {
   cvToValue,
   parseToCV,
 } from '@clarigen/core';
-import { SmartContractsApi, Configuration, AccountsApi } from '@stacks/blockchain-api-client';
-import { StacksNetwork } from '@stacks/network';
-import { ClarityAbiFunction, ClarityType, deserializeCV, serializeCV } from '@stacks/transactions';
-import fetch from 'cross-fetch';
+import { StacksNetwork } from 'micro-stacks/network';
+import { ClarityAbiFunction, ClarityType } from 'micro-stacks/clarity';
 import { makeTx } from './utils';
+import { callReadOnlyFunction } from 'micro-stacks/api';
 export { NodeTransaction, tx } from './utils';
 
 export interface NodeConfig {
@@ -22,19 +21,11 @@ export interface NodeConfig {
 }
 
 export class NodeProvider implements BaseProvider {
-  apiClient: SmartContractsApi;
   identifier: string;
   privateKey: string;
   network: StacksNetwork;
 
   constructor({ network, identifier, privateKey }: NodeConfig & { identifier: string }) {
-    const apiConfig = new Configuration({
-      fetchApi: fetch,
-      basePath: network.coreApiUrl,
-    });
-
-    const apiClient = new SmartContractsApi(apiConfig);
-    this.apiClient = apiClient;
     this.identifier = identifier;
     this.privateKey = privateKey;
     this.network = network;
@@ -61,26 +52,15 @@ export class NodeProvider implements BaseProvider {
   }
 
   async callReadOnly(func: ClarityAbiFunction, args: any[]) {
-    const argumentsFormatted = args.map((arg, index) => {
-      const { type } = func.args[index];
-      const valueCV = parseToCV(arg, type);
-      return serializeCV(valueCV).toString('hex');
-    });
+    const argumentsFormatted = args.map((arg, index) => parseToCV(arg, func.args[index].type));
     const [contractAddress, contractName] = this.identifier.split('.');
-    const response = await this.apiClient.callReadOnlyFunction({
+    const resultCV = await callReadOnlyFunction({
       contractAddress,
       contractName,
+      functionArgs: argumentsFormatted,
       functionName: func.name,
-      readOnlyFunctionArgs: {
-        sender: 'STB44HYPYAT2BB2QE513NSP81HTMYWBJP02HPGK6',
-        arguments: argumentsFormatted,
-      },
+      network: this.network,
     });
-    if (!response.okay || !response.result) {
-      console.log(response);
-      throw new Error('Error calling read-only function');
-    }
-    const resultCV = deserializeCV(Buffer.from(response.result.replace(/^0x/, ''), 'hex'));
     const value = cvToValue(resultCV);
     switch (resultCV.type) {
       case ClarityType.ResponseOk:
