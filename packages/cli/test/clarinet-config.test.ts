@@ -37,7 +37,7 @@ test('getting contracts from clarinet', async () => {
   expect(nested.file).toEqual('nested/nested.clar');
 }, 10000);
 
-test('can correctly sort contracts based on depends_on', async () => {
+test('can correctly sort contracts based on depends_on', () => {
   const contracts: ClarinetContracts = {
     dao: {
       path: 'asdf',
