@@ -16,7 +16,7 @@
     "dev": "tsdx watch",
     "build": "tsdx build && yarn build-installer",
     "build-installer": "yarn tsc --esModuleInterop --outDir ./installer src/direct-install.ts",
-    "test": "tsdx test --passWithNoTests",
+    "test": "jest --passWithNoTests",
     "lint": "tsdx lint",
     "prepublishOnly": "yarn build",
     "typecheck": "tsc --noEmit",

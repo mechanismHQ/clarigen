@@ -1,8 +1,23 @@
-import { cvToValue } from '../src/clarity-types';
-import { intCV } from 'micro-stacks/clarity';
+import { cvToValue, parseToCV } from '../src/clarity-types';
+import { contractPrincipalCV, intCV, responseOkCV, uintCV } from 'micro-stacks/clarity';
 
-test('can turn clarity negative integer into bignum', () => {
-  expect(cvToValue(intCV(-200n))).toEqual(-200n);
-  expect(cvToValue(intCV(200n))).toEqual(200n);
-  expect(cvToValue(intCV(0n))).toEqual(0n);
+describe('cvToValue', () => {
+  test('can turn clarity negative integer into bignum', () => {
+    expect(cvToValue(intCV(-200n))).toEqual(-200n);
+    expect(cvToValue(intCV(200n))).toEqual(200n);
+    expect(cvToValue(intCV(0n))).toEqual(0n);
+  });
+
+  test('can handle responses correctly', () => {
+    const ok = responseOkCV(uintCV(100));
+    const value = cvToValue(ok);
+    expect(value).toEqual(100n);
+  });
+});
+
+describe('parseToCV', () => {
+  test('can handle trait references correctly', () => {
+    const cv = parseToCV('ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM.asdf', 'trait_reference');
+    expect(cv).toEqual(contractPrincipalCV('ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM.asdf'));
+  });
 });
