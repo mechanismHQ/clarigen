@@ -1,5 +1,4 @@
-import { Configuration, SmartContractsApi } from '@stacks/blockchain-api-client';
-import { ClarityAbiFunction, ClarityType, deserializeCV, serializeCV } from '@stacks/transactions';
+import { ClarityAbiFunction, ClarityType } from 'micro-stacks/clarity';
 import { ok, err } from 'neverthrow';
 import {
   BaseProvider,
@@ -11,8 +10,8 @@ import {
   parseToCV,
 } from '@clarigen/core';
 import { AppDetails, makeTx } from './utils';
-import { StacksNetwork } from '@stacks/network';
-import { fetch } from 'cross-fetch';
+import { StacksNetwork } from 'micro-stacks/network';
+import { callReadOnlyFunction } from 'micro-stacks/api';
 
 export interface WebConfig {
   stxAddress: string;
@@ -23,7 +22,6 @@ export interface WebConfig {
 }
 
 export class WebProvider implements BaseProvider {
-  apiClient: SmartContractsApi;
   identifier: string;
   stxAddress: string;
   privateKey: string;
@@ -37,14 +35,6 @@ export class WebProvider implements BaseProvider {
     privateKey,
     appDetails,
   }: WebConfig & { identifier: string }) {
-    const _fetch = typeof window !== 'undefined' ? window.fetch.bind(window) : fetch;
-    const apiConfig = new Configuration({
-      fetchApi: _fetch,
-      basePath: network.coreApiUrl,
-    });
-
-    const apiClient = new SmartContractsApi(apiConfig);
-    this.apiClient = apiClient;
     this.identifier = identifier;
     this.privateKey = privateKey;
     this.stxAddress = stxAddress;
@@ -73,26 +63,15 @@ export class WebProvider implements BaseProvider {
   }
 
   async callReadOnly(func: ClarityAbiFunction, args: any[]) {
-    const argumentsFormatted = args.map((arg, index) => {
-      const { type } = func.args[index];
-      const valueCV = parseToCV(arg, type);
-      return serializeCV(valueCV).toString('hex');
-    });
+    const argumentsFormatted = args.map((arg, index) => parseToCV(arg, func.args[index].type));
     const [contractAddress, contractName] = this.identifier.split('.');
-    const response = await this.apiClient.callReadOnlyFunction({
+    const resultCV = await callReadOnlyFunction({
       contractAddress,
       contractName,
+      functionArgs: argumentsFormatted,
       functionName: func.name,
-      readOnlyFunctionArgs: {
-        sender: 'STB44HYPYAT2BB2QE513NSP81HTMYWBJP02HPGK6',
-        arguments: argumentsFormatted,
-      },
+      network: this.network,
     });
-    if (!response.okay || !response.result) {
-      console.log(response);
-      throw new Error('Error calling read-only function');
-    }
-    const resultCV = deserializeCV(Buffer.from(response.result.replace(/^0x/, ''), 'hex'));
     const value = cvToValue(resultCV);
     switch (resultCV.type) {
       case ClarityType.ResponseOk:
@@ -105,11 +84,7 @@ export class WebProvider implements BaseProvider {
   }
 
   callPublic(func: ClarityAbiFunction, args: any[]): Transaction<any, any> {
-    const argumentsFormatted = args.map((arg, index) => {
-      const { type } = func.args[index];
-      const valueCV = parseToCV(arg, type);
-      return serializeCV(valueCV).toString('hex');
-    });
+    const argumentsFormatted = args.map((arg, index) => parseToCV(arg, func.args[index].type));
     const [contractAddress, contractName] = this.identifier.split('.');
     return makeTx({
       contractAddress,
@@ -121,6 +96,5 @@ export class WebProvider implements BaseProvider {
       privateKey: this.privateKey,
       appDetails: this.appDetails,
     });
-    // throw new Error('Not implemented');
   }
 }

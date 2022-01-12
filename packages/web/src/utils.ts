@@ -1,15 +1,8 @@
-import { getPublicKey } from 'noble-secp256k1';
-import { TokenSigner, Json } from 'stacks-crypto';
-import {
-  BufferReader,
-  deserializeTransaction,
-  PostConditionMode,
-  serializeCV,
-  serializePostCondition,
-} from '@stacks/transactions';
-import type { PostCondition } from '@stacks/transactions';
+import { deserializeTransaction, PostConditionMode } from 'micro-stacks/transactions';
+import { makeContractCallToken } from 'micro-stacks/connect';
 import { SubmitOptions, Transaction, WebTransactionReceipt } from '@clarigen/core';
-import { StacksNetwork } from '@stacks/network';
+import { StacksNetwork } from 'micro-stacks/network';
+import { ClarityValue } from 'micro-stacks/clarity';
 
 export type AppDetails = {
   name: string;
@@ -20,7 +13,7 @@ interface TxPayload {
   contractAddress: string;
   contractName: string;
   functionName: string;
-  functionArgs: string[];
+  functionArgs: ClarityValue[];
   network: StacksNetwork;
   privateKey: string;
   stxAddress: string;
@@ -44,12 +37,11 @@ export function makeTx<Ok, Err>(payload: TxPayload): WebTransaction<Ok, Err> {
       if ('sender' in options) {
         throw new Error('Cannot use test options');
       }
-      const postConditions = serializePostConditions(options.postConditions);
       const token = await makeContractCallToken({
-        postConditions,
+        postConditions: options.postConditions,
         postConditionMode: options.postConditionMode || PostConditionMode.Deny,
         sponsored: options.sponsored,
-        fee: options.fee,
+        // fee: options.fee,
         ...payload,
       });
       if (!window.StacksProvider) {
@@ -57,8 +49,7 @@ export function makeTx<Ok, Err>(payload: TxPayload): WebTransaction<Ok, Err> {
       }
       const request = await window.StacksProvider.transactionRequest(token);
       const { txRaw } = request;
-      const txBuffer = Buffer.from(txRaw.replace(/^0x/, ''), 'hex');
-      const stacksTransaction = deserializeTransaction(new BufferReader(txBuffer));
+      const stacksTransaction = deserializeTransaction(txRaw);
       return {
         txId: request.txId,
         stacksTransaction,
@@ -68,41 +59,4 @@ export function makeTx<Ok, Err>(payload: TxPayload): WebTransaction<Ok, Err> {
       };
     },
   };
-}
-
-async function makeContractCallToken(
-  options: TxPayload & {
-    postConditions?: string[];
-    postConditionMode?: PostConditionMode;
-    sponsored?: boolean;
-    fee?: number;
-  }
-) {
-  const { functionArgs, privateKey, ...rest } = options;
-  const args: string[] = functionArgs.map(arg => {
-    if (typeof arg === 'string') {
-      return arg;
-    }
-    return serializeCV(arg).toString('hex');
-  });
-  // const defaults = getDefaults(signer);
-  const publicKey = getPublicKey(privateKey, true);
-  const payload: ContractCallPayload = {
-    functionArgs: args,
-    txType: 'contract_call',
-    publicKey,
-    ...rest,
-  };
-
-  const tokenSigner = new TokenSigner('ES256k', privateKey);
-  const token = await tokenSigner.sign(payload as any);
-  return token;
-}
-
-function serializePostConditions(postConditions?: PostCondition[]): string[] {
-  let pcSerialized: string[] = [];
-  if (postConditions && typeof postConditions[0] !== 'string') {
-    pcSerialized = postConditions.map(pc => serializePostCondition(pc).toString('hex'));
-  }
-  return pcSerialized;
 }
