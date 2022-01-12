@@ -1,16 +1,10 @@
 import { generateTypesFile } from '../src';
 import { appmap } from './abi/appmap';
-import { pox } from './abi/pox';
 import { SimpleInterface } from './abi/simple';
 import { readFile } from './test-utils';
 
 test('can gen', () => {
   const typesFile = generateTypesFile(appmap, 'app-map');
-  expect(typesFile).toBeTruthy();
-});
-
-test('generate pox interface', () => {
-  const typesFile = generateTypesFile(pox, 'pox');
   expect(typesFile).toBeTruthy();
 });
 

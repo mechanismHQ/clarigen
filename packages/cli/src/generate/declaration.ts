@@ -1,5 +1,4 @@
 import {
-  ClarityAbiType,
   isClarityAbiBuffer,
   isClarityAbiList,
   isClarityAbiOptional,
@@ -8,7 +7,8 @@ import {
   isClarityAbiStringAscii,
   isClarityAbiStringUtf8,
   isClarityAbiTuple,
-} from '@stacks/transactions';
+} from 'micro-stacks/transactions';
+import { ClarityAbiType } from 'micro-stacks/clarity';
 import { toCamelCase, ClarityAbi } from '@clarigen/core';
 
 export const cvFromType = (val: ClarityAbiType) => {
