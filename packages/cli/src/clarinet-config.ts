@@ -2,8 +2,9 @@ import { parse } from '@ltd/j-toml';
 import { resolve } from 'path';
 import { readFile } from 'fs/promises';
 import { ConfigContract } from './config';
-import { generateWallet, getStxAddress } from '@stacks/wallet-sdk';
+import { generateWallet, getStxAddressFromAccount } from 'micro-stacks/wallet-sdk';
 import { array as toposort } from 'toposort';
+import { StacksNetworkVersion } from 'micro-stacks/crypto';
 
 interface ClarinetConfigAccount {
   mnemonic: string;
@@ -102,12 +103,9 @@ export async function getClarinetAccounts(
   const devConfig = await getClarinetDevConfig(folder);
   const accountEntries = await Promise.all(
     Object.entries(devConfig.accounts).map(async ([key, info]) => {
-      const wallet = await generateWallet({
-        secretKey: info.mnemonic,
-        password: 'password',
-      });
+      const wallet = await generateWallet(info.mnemonic, 'password');
       const [account] = wallet.accounts;
-      const address = getStxAddress({ account });
+      const address = getStxAddressFromAccount(account, StacksNetworkVersion.testnetP2PKH);
       return [
         key,
         {

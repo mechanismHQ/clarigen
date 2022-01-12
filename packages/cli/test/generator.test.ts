@@ -1,7 +1,7 @@
 import {
   isClarityAbiResponse,
   isClarityAbiStringAscii,
-} from '@stacks/transactions';
+} from 'micro-stacks/transactions';
 import {
   generateIndexFile,
   generateInterface,

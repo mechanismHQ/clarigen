@@ -70,7 +70,8 @@ export const generateInterfaceFile = ({
 }) => {
   const contractName = getContractNameFromPath(contractFile);
   const variableName = toCamelCase(contractName, true);
-  const abiString = JSON.stringify(abi, null, 2);
+  const { clarity_version, ...rest } = abi;
+  const abiString = JSON.stringify(rest, null, 2);
 
   const fileContents = `import { ClarityAbi } from '@clarigen/core';
 
