@@ -26,9 +26,6 @@
     "micro-stacks": "^0.1.17",
     "neverthrow": "4.2.1"
   },
-  "devDependencies": {
-    "@blockstack/stacks-blockchain-api-types": "0.55.3"
-  },
   "publishConfig": {
     "access": "public"
   },
