@@ -1,4 +1,4 @@
-import { deserializeCV } from '@stacks/transactions';
+import { deserializeCV, hexToCV } from 'micro-stacks/clarity';
 import { join } from 'path';
 import { cvToValue } from '@clarigen/core';
 import { deployContract, evalJson, executeJson } from './clarity-cli-adapter';
@@ -25,7 +25,7 @@ export async function getBlockHeight(provider: NativeClarityBinProvider) {
     args: [],
     provider,
   });
-  const outputCV = deserializeCV(Buffer.from(output_serialized, 'hex'));
+  const outputCV = hexToCV(output_serialized);
   const blockHeight: bigint = cvToValue(outputCV);
   return blockHeight;
 }
@@ -53,7 +53,7 @@ export async function getStxBalance(provider: NativeClarityBinProvider, account:
     args: [`'${account}`],
     provider,
   });
-  const outputCV = deserializeCV(Buffer.from(output_serialized, 'hex'));
+  const outputCV = hexToCV(output_serialized);
   const balance: bigint = cvToValue(outputCV);
   return balance;
 }

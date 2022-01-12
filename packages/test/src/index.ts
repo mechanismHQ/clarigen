@@ -5,7 +5,8 @@ import {
   responseErrorCV,
   responseOkCV,
   ClarityAbiFunction,
-} from '@stacks/transactions';
+  hexToCV,
+} from 'micro-stacks/clarity';
 import { ok, err } from 'neverthrow';
 import {
   Submitter,
@@ -20,6 +21,7 @@ import {
   parseToCV,
   cvToValue,
   cvToString,
+  hexToCvValue,
 } from '@clarigen/core';
 import {
   evalJson,
@@ -131,7 +133,7 @@ export class TestProvider implements BaseProvider {
       args: argsFormatted,
       provider: this.clarityBin,
     });
-    const resultCV = deserializeCV(Buffer.from(result.output_serialized, 'hex'));
+    const resultCV = hexToCV(result.output_serialized);
     const value = cvToValue(resultCV);
     switch (resultCV.type) {
       case ClarityType.ResponseOk:
@@ -157,7 +159,7 @@ export class TestProvider implements BaseProvider {
         args: argsFormatted,
       });
       const getResult = (): Promise<TransactionResult<any, any>> => {
-        const resultCV = deserializeCV(Buffer.from(receipt.output_serialized, 'hex'));
+        const resultCV = hexToCV(receipt.output_serialized);
         const result = cvToValue(resultCV);
         if (receipt.success) {
           return Promise.resolve({
