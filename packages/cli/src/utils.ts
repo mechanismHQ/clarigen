@@ -5,7 +5,6 @@ import {
   generateProjectIndexFile,
   generateTypesFile,
 } from './generate/files';
-import { getContractNameFromPath } from '@clarigen/core';
 import {
   NativeClarityBinProvider,
   createClarityBin,
@@ -20,33 +19,32 @@ export const generateFilesForContract = async ({
   provider,
   contractAddress,
   dirName,
+  contractName,
 }: {
   contractFile: string;
-  outputFolder?: string;
-  provider?: NativeClarityBinProvider;
-  contractAddress?: string;
+  outputFolder: string;
+  provider: NativeClarityBinProvider;
+  contractAddress: string;
   dirName?: string;
+  contractName: string;
 }) => {
   const contractFile = resolve(process.cwd(), _contractFile);
-  const contractName = getContractNameFromPath(contractFile);
 
   const abi = await generateInterface({
     contractFile,
     provider,
     contractAddress,
+    contractName,
   });
   const typesFile = generateTypesFile(abi, contractName);
-  if (!contractAddress && process.env.NODE_ENV !== 'test') {
-    console.warn('Please provide an address with every contract.');
-  }
   const indexFile = generateIndexFile({
     contractFile: relative(process.cwd(), contractFile),
-    address: contractAddress || '',
+    contractAddress: contractAddress,
+    contractName,
   });
-  const abiFile = generateInterfaceFile({ contractFile, abi });
+  const abiFile = generateInterfaceFile({ contractName, abi });
 
-  const baseDir = outputFolder || resolve(process.cwd(), `tmp/${contractName}`);
-  const outputPath = resolve(baseDir, dirName || '.', contractName);
+  const outputPath = resolve(outputFolder, dirName || '.', contractName);
   await mkdir(outputPath, { recursive: true });
 
   await writeFile(resolve(outputPath, 'abi.ts'), abiFile);
@@ -69,6 +67,7 @@ export const generateProject = async (projectPath: string) => {
       provider,
       contractAddress: contract.address,
       dirName,
+      contractName: contract.name,
     });
   }
 

@@ -10,6 +10,7 @@ export const simpleContract = (provider: BaseProvider) => {
 
 export const simpleInfo: Contract<SimpleContract> = {
   contract: simpleContract,
-  address: 'ST3J2GVMMM2R07ZFBJDWTYEYAR8FZH5WKDTFJ9AHA',
+  address: 'ST1HTBVD3JG9C05J7HBJTHGR0GGW7KXW28M5JS8QE',
   contractFile: 'test/contracts/simple/simple.clar',
+  name: 'simple',
 };

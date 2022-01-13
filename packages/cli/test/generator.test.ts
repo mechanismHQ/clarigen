@@ -12,10 +12,23 @@ import {
 } from '../src';
 import { readFile } from './test-utils';
 import { resolve } from 'path';
+import {
+  createClarityBin,
+  NativeClarityBinProvider,
+} from '@clarigen/native-bin';
+
+let provider: NativeClarityBinProvider;
+
+beforeEach(async () => {
+  provider = await createClarityBin();
+});
 
 test('can generate an interface', async () => {
   const abi = await generateInterface({
     contractFile: 'test/contracts/simple/simple.clar',
+    provider,
+    contractName: 'simple',
+    contractAddress: 'ST1HTBVD3JG9C05J7HBJTHGR0GGW7KXW28M5JS8QE',
   });
   const getNameFn = abi.functions.find((func) => {
     return func.name === 'get-name';
@@ -35,9 +48,12 @@ test('can generate interface file', async () => {
   const contractFile = 'test/contracts/simple/simple.clar';
   const abi = await generateInterface({
     contractFile,
+    provider,
+    contractName: 'simple',
+    contractAddress: 'ST1HTBVD3JG9C05J7HBJTHGR0GGW7KXW28M5JS8QE',
   });
   const fileContents = generateInterfaceFile({
-    contractFile,
+    contractName: 'simple',
     abi,
   });
   expect(fileContents).toEqual(expectedFile);
@@ -48,6 +64,9 @@ test('can generate a types file', async () => {
   const contractFile = 'test/contracts/simple/simple.clar';
   const abi = await generateInterface({
     contractFile,
+    provider,
+    contractName: 'simple',
+    contractAddress: 'ST1HTBVD3JG9C05J7HBJTHGR0GGW7KXW28M5JS8QE',
   });
   const fileContents = generateTypesFile(abi, 'simple.clar');
   expect(fileContents).toEqual(expectedFile);
@@ -57,7 +76,8 @@ test('can generate index file', async () => {
   const expectedFile = await readFile('./contracts/simple/index.ts');
   const indexFile = generateIndexFile({
     contractFile: 'test/contracts/simple/simple.clar',
-    address: 'ST3J2GVMMM2R07ZFBJDWTYEYAR8FZH5WKDTFJ9AHA',
+    contractAddress: 'ST1HTBVD3JG9C05J7HBJTHGR0GGW7KXW28M5JS8QE',
+    contractName: 'simple',
   });
   expect(indexFile).toEqual(expectedFile);
 });

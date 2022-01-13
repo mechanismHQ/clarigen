@@ -1,28 +1,20 @@
-import {
-  NativeClarityBinProvider,
-  createClarityBin,
-  hasStdErr,
-} from '@clarigen/native-bin';
-import {
-  ClarityAbi,
-  toCamelCase,
-  getContractNameFromPath,
-} from '@clarigen/core';
+import { NativeClarityBinProvider, hasStdErr } from '@clarigen/native-bin';
+import { ClarityAbi, toCamelCase } from '@clarigen/core';
 import { makeTypes } from './declaration';
 import { ConfigContract, ConfigFile } from '../config';
 import { dirname, resolve, join } from 'path';
 
 export const generateInterface = async ({
-  provider: _provider,
+  provider,
   contractFile,
-  contractAddress = 'S1G2081040G2081040G2081040G208105NK8PE5',
+  contractAddress,
+  contractName,
 }: {
   contractFile: string;
-  provider?: NativeClarityBinProvider;
-  contractAddress?: string;
+  provider: NativeClarityBinProvider;
+  contractAddress: string;
+  contractName: string;
 }): Promise<ClarityAbi> => {
-  const provider = _provider || (await createClarityBin());
-  const contractName = getContractNameFromPath(contractFile);
   const receipt = await provider.runCommand([
     'launch',
     `${contractAddress}.${contractName}`,
@@ -62,13 +54,12 @@ export const generateInterface = async ({
 };
 
 export const generateInterfaceFile = ({
-  contractFile,
+  contractName,
   abi,
 }: {
-  contractFile: string;
+  contractName: string;
   abi: ClarityAbi;
 }) => {
-  const contractName = getContractNameFromPath(contractFile);
   const variableName = toCamelCase(contractName, true);
   const { clarity_version, ...rest } = abi;
   const abiString = JSON.stringify(rest, null, 2);
@@ -84,12 +75,13 @@ export const ${variableName}Interface: ClarityAbi = ${abiString};
 
 export const generateIndexFile = ({
   contractFile,
-  address,
+  contractAddress,
+  contractName,
 }: {
   contractFile: string;
-  address: string;
+  contractAddress: string;
+  contractName: string;
 }) => {
-  const contractName = getContractNameFromPath(contractFile);
   const contractTitle = toCamelCase(contractName, true);
   const varName = toCamelCase(contractName);
   const contractType = `${contractTitle}Contract`;
@@ -106,8 +98,9 @@ export const ${varName}Contract = (provider: BaseProvider) => {
 
 export const ${varName}Info: Contract<${contractType}> = {
   contract: ${varName}Contract,
-  address: '${address}',
+  address: '${contractAddress}',
   contractFile: '${contractFile}',
+  name: '${contractName}',
 };
 `;
 
@@ -151,7 +144,7 @@ export const accounts = {
   }
 
   config.contracts.forEach((contract) => {
-    const contractName = getContractNameFromPath(contract.file);
+    const contractName = contract.name;
     const contractVar = toCamelCase(contractName);
     const contractInfo = `${contractVar}Info`;
     const contractInterface = `${toCamelCase(contractName, true)}Contract`;

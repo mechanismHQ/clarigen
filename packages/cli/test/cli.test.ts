@@ -2,6 +2,7 @@ import { generateFilesForContract, generateProject } from '../src/utils';
 import { getProjectConfig } from '../src/config';
 import { resolve } from 'path';
 import { readFile, rm, mkdir } from 'fs/promises';
+import { createClarityBin } from '@clarigen/native-bin';
 
 const getFile = async (path: string) => {
   const fullPath = resolve(process.cwd(), path);
@@ -18,9 +19,13 @@ async function rmdir(path: string) {
 test('generates files appropriately', async () => {
   await rmdir(resolve(process.cwd(), 'tmp'));
   await mkdir(resolve(process.cwd(), 'tmp'));
+  const provider = await createClarityBin();
   await generateFilesForContract({
     contractFile: 'contracts/simple.clar',
     outputFolder: 'tmp/test-1',
+    provider,
+    contractName: 'simple',
+    contractAddress: 'ST1HTBVD3JG9C05J7HBJTHGR0GGW7KXW28M5JS8QE',
   });
   expect(await getFile('tmp/test-1/simple/abi.ts')).toBeTruthy();
   expect(await getFile('tmp/test-1/simple/index.ts')).toBeTruthy();
