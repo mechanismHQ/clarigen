@@ -1,6 +1,6 @@
 import { Command, flags } from '@oclif/command';
 import { generateProject } from '../utils';
-import { getConfigFile } from '../config';
+import { getProjectConfig } from '../config';
 import { watch } from 'chokidar';
 import { basename } from 'path';
 import { red, green } from 'chalk';
@@ -28,7 +28,7 @@ export class Generate extends Command {
 
     if (flags.watch) {
       const spinner = ora('Generating files').start();
-      const { contractsDir } = await getConfigFile(cwd);
+      const { contractsDir } = await getProjectConfig(cwd);
       const watcher = watch([contractsDir], {
         cwd,
       });

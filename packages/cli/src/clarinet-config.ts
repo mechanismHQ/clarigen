@@ -2,7 +2,10 @@ import { parse } from '@ltd/j-toml';
 import { resolve } from 'path';
 import { readFile } from 'fs/promises';
 import { ConfigContract } from './config';
-import { generateWallet, getStxAddressFromAccount } from 'micro-stacks/wallet-sdk';
+import {
+  generateWallet,
+  getStxAddressFromAccount,
+} from 'micro-stacks/wallet-sdk';
 import { array as toposort } from 'toposort';
 import { StacksNetworkVersion } from 'micro-stacks/crypto';
 
@@ -64,14 +67,15 @@ export async function getContractsFromClarinet(
   const clarinetConfig = await getClarinetConfig(folder);
   const deployerAddress = accounts.deployer.address;
   const sortedContracts = sortClarinetContracts(clarinetConfig.contracts);
-  const contracts: ConfigContract[] = sortedContracts.map(contractName => {
+  const contracts: ConfigContract[] = sortedContracts.map((contractName) => {
     const info = clarinetConfig.contracts[contractName];
     const file = info.path.replace(/^contracts\//, '');
     return {
       file,
       address: deployerAddress,
+      name: contractName,
     };
-  })
+  });
   return contracts;
 }
 
@@ -105,7 +109,10 @@ export async function getClarinetAccounts(
     Object.entries(devConfig.accounts).map(async ([key, info]) => {
       const wallet = await generateWallet(info.mnemonic, 'password');
       const [account] = wallet.accounts;
-      const address = getStxAddressFromAccount(account, StacksNetworkVersion.testnetP2PKH);
+      const address = getStxAddressFromAccount(
+        account,
+        StacksNetworkVersion.testnetP2PKH
+      );
       return [
         key,
         {

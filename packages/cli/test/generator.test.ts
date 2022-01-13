@@ -8,7 +8,7 @@ import {
   generateInterfaceFile,
   generateProjectIndexFile,
   generateTypesFile,
-  getConfigFile,
+  getProjectConfig,
 } from '../src';
 import { readFile } from './test-utils';
 import { resolve } from 'path';
@@ -64,7 +64,7 @@ test('can generate index file', async () => {
 
 test('can generate a project index file', async () => {
   const path = resolve(process.cwd(), 'test/clarinet-project');
-  const configFile = await getConfigFile(path);
+  const configFile = await getProjectConfig(path);
   const indexFile = generateProjectIndexFile(configFile);
   const expectedFile = await readFile('./mocks/project-index.txt');
   expect(indexFile).toEqual(expectedFile);

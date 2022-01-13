@@ -12,7 +12,7 @@ import {
 } from '@clarigen/native-bin';
 import { resolve, relative, dirname } from 'path';
 import { mkdir, writeFile } from 'fs/promises';
-import { getConfigFile } from './config';
+import { getProjectConfig } from './config';
 
 export const generateFilesForContract = async ({
   contractFile: _contractFile,
@@ -55,7 +55,7 @@ export const generateFilesForContract = async ({
 };
 
 export const generateProject = async (projectPath: string) => {
-  const configFile = await getConfigFile(projectPath);
+  const configFile = await getProjectConfig(projectPath);
   const { contractsDir, outputDir, contracts } = configFile;
   const outputFolder = resolve(projectPath, outputDir);
   const provider = await createClarityBin();

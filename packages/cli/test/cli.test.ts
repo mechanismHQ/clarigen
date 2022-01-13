@@ -1,5 +1,5 @@
 import { generateFilesForContract, generateProject } from '../src/utils';
-import { getConfigFile } from '../src/config';
+import { getProjectConfig } from '../src/config';
 import { resolve } from 'path';
 import { readFile, rm, mkdir } from 'fs/promises';
 
@@ -28,39 +28,15 @@ test('generates files appropriately', async () => {
 });
 
 test('can get a config file', async () => {
-  const path = resolve(process.cwd(), 'test/sample-project');
-  const config = await getConfigFile(path);
-  expect(config.contractsDir).toEqual('contracts');
+  const path = resolve(process.cwd(), 'test/clarinet-project');
+  const config = await getProjectConfig(path);
+  expect(config.contractsDir).toEqual('clarinet/contracts');
   expect(config.contracts).toBeTruthy();
+  const [contract] = config.contracts;
+  expect(contract.name).toEqual('echo');
 });
 
-test('can generate a project', async () => {
-  const path = resolve(process.cwd(), 'test/sample-project');
-  const outputDir = resolve(path, 'clarigen');
-  await rmdir(outputDir);
-  await generateProject(path);
-  expect(
-    await getFile('test/sample-project/clarigen/trait/index.ts')
-  ).toBeTruthy();
-  expect(
-    await getFile('test/sample-project/clarigen/trait/abi.ts')
-  ).toBeTruthy();
-  expect(
-    await getFile('test/sample-project/clarigen/trait/types.ts')
-  ).toBeTruthy();
-  expect(
-    await getFile('test/sample-project/clarigen/test-project/index.ts')
-  ).toBeTruthy();
-  expect(
-    await getFile('test/sample-project/clarigen/test-project/abi.ts')
-  ).toBeTruthy();
-  expect(
-    await getFile('test/sample-project/clarigen/test-project/types.ts')
-  ).toBeTruthy();
-  expect(await getFile('test/sample-project/clarigen/index.ts')).toBeTruthy();
-});
-
-test('can generate a clarion project', async () => {
+test('can generate a clarinet project', async () => {
   const path = resolve(process.cwd(), 'test/clarinet-project');
   const outputDir = resolve(path, 'clarigen');
   await rmdir(outputDir);
@@ -84,5 +60,4 @@ test('can generate a clarion project', async () => {
   expect(
     await getFile('test/clarinet-project/clarigen/nested/nested/types.ts')
   ).toBeTruthy();
-  expect(await getFile('test/sample-project/clarigen/index.ts')).toBeTruthy();
 });
