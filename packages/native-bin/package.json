@@ -22,7 +22,7 @@
     "typecheck": "tsc --noEmit",
     "postinstall": "node post-install.js"
   },
-  "prettier": "@blockstack/prettier-config",
+  "prettier": "@stacks/prettier-config",
   "name": "@clarigen/native-bin",
   "author": "Hank Stoever",
   "module": "dist/native-bin.esm.js",

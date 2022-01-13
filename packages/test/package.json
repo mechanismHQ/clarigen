@@ -19,7 +19,7 @@
     "prepublishOnly": "tsdx build",
     "typecheck": "tsc --noEmit"
   },
-  "prettier": "@blockstack/prettier-config",
+  "prettier": "@stacks/prettier-config",
   "name": "@clarigen/test",
   "author": "Hank Stoever",
   "module": "dist/test.esm.js",

@@ -18,7 +18,7 @@
     "prepublishOnly": "yarn build",
     "typecheck": "tsc --noEmit"
   },
-  "prettier": "@blockstack/prettier-config",
+  "prettier": "@stacks/prettier-config",
   "name": "@clarigen/core",
   "author": "Hank Stoever",
   "module": "dist/core.esm.js",
