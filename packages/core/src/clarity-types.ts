@@ -17,6 +17,7 @@ import {
   listCV,
   cvToJSON,
   hexToCV,
+  ClarityAbiFunction,
 } from 'micro-stacks/clarity';
 import {
   isClarityAbiList,
@@ -225,4 +226,8 @@ export function cvToString(val: ClarityValue, encoding: 'tryAscii' | 'hex' = 'he
     case ClarityType.StringUTF8:
       return `u"${val.data}"`;
   }
+}
+
+export function transformArgsToCV(func: ClarityAbiFunction, args: any[]): ClarityValue[] {
+  return args.map((arg, index) => parseToCV(arg, func.args[index].type));
 }

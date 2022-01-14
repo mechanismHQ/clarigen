@@ -6,6 +6,7 @@ export * from './transaction';
 export * from './types';
 export * from './utils';
 export * from './events';
+export { pureProxy, ContractCalls } from './pure';
 export { cvToValue, parseToCV, cvToString, hexToCvValue } from './clarity-types';
 export { BaseProvider } from './base-provider';
 
