@@ -1,4 +1,4 @@
-import { generateTypesFile } from '../src';
+import { generateTypesFile, makePureTypes } from '../src';
 import { appmap } from './abi/appmap';
 import { SimpleInterface } from './abi/simple';
 import { readFile } from './test-utils';
@@ -17,4 +17,12 @@ test('Can generate the TS declaration for simple.clar', async () => {
   const declarationFile = generateTypesFile(SimpleInterface, 'simple');
   const expectedFile = await readFile('./contracts/simple/types.ts');
   expect(declarationFile).toEqual(expectedFile);
+});
+
+test('can generate pure typings', () => {
+  const typings = makePureTypes(SimpleInterface);
+  const [line] = typings.split('\n');
+  expect(line).toEqual(
+    '  getName: () => ContractCalls.Public<ClarityTypes.Response<string, null>>;'
+  );
 });

@@ -8,7 +8,7 @@ import {
   isClarityAbiStringUtf8,
   isClarityAbiTuple,
 } from 'micro-stacks/transactions';
-import { ClarityAbiType } from 'micro-stacks/clarity';
+import { ClarityAbiFunction, ClarityAbiType } from 'micro-stacks/clarity';
 import { toCamelCase, ClarityAbi } from '@clarigen/core';
 
 export const jsTypeFromAbiType = (
@@ -102,3 +102,26 @@ export const makeTypes = (abi: ClarityAbi) => {
 
   return typings;
 };
+
+const accessToReturnType = {
+  public: 'Public',
+  read_only: 'ReadOnly',
+  private: 'Private',
+} as const;
+
+export function makePureTypes(abi: ClarityAbi) {
+  let typings = '';
+  abi.functions.forEach((func, index) => {
+    let functionLine = `${toCamelCase(func.name)}: `;
+    const args = func.args.map((arg) => {
+      return `${toCamelCase(arg.name)}: ${jsTypeFromAbiType(arg.type, true)}`;
+    });
+    functionLine += `(${args.join(', ')}) => `;
+    const funcType = accessToReturnType[func.access];
+    functionLine += `ContractCalls.${funcType}<`;
+    const returnType = jsTypeFromAbiType(func.outputs.type);
+    functionLine += `${returnType}>;`;
+    typings += `${index === 0 ? '' : '\n'}  ${functionLine}`;
+  });
+  return typings;
+}

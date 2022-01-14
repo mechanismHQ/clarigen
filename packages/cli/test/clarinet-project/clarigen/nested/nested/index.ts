@@ -1,12 +1,15 @@
-import { proxy, BaseProvider, Contract } from '@clarigen/core';
+import { pureProxy, Contract } from '@clarigen/core';
 import type { NestedContract } from './types';
 import { NestedInterface } from './abi';
 export type { NestedContract } from './types';
 
-export const nestedContract = (provider: BaseProvider) => {
-  const contract = proxy<NestedContract>(NestedInterface, provider);
-  return contract;
-};
+export function nestedContract(contractAddress: string, contractName: string) {
+  return pureProxy<NestedContract>({
+    abi: NestedInterface,
+    contractAddress,
+    contractName,
+  });
+}
 
 export const nestedInfo: Contract<NestedContract> = {
   contract: nestedContract,

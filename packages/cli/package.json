@@ -21,7 +21,7 @@
     "build": "rm -rf dist && tsc -b",
     "test": "jest",
     "lint": "tsdx lint",
-    "typecheck": "tsc --noEmit",
+    "typecheck": "tsc --noEmit -p tsconfig-test.json",
     "prepublishOnly": "yarn build"
   },
   "bin": {

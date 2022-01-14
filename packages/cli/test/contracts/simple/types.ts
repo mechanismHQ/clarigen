@@ -1,17 +1,17 @@
-import { ClarityTypes, Transaction } from '@clarigen/core';
+import { ClarityTypes, ContractCalls } from '@clarigen/core';
 
 // prettier-ignore
 export interface SimpleContract {
-  getName: () => Transaction<string, null>;
-  getTuplePub: () => Transaction<{
+  getName: () => ContractCalls.Public<ClarityTypes.Response<string, null>>;
+  getTuplePub: () => ContractCalls.Public<ClarityTypes.Response<{
   "a": bigint;
   "b": boolean
-    }, null>;
-  getTuple: () => Promise<{
+    }, null>>;
+  getTuple: () => ContractCalls.ReadOnly<{
   "a": bigint;
   "b": boolean
     }>;
-  getTupleResp: () => Promise<ClarityTypes.Response<{
+  getTupleResp: () => ContractCalls.ReadOnly<ClarityTypes.Response<{
   "a": bigint;
   "b": boolean;
   "c": {

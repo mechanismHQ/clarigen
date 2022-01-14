@@ -1,6 +1,6 @@
-import { ClarityTypes, Transaction } from '@clarigen/core';
+import { ClarityTypes, ContractCalls } from '@clarigen/core';
 
 // prettier-ignore
 export interface NestedContract {
-  hello: () => Promise<boolean>;
+  hello: () => ContractCalls.ReadOnly<boolean>;
 }

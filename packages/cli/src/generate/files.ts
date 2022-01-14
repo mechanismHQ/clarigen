@@ -3,6 +3,7 @@ import { ClarityAbi, toCamelCase } from '@clarigen/core';
 import { makeTypes } from './declaration';
 import { ConfigContract, ConfigFile } from '../config';
 import { dirname, resolve, join } from 'path';
+import { makePureTypes } from '..';
 
 export const generateInterface = async ({
   provider,
@@ -86,15 +87,18 @@ export const generateIndexFile = ({
   const varName = toCamelCase(contractName);
   const contractType = `${contractTitle}Contract`;
 
-  const fileContents = `import { proxy, BaseProvider, Contract } from '@clarigen/core';
+  const fileContents = `import { pureProxy, Contract } from '@clarigen/core';
 import type { ${contractType} } from './types';
 import { ${contractTitle}Interface } from './abi';
 export type { ${contractType} } from './types';
 
-export const ${varName}Contract = (provider: BaseProvider) => {
-  const contract = proxy<${contractType}>(${contractTitle}Interface, provider);
-  return contract;
-};
+export function ${varName}Contract(contractAddress: string, contractName: string) {
+  return pureProxy<${contractType}>({
+    abi: ${contractTitle}Interface,
+    contractAddress,
+    contractName,
+  });
+}
 
 export const ${varName}Info: Contract<${contractType}> = {
   contract: ${varName}Contract,
@@ -109,8 +113,8 @@ export const ${varName}Info: Contract<${contractType}> = {
 
 export const generateTypesFile = (abi: ClarityAbi, contractName: string) => {
   const name = toCamelCase(contractName, true);
-  const typings = makeTypes(abi);
-  const fileContents = `import { ClarityTypes, Transaction } from '@clarigen/core';
+  const typings = makePureTypes(abi);
+  const fileContents = `import { ClarityTypes, ContractCalls } from '@clarigen/core';
 
 // prettier-ignore
 export interface ${name}Contract {

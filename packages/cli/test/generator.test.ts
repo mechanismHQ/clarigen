@@ -68,7 +68,7 @@ test('can generate a types file', async () => {
     contractName: 'simple',
     contractAddress: 'ST1HTBVD3JG9C05J7HBJTHGR0GGW7KXW28M5JS8QE',
   });
-  const fileContents = generateTypesFile(abi, 'simple.clar');
+  const fileContents = generateTypesFile(abi, 'simple');
   expect(fileContents).toEqual(expectedFile);
 });
 

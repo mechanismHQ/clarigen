@@ -1,12 +1,15 @@
-import { proxy, BaseProvider, Contract } from '@clarigen/core';
+import { pureProxy, Contract } from '@clarigen/core';
 import type { SimpleContract } from './types';
 import { SimpleInterface } from './abi';
 export type { SimpleContract } from './types';
 
-export const simpleContract = (provider: BaseProvider) => {
-  const contract = proxy<SimpleContract>(SimpleInterface, provider);
-  return contract;
-};
+export function simpleContract(contractAddress: string, contractName: string) {
+  return pureProxy<SimpleContract>({
+    abi: SimpleInterface,
+    contractAddress,
+    contractName,
+  });
+}
 
 export const simpleInfo: Contract<SimpleContract> = {
   contract: simpleContract,
