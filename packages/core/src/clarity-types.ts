@@ -28,7 +28,7 @@ import {
   parseToCV as _parseToCV,
 } from 'micro-stacks/transactions';
 import { bytesToAscii, bytesToHex } from 'micro-stacks/common';
-import { Result } from 'neverthrow';
+import { ok, err, Result } from 'neverthrow';
 
 // eslint-disable-next-line @typescript-eslint/no-namespace
 export namespace ClarityTypes {
@@ -71,11 +71,10 @@ function principalToString(principal: PrincipalCV): string {
 
 /**
  * @param val - ClarityValue
- * @param strictJsonCompat If true then ints and uints are returned as JSON serializable numbers when
- * less than or equal to 53 bit length, otherwise string wrapped integers when larger than 53 bits.
- * If false, they are returned as js native `bigint`s which are _not_ JSON serializable.
+ * @param returnResponse - if true, this will return a "response" object from the `neverthrow`
+ * library. Otherwise, it returns the inner value of the response (whether ok or err)
  */
-export function cvToValue<T = any>(val: ClarityValue, strictJsonCompat = false): T {
+export function cvToValue<T = any>(val: ClarityValue, returnResponse = false): T {
   switch (val.type) {
     case ClarityType.BoolTrue:
       return (true as unknown) as T;
@@ -83,7 +82,6 @@ export function cvToValue<T = any>(val: ClarityValue, strictJsonCompat = false):
       return (false as unknown) as T;
     case ClarityType.Int:
     case ClarityType.UInt:
-      if (strictJsonCompat) return (val.value.toString() as unknown) as T;
       return (val.value as unknown) as T;
     case ClarityType.Buffer:
       return (val.buffer as unknown) as T;
@@ -92,8 +90,10 @@ export function cvToValue<T = any>(val: ClarityValue, strictJsonCompat = false):
     case ClarityType.OptionalSome:
       return cvToValue(val.value);
     case ClarityType.ResponseErr:
+      if (returnResponse) return (err(cvToValue(val.value)) as unknown) as T;
       return cvToValue(val.value);
     case ClarityType.ResponseOk:
+      if (returnResponse) return (ok(cvToValue(val.value)) as unknown) as T;
       return cvToValue(val.value);
     case ClarityType.PrincipalStandard:
     case ClarityType.PrincipalContract:

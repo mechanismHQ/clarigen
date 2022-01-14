@@ -86,15 +86,16 @@ export const generateIndexFile = ({
   const contractTitle = toCamelCase(contractName, true);
   const varName = toCamelCase(contractName);
   const contractType = `${contractTitle}Contract`;
+  const interfaceVar = `${contractTitle}Interface`;
 
   const fileContents = `import { pureProxy, Contract } from '@clarigen/core';
 import type { ${contractType} } from './types';
-import { ${contractTitle}Interface } from './abi';
+import { ${interfaceVar} } from './abi';
 export type { ${contractType} } from './types';
 
 export function ${varName}Contract(contractAddress: string, contractName: string) {
   return pureProxy<${contractType}>({
-    abi: ${contractTitle}Interface,
+    abi: ${interfaceVar},
     contractAddress,
     contractName,
   });
@@ -105,6 +106,7 @@ export const ${varName}Info: Contract<${contractType}> = {
   address: '${contractAddress}',
   contractFile: '${contractFile}',
   name: '${contractName}',
+  abi: ${interfaceVar},
 };
 `;
 

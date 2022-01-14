@@ -1,5 +1,6 @@
 import { cvToValue, parseToCV } from '../src/clarity-types';
 import { contractPrincipalCV, intCV, responseOkCV, uintCV } from 'micro-stacks/clarity';
+import { ok } from 'neverthrow';
 
 describe('cvToValue', () => {
   test('can turn clarity negative integer into bignum', () => {
@@ -12,6 +13,12 @@ describe('cvToValue', () => {
     const ok = responseOkCV(uintCV(100));
     const value = cvToValue(ok);
     expect(value).toEqual(100n);
+  });
+
+  test('can return full response if specified', () => {
+    const okCV = responseOkCV(uintCV(100));
+    const value = cvToValue(okCV, true);
+    expect(value).toEqual(ok(100n));
   });
 });
 

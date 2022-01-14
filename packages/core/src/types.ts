@@ -1,9 +1,12 @@
+import { ClarityAbi } from './clarity-types';
+
 export type ContractBuilder<T> = (contractAddress: string, contractName: string) => T;
 
 export interface Contract<T> {
   address: string;
   contractFile: string;
   contract: ContractBuilder<T>;
+  abi: ClarityAbi;
   name: string;
 }
 

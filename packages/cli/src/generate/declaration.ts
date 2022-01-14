@@ -119,8 +119,17 @@ export function makePureTypes(abi: ClarityAbi) {
     functionLine += `(${args.join(', ')}) => `;
     const funcType = accessToReturnType[func.access];
     functionLine += `ContractCalls.${funcType}<`;
-    const returnType = jsTypeFromAbiType(func.outputs.type);
-    functionLine += `${returnType}>;`;
+    if (func.access === 'public') {
+      const { type } = func.outputs;
+      if (!isClarityAbiResponse(type))
+        throw new Error('Expected response type for public function');
+      const ok = jsTypeFromAbiType(type.response.ok);
+      const err = jsTypeFromAbiType(type.response.error);
+      functionLine += `${ok}, ${err}>;`;
+    } else {
+      const returnType = jsTypeFromAbiType(func.outputs.type);
+      functionLine += `${returnType}>;`;
+    }
     typings += `${index === 0 ? '' : '\n'}  ${functionLine}`;
   });
   return typings;

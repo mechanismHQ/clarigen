@@ -4,11 +4,20 @@ import {
   getDefaultBinaryFilePath,
   hasStdErr,
 } from '@clarigen/native-bin';
-import { ResultAssets } from '@clarigen/core';
+import { CoreNodeEvent, cvToValue, ResultAssets } from '@clarigen/core';
+import { hexToCV } from 'micro-stacks/clarity';
 
 export interface Allocation {
   principal: string;
   amount: bigint;
+}
+
+export interface Costs {
+  read_count: number;
+  read_length: number;
+  runtime: number;
+  write_count: number;
+  write_length: number;
 }
 
 interface ExecuteOk {
@@ -16,11 +25,9 @@ interface ExecuteOk {
   message: string;
   events: any[];
   output_serialized: string;
-  costs: {
-    [key: string]: any;
-    runtime: number;
-  };
+  costs: Costs;
   assets: ResultAssets;
+  stderr: string;
   // todo: logs
 }
 
@@ -28,12 +35,9 @@ interface ExecuteErr {
   message: string;
   error: any;
   output_serialized: string;
-  costs: {
-    [key: string]: any;
-    runtime: number;
-  };
-  assets: ResultAssets;
+  costs: Costs;
   success: false;
+  stderr: string;
 }
 
 type ExecuteResult = ExecuteOk | ExecuteErr;
@@ -50,7 +54,7 @@ export const executeJson = async ({
   provider: NativeClarityBinProvider;
   functionName: string;
   args?: string[];
-}) => {
+}): Promise<ExecuteResult> => {
   const result = await provider.runCommand([
     'execute',
     '--costs',
@@ -71,15 +75,15 @@ export const executeJson = async ({
   if (result.exitCode !== 0) {
     throw new Error(`Execution error: ${result.stderr}`);
   }
-  return response;
+  return {
+    ...response,
+    stderr: result.stderr,
+  };
 };
 
 interface EvalOk {
   success: true;
-  costs: {
-    [key: string]: any;
-    runtime: number;
-  };
+  costs: Costs;
   output_serialized: string;
 }
 
@@ -89,6 +93,10 @@ interface EvalErr {
 }
 
 type EvalResult = EvalOk | EvalErr;
+
+interface Eval extends EvalOk {
+  stderr: string;
+}
 
 export const evalJson = async ({
   contractAddress,
@@ -100,7 +108,7 @@ export const evalJson = async ({
   functionName: string;
   provider: NativeClarityBinProvider;
   args?: string[];
-}) => {
+}): Promise<Eval> => {
   const evalCode = `(${functionName} ${args.join(' ')})`;
   const receipt = await provider.runCommand(
     ['eval_at_chaintip', '--costs', contractAddress, provider.dbFilePath],
@@ -115,7 +123,10 @@ export const evalJson = async ({
   if (!response.success) {
     throw new Error(JSON.stringify(response.error, null, 2));
   }
-  return response;
+  return {
+    ...response,
+    stderr: receipt.stderr,
+  };
 };
 
 export interface ClarinetAccount {
@@ -228,4 +239,16 @@ export async function deployContract({
   ${JSON.stringify(output.error, null, 2)}
     `);
   }
+}
+
+export function getPrints(events: CoreNodeEvent[]) {
+  const prints: any[] = [];
+  events.forEach(e => {
+    if (e.type === 'contract_event') {
+      const hex = e.contract_event.raw_value;
+      const cv = hexToCV(hex);
+      prints.push(cvToValue(cv));
+    }
+  });
+  return prints;
 }

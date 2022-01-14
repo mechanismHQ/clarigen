@@ -1,37 +1,21 @@
-import { NativeClarityBinProvider } from '@clarigen/native-bin';
+import { createClarityBin, NativeClarityBinProvider } from '@clarigen/native-bin';
 import {
-  ClarityType,
-  deserializeCV,
-  responseErrorCV,
-  responseOkCV,
-  ClarityAbiFunction,
-  hexToCV,
-} from 'micro-stacks/clarity';
-import { ok, err } from 'neverthrow';
-import {
-  Submitter,
-  Transaction,
-  TransactionResult,
-  Contract,
   ContractInstances,
   Contracts,
-  getContractNameFromPath,
   getContractIdentifier,
-  BaseProvider,
-  parseToCV,
-  cvToValue,
-  cvToString,
-  hexToCvValue,
+  ContractCall,
+  ContractCalls,
+  ClarityTypes,
 } from '@clarigen/core';
+import { deployContract, deployUtilContract, ClarinetAccounts } from './utils';
 import {
-  evalJson,
-  executeJson,
-  Allocation,
-  deployContract,
-  deployUtilContract,
-  ClarinetAccounts,
-  getDefaultClarityBin,
-} from './utils';
+  PublicResult,
+  PublicResultErr,
+  PublicResultOk,
+  ReadOnlyResult,
+  ro,
+  tx as _tx,
+} from './utils/pure';
 export {
   Allocation,
   createClarityBin,
@@ -45,158 +29,127 @@ export {
   evalJson,
 } from './utils';
 
-interface CreateOptions {
-  allocations?: Allocation[];
-  contractIdentifier: string;
-  contractFilePath: string;
-  clarityBin: NativeClarityBinProvider;
+interface FromContractsOptions {
+  accounts?: ClarinetAccounts;
+  clarityBin?: NativeClarityBinProvider;
 }
 
-interface FromContractOptions<T> {
-  contract: Contract<T>;
-  clarityBin: NativeClarityBinProvider;
+interface FromContracts<T extends Contracts<M>, M> {
+  deployed: ContractInstances<T, M>;
+  provider: TestProvider;
 }
 
-interface UtilsContract {
-  getBlockHeight: Promise<number>;
-}
+export class TestProvider {
+  public clarityBin: NativeClarityBinProvider;
 
-export class TestProvider implements BaseProvider {
-  clarityBin: NativeClarityBinProvider;
-  contractIdentifier: string;
-  contractFile: string;
-
-  constructor(
-    clarityBin: NativeClarityBinProvider,
-    contractIdentifier: string,
-    contractFile: string
-  ) {
+  constructor(clarityBin: NativeClarityBinProvider) {
     this.clarityBin = clarityBin;
-    this.contractIdentifier = contractIdentifier;
-    this.contractFile = contractFile;
-  }
-
-  static async create({ clarityBin, contractFilePath, contractIdentifier }: CreateOptions) {
-    await deployContract({ contractIdentifier, contractFilePath, provider: clarityBin });
-    return new this(clarityBin, contractIdentifier, contractFilePath);
-  }
-
-  static async fromContract<T>({ contract, clarityBin }: FromContractOptions<T>) {
-    const { address } = contract;
-    if (!address) {
-      throw new Error('TestProvider must have an address');
-    }
-    const contractName = contract.name || getContractNameFromPath(contract.contractFile);
-
-    const provider = await this.create({
-      clarityBin,
-      contractFilePath: contract.contractFile,
-      contractIdentifier: `${address}.${contractName}`,
-    });
-    return contract.contract(provider);
   }
 
   public static async fromContracts<T extends Contracts<M>, M>(
     contracts: T,
-    clarityBin?: NativeClarityBinProvider
-  ): Promise<ContractInstances<T, M>>;
-  public static async fromContracts<T extends Contracts<M>, M>(
-    contracts: T,
-    accounts?: ClarinetAccounts
-  ): Promise<ContractInstances<T, M>>;
-  public static async fromContracts<T extends Contracts<M>, M>(
-    contracts: T,
-    clarityBinOrAccounts?: NativeClarityBinProvider | ClarinetAccounts
-  ): Promise<ContractInstances<T, M>> {
-    const clarityBin = await getDefaultClarityBin(clarityBinOrAccounts);
+    options: FromContractsOptions = {}
+  ): Promise<FromContracts<T, M>> {
+    const clarityBin = options.clarityBin || (await createClarityBin());
     const instances = {} as ContractInstances<T, M>;
     await deployUtilContract(clarityBin);
     for (const k in contracts) {
-      const contract = contracts[k];
-      const instance = await this.fromContract({
-        contract,
-        clarityBin,
-      });
-      instances[k] = {
-        identifier: getContractIdentifier(contract),
-        contract: instance as ReturnType<T[typeof k]['contract']>,
-      };
-    }
-    return instances;
-  }
-
-  async callReadOnly(func: ClarityAbiFunction, args: any[]) {
-    const argsFormatted = this.formatArguments(func, args);
-    const result = await evalJson({
-      contractAddress: this.contractIdentifier,
-      functionName: func.name,
-      args: argsFormatted,
-      provider: this.clarityBin,
-    });
-    const resultCV = hexToCV(result.output_serialized);
-    const value = cvToValue(resultCV);
-    switch (resultCV.type) {
-      case ClarityType.ResponseOk:
-        return ok(value);
-      case ClarityType.ResponseErr:
-        return err(value);
-      default:
-        return value;
-    }
-  }
-
-  callPublic(func: ClarityAbiFunction, args: any[]): Transaction<any, any> {
-    const argsFormatted = this.formatArguments(func, args);
-    const submit: Submitter<any, any> = async options => {
-      if (!('sender' in options)) {
-        throw new Error('Passing `sender` is required.');
+      if (Object.prototype.hasOwnProperty.call(contracts, k)) {
+        const contract = contracts[k];
+        const identifier = getContractIdentifier(contract);
+        await deployContract({
+          contractIdentifier: identifier,
+          contractFilePath: contract.contractFile,
+          provider: clarityBin,
+        });
+        const instance = contract.contract(contract.address, contract.name);
+        instances[k] = {
+          identifier: getContractIdentifier(contract),
+          contract: instance as ReturnType<T[typeof k]['contract']>,
+        };
       }
-      const receipt = await executeJson({
-        provider: this.clarityBin,
-        contractAddress: this.contractIdentifier,
-        senderAddress: options.sender,
-        functionName: func.name,
-        args: argsFormatted,
-      });
-      const getResult = (): Promise<TransactionResult<any, any>> => {
-        const resultCV = hexToCV(receipt.output_serialized);
-        const result = cvToValue(resultCV);
-        if (receipt.success) {
-          return Promise.resolve({
-            isOk: true,
-            response: responseOkCV(resultCV),
-            value: result,
-            events: receipt.events,
-            costs: receipt.costs,
-            assets: receipt.assets,
-          });
-        } else {
-          return Promise.resolve({
-            isOk: false,
-            response: responseErrorCV(resultCV),
-            value: result,
-            costs: receipt.costs,
-          });
-        }
-      };
-      return {
-        getResult,
-      };
-    };
+    }
+    const provider = new this(clarityBin);
     return {
-      submit,
+      deployed: instances,
+      provider,
     };
   }
 
-  formatArguments(func: ClarityAbiFunction, args: any[]): string[] {
-    return args.map((arg, index) => {
-      const { type } = func.args[index];
-      if (type === 'trait_reference') {
-        return `'${arg}`;
+  public ro<T>(tx: ContractCall<T>): Promise<ReadOnlyResult<T>> {
+    return ro(tx, this.clarityBin);
+  }
+
+  public async rov<T>(tx: ContractCall<T>): Promise<T> {
+    const result = await this.ro(tx);
+    return result.value;
+  }
+
+  public async roOk<Ok, Err>(
+    tx: ContractCall<ClarityTypes.Response<Ok, Err>>
+  ): Promise<ReadOnlyResult<Ok>> {
+    const result = await this.ro(tx);
+    return result.value.match(
+      ok => {
+        return {
+          ...result,
+          value: ok,
+        };
+      },
+      err => {
+        throw new Error(`Expected OK, received error: ${err}`);
       }
-      const argCV = parseToCV(arg, type);
-      const cvString = cvToString(argCV);
-      return cvString;
+    );
+  }
+
+  public async roErr<Ok, Err>(
+    tx: ContractCall<ClarityTypes.Response<Ok, Err>>
+  ): Promise<ReadOnlyResult<Err>> {
+    const result = await this.ro(tx);
+    return result.value.match(
+      ok => {
+        throw new Error(`Expected err, received ok: ${ok}`);
+      },
+      err => {
+        return {
+          ...result,
+          value: err,
+        };
+      }
+    );
+  }
+
+  public async rovOk<Ok, Err>(tx: ContractCall<ClarityTypes.Response<Ok, Err>>): Promise<Ok> {
+    return (await this.roOk(tx)).value;
+  }
+
+  public async rovErr<Ok, Err>(tx: ContractCall<ClarityTypes.Response<Ok, Err>>): Promise<Err> {
+    return (await this.roErr(tx)).value;
+  }
+
+  public tx<Ok, Err>(tx: ContractCalls.Public<Ok, Err>, senderAddress: string) {
+    return _tx({
+      tx,
+      senderAddress,
+      bin: this.clarityBin,
     });
+  }
+
+  public async txOk<Ok, Err>(
+    tx: ContractCalls.Public<Ok, Err>,
+    senderAddress: string
+  ): Promise<PublicResultOk<Ok>> {
+    const result = await this.tx(tx, senderAddress);
+    if (!result.isOk) throw new Error(`Expected OK, received error: ${result.value}`);
+    return result;
+  }
+
+  public async txErr<Ok, Err>(
+    tx: ContractCalls.Public<Ok, Err>,
+    senderAddress: string
+  ): Promise<PublicResultErr<Err>> {
+    const result = await this.tx(tx, senderAddress);
+    if (result.isOk) throw new Error(`Expected Err, received ok: ${result.value}`);
+    return result;
   }
 }

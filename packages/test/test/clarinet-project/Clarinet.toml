@@ -1,0 +1,7 @@
+
+[project]
+name = "clarinet"
+
+[contracts.tester]
+path = "contracts/tester.clar"
+depends_on = []

@@ -1,4 +1,6 @@
 import { ClarityAbiFunction, ClarityValue } from 'micro-stacks/clarity';
+import { Ok } from 'neverthrow';
+import { ClarityTypes } from '..';
 import { ClarityAbi, transformArgsToCV } from '../clarity-types';
 import { toCamelCase } from '../utils';
 
@@ -6,6 +8,8 @@ export interface ContractCall<T> {
   function: ClarityAbiFunction;
   nativeArgs: any[];
   functionArgs: ClarityValue[];
+  contractAddress: string;
+  contractName: string;
 }
 
 export interface PureContractInfo {
@@ -17,17 +21,12 @@ export interface PureContractInfo {
 // eslint-disable-next-line @typescript-eslint/no-namespace
 export namespace ContractCalls {
   export type ReadOnly<T> = ContractCall<T>;
-  export type Public<T> = ContractCall<T>;
+  export type Public<Ok, Err> = ContractCall<ClarityTypes.Response<Ok, Err>>;
   export type Private<T> = ContractCall<T>;
 }
 
-export function transformFunction<T>(func: ClarityAbiFunction, args: any[]): ContractCall<T> {
-  const functionArgs = transformArgsToCV(func, args);
-  return {
-    function: func,
-    functionArgs,
-    nativeArgs: args,
-  };
+export function transformArguments(func: ClarityAbiFunction, args: any[]): ClarityValue[] {
+  return transformArgsToCV(func, args);
 }
 
 function getter<T>(
@@ -35,10 +34,19 @@ function getter<T>(
   property: string | symbol
 ): (args: any[]) => ContractCall<T> {
   const foundFunction = contract.abi.functions.find(func => toCamelCase(func.name) === property);
+  // TODO: maps, variables, tokens
   if (!foundFunction)
     throw new Error(`Invalid function call: no function exists for ${String(property)}`);
-  return (...args: any[]) => transformFunction(foundFunction, args);
-  // TODO: maps, variables, tokens
+  return function (...args: any[]) {
+    const functionArgs = transformArguments(foundFunction, args);
+    return {
+      functionArgs: functionArgs,
+      contractAddress: contract.contractAddress,
+      contractName: contract.contractName,
+      function: foundFunction,
+      nativeArgs: args,
+    };
+  };
 }
 
 export const proxyHandler: ProxyHandler<PureContractInfo> = {
