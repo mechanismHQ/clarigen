@@ -18,6 +18,7 @@ import {
   cvToJSON,
   hexToCV,
   ClarityAbiFunction,
+  bufferCV,
 } from 'micro-stacks/clarity';
 import {
   isClarityAbiList,
@@ -25,6 +26,7 @@ import {
   isClarityAbiStringAscii,
   isClarityAbiStringUtf8,
   isClarityAbiTuple,
+  isClarityAbiBuffer,
   parseToCV as _parseToCV,
 } from 'micro-stacks/transactions';
 import { bytesToAscii, bytesToHex } from 'micro-stacks/common';
@@ -182,6 +184,8 @@ export function parseToCV(input: CVInput, type: ClarityAbiType): ClarityValue {
     if (typeof input !== 'string') throw new Error('Invalid input for trait_reference');
     const [addr, name] = input.split('.');
     return contractPrincipalCV(addr, name);
+  } else if (isClarityAbiBuffer(type)) {
+    return bufferCV(input as Uint8Array);
   }
   return _parseToCV(input as string, type);
 }

@@ -1,91 +1,76 @@
-import { ok, err } from 'neverthrow';
-import {
-  BaseProvider,
-  Transaction,
-  getContractIdentifier,
-  Contracts,
-  ContractInstances,
-  cvToValue,
-  parseToCV,
-} from '@clarigen/core';
+import { cvToValue, ContractCall, ClarityTypes } from '@clarigen/core';
 import { StacksNetwork } from 'micro-stacks/network';
-import { ClarityAbiFunction, ClarityType } from 'micro-stacks/clarity';
-import { makeTx } from './utils';
 import { callReadOnlyFunction } from 'micro-stacks/api';
-export { NodeTransaction, tx } from './utils';
+import { AnchorMode, makeContractCall } from 'micro-stacks/transactions';
+import { broadcastTransaction } from 'micro-stacks/transactions';
 
-export interface NodeConfig {
-  privateKey: string;
+export interface ReadOnlyOptions {
   network: StacksNetwork;
-  deployerAddress?: string;
 }
 
-export class NodeProvider implements BaseProvider {
-  identifier: string;
+export async function ro<T>(tx: ContractCall<T>, options: ReadOnlyOptions): Promise<T> {
+  const result = await callReadOnlyFunction({
+    contractAddress: tx.contractAddress,
+    contractName: tx.contractName,
+    functionArgs: tx.functionArgs,
+    functionName: tx.function.name,
+    network: options.network,
+  });
+  return cvToValue(result, true);
+}
+
+export async function roOk<Ok>(
+  tx: ContractCall<ClarityTypes.Response<Ok, any>>,
+  options: ReadOnlyOptions
+): Promise<Ok> {
+  const result = await ro(tx, options);
+  return result.match(
+    ok => {
+      return ok;
+    },
+    err => {
+      throw new Error(`Expected OK, received error: ${err}`);
+    }
+  );
+}
+
+export interface PublicOptions extends ReadOnlyOptions {
   privateKey: string;
-  network: StacksNetwork;
+}
 
-  constructor({ network, identifier, privateKey }: NodeConfig & { identifier: string }) {
-    this.identifier = identifier;
-    this.privateKey = privateKey;
-    this.network = network;
+export async function tx(tx: ContractCall<any>, options: PublicOptions) {
+  const transaction = await makeContractCall({
+    contractAddress: tx.contractAddress,
+    contractName: tx.contractName,
+    functionArgs: tx.functionArgs,
+    functionName: tx.function.name,
+    network: options.network,
+    senderKey: options.privateKey,
+    anchorMode: AnchorMode.Any,
+  });
+  const result = await broadcastTransaction(transaction, options.network);
+  if ('error' in result) {
+    throw new Error(
+      `Error broadcasting tx: ${result.error} - ${result.reason} - ${result.reason_data}`
+    );
+  } else {
+    return {
+      txId: result.txid,
+      stacksTransaction: transaction,
+    };
   }
+}
 
-  static fromContracts<T extends Contracts<M>, M>(
-    contracts: T,
-    config: NodeConfig
-  ): ContractInstances<T, M> {
-    const instances = {} as ContractInstances<T, M>;
-    for (const k in contracts) {
-      const contract = contracts[k];
-      contract.address = config.deployerAddress || contract.address;
-      const identifier = getContractIdentifier(contract);
-      const provider = new this({ ...config, identifier });
-      // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
-      const instance = contract.contract(provider) as ReturnType<T[typeof k]['contract']>;
-      instances[k] = {
-        identifier,
-        contract: instance,
-      };
-    }
-    return instances;
-  }
-
-  async callReadOnly(func: ClarityAbiFunction, args: any[]) {
-    const argumentsFormatted = args.map((arg, index) => parseToCV(arg, func.args[index].type));
-    const [contractAddress, contractName] = this.identifier.split('.');
-    const resultCV = await callReadOnlyFunction({
-      contractAddress,
-      contractName,
-      functionArgs: argumentsFormatted,
-      functionName: func.name,
-      network: this.network,
-    });
-    const value = cvToValue(resultCV);
-    switch (resultCV.type) {
-      case ClarityType.ResponseOk:
-        return ok(value);
-      case ClarityType.ResponseErr:
-        return err(value);
-      default:
-        return value;
-    }
-  }
-
-  callPublic(func: ClarityAbiFunction, args: any[]): Transaction<any, any> {
-    const argumentsFormatted = args.map((arg, index) => {
-      const { type } = func.args[index];
-      const valueCV = parseToCV(arg, type);
-      return valueCV;
-    });
-    const [contractAddress, contractName] = this.identifier.split('.');
-    return makeTx({
-      contractAddress,
-      contractName,
-      functionName: func.name,
-      functionArgs: argumentsFormatted,
-      network: this.network,
-      privateKey: this.privateKey,
-    });
-  }
+export function PureProvider(options: PublicOptions) {
+  return {
+    ro: function <T>(tx: ContractCall<T>) {
+      return ro(tx, options);
+    },
+    roOk: function <Ok>(tx: ContractCall<ClarityTypes.Response<Ok, any>>) {
+      return roOk(tx, options);
+    },
+    tx: function (_tx: ContractCall<any>) {
+      return tx(_tx, options);
+    },
+  };
 }

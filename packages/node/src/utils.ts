@@ -8,6 +8,10 @@ import {
 } from 'micro-stacks/transactions';
 import { ClarityValue } from 'micro-stacks/clarity';
 
+export interface ReadOnlyResult<T> {
+  value: T;
+}
+
 interface TxPayload {
   contractAddress: string;
   contractName: string;
