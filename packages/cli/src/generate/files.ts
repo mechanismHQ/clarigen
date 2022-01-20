@@ -128,7 +128,9 @@ ${typings}
 };
 
 export const generateProjectIndexFile = (config: ConfigFile) => {
-  const imports: string[] = [];
+  const imports: string[] = [
+    "import type { ContractInstances } from '@clarigen/core';",
+  ];
   const exports: string[] = [];
   const contractMap: string[] = [];
 
@@ -167,9 +169,11 @@ export const accounts = {
     contractMap.push(map);
   });
 
+  const contractsType = `\nexport type Contracts = ContractInstances<typeof contracts, any>;\n`;
+
   const file = `${imports.join('\n')}
 ${exports.join('\n')}
-
+${contractsType}
 export const contracts = {
   ${contractMap.join('\n  ')}
 };${accounts}

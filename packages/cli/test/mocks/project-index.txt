@@ -1,7 +1,10 @@
+import type { ContractInstances } from '@clarigen/core';
 import { echoInfo } from './echo';
 import { nestedInfo } from './nested/nested';
 export type { EchoContract } from './echo';
 export type { NestedContract } from './nested/nested';
+
+export type Contracts = ContractInstances<typeof contracts, any>;
 
 export const contracts = {
   echo: echoInfo,

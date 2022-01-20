@@ -16,7 +16,6 @@ import {
 } from 'micro-stacks/clarity';
 import { executeJson, getPrints } from '.';
 import { Costs, evalJson } from './clarity-cli-adapter';
-import { ok, err } from 'neverthrow';
 
 function formatArguments(args: ClarityValue[]) {
   return args.map(arg => cvToString(arg));

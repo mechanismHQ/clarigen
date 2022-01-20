@@ -1,0 +1,7 @@
+
+[project]
+name = "clarinet"
+
+[contracts.simple]
+path = "contracts/simple.clar"
+depends_on = []

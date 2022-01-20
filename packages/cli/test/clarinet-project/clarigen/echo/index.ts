@@ -16,4 +16,5 @@ export const echoInfo: Contract<EchoContract> = {
   address: 'ST1HTBVD3JG9C05J7HBJTHGR0GGW7KXW28M5JS8QE',
   contractFile: 'test/clarinet-project/clarinet/contracts/echo.clar',
   name: 'echo',
+  abi: EchoInterface,
 };

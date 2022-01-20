@@ -16,4 +16,5 @@ export const nestedInfo: Contract<NestedContract> = {
   address: 'ST1HTBVD3JG9C05J7HBJTHGR0GGW7KXW28M5JS8QE',
   contractFile: 'test/clarinet-project/clarinet/contracts/nested/nested.clar',
   name: 'nested',
+  abi: NestedInterface,
 };

@@ -22,7 +22,5 @@ test('Can generate the TS declaration for simple.clar', async () => {
 test('can generate pure typings', () => {
   const typings = makePureTypes(SimpleInterface);
   const [line] = typings.split('\n');
-  expect(line).toEqual(
-    '  getName: () => ContractCalls.Public<ClarityTypes.Response<string, null>>;'
-  );
+  expect(line).toEqual('  getName: () => ContractCalls.Public<string, null>;');
 });

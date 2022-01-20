@@ -2,7 +2,7 @@ import { ClarityTypes, ContractCalls } from '@clarigen/core';
 
 // prettier-ignore
 export interface SimpleContract {
-  getName: () => ContractCalls.Public<ClarityTypes.Response<string, null>>;
+  getName: () => ContractCalls.Public<string, null>;
   getBuff: () => ContractCalls.ReadOnly<Uint8Array>;
   getNumber: () => ContractCalls.ReadOnly<bigint>;
 }
