@@ -1,3 +1,9 @@
+(define-map simple-map uint bool)
+
+(define-public (set-in-map (key uint) (val bool))
+  (ok (map-set simple-map key val))
+)
+
 (define-read-only (echo (val (string-ascii 33)))
   val
 )

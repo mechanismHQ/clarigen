@@ -1,5 +1,8 @@
+import type { ContractInstances } from '@clarigen/core';
 import { testerInfo } from './tester';
 export type { TesterContract } from './tester';
+
+export type Contracts = ContractInstances<typeof contracts>;
 
 export const contracts = {
   tester: testerInfo,

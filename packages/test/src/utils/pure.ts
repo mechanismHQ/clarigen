@@ -5,6 +5,7 @@ import {
   cvToString,
   ResultAssets,
   cvToValue,
+  Response,
 } from '@clarigen/core';
 import { NativeClarityBinProvider } from '@clarigen/native-bin';
 import {
@@ -21,7 +22,7 @@ function formatArguments(args: ClarityValue[]) {
   return args.map(arg => cvToString(arg));
 }
 
-function getIdentifier<T>(tx: ContractCall<T>) {
+function getIdentifier(tx: { contractAddress: string; contractName: string }) {
   return `${tx.contractAddress}.${tx.contractName}`;
 }
 
@@ -139,4 +140,20 @@ export async function tx<Ok, Err>({
     isOk: false,
     response: responseErrorCV(resultCV),
   };
+}
+
+export async function mapGet<T extends ContractCalls.Map<any, Val>, Val>({
+  map,
+  bin,
+}: {
+  map: T;
+  bin: NativeClarityBinProvider;
+}): Promise<Val | null> {
+  const code = `(map-get? ${map.map.name} ${cvToString(map.key)})`;
+  const result = await evalCode({
+    contractAddress: getIdentifier(map),
+    code,
+    bin,
+  });
+  return result.value as Val | null;
 }

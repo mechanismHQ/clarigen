@@ -3,6 +3,7 @@ import { contracts, TesterContract, accounts } from './clarinet-project/clarigen
 import { ok } from 'neverthrow';
 
 let contract: TesterContract;
+let addr: string;
 let t: TestProvider;
 
 const alice = accounts.deployer.address;
@@ -10,6 +11,7 @@ const alice = accounts.deployer.address;
 beforeAll(async () => {
   const { deployed, provider } = await TestProvider.fromContracts(contracts);
   contract = deployed.tester.contract;
+  addr = deployed.tester.identifier;
   t = provider;
 });
 
@@ -64,4 +66,15 @@ describe('read-only with response', () => {
 
     expect(await t.rovErr(contract.roResp(true))).toEqual(100n);
   });
+});
+
+test('can get a map entry', async () => {
+  const mapGet = contract.simpleMap(1);
+  const emptyVal = await t.mapGet(mapGet);
+  expect(emptyVal).toEqual(null);
+
+  // const res = await t.evalCode(addr, `(map-set simple-map u1 true)`);
+  await t.txOk(contract.setInMap(1, true), alice);
+  const val = await t.mapGet(mapGet);
+  expect(val).toEqual(true);
 });

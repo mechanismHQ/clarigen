@@ -30,6 +30,28 @@ export const TesterInterface: ClarityAbi = {
       }
     },
     {
+      "access": "public",
+      "args": [
+        {
+          "name": "key",
+          "type": "uint128"
+        },
+        {
+          "name": "val",
+          "type": "bool"
+        }
+      ],
+      "name": "set-in-map",
+      "outputs": {
+        "type": {
+          "response": {
+            "error": "none",
+            "ok": "bool"
+          }
+        }
+      }
+    },
+    {
       "access": "read_only",
       "args": [
         {
@@ -95,7 +117,13 @@ export const TesterInterface: ClarityAbi = {
     }
   ],
   "fungible_tokens": [],
-  "maps": [],
+  "maps": [
+    {
+      "key": "uint128",
+      "name": "simple-map",
+      "value": "bool"
+    }
+  ],
   "non_fungible_tokens": [],
   "variables": []
 };

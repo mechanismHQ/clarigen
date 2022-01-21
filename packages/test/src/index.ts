@@ -10,6 +10,7 @@ import {
 import { deployContract, deployUtilContract, ClarinetAccounts } from './utils';
 import {
   evalCode,
+  mapGet,
   PublicResult,
   PublicResultErr,
   PublicResultOk,
@@ -159,5 +160,9 @@ export class TestProvider {
       code,
       bin: this.clarityBin,
     });
+  }
+
+  public mapGet<T extends ContractCalls.Map<any, Val>, Val>(map: T): Promise<Val | null> {
+    return mapGet({ map, bin: this.clarityBin });
   }
 }
