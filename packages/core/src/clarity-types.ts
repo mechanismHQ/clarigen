@@ -55,8 +55,8 @@ export interface ClarityAbiMap {
     | ClarityAbiType;
 }
 
-export interface ClarityAbi extends _ClarityAbi {
-  // maps: ClarityAbiMap[];
+export interface ClarityAbi extends Omit<_ClarityAbi, 'maps'> {
+  maps: ClarityAbiMap[];
   clarity_version?: string;
 }
 

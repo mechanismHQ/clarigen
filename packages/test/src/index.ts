@@ -34,8 +34,8 @@ interface FromContractsOptions {
   clarityBin?: NativeClarityBinProvider;
 }
 
-interface FromContracts<T extends Contracts<M>, M> {
-  deployed: ContractInstances<T, M>;
+interface FromContracts<T extends Contracts<any>> {
+  deployed: ContractInstances<T>;
   provider: TestProvider;
 }
 
@@ -46,12 +46,12 @@ export class TestProvider {
     this.clarityBin = clarityBin;
   }
 
-  public static async fromContracts<T extends Contracts<M>, M>(
+  public static async fromContracts<T extends Contracts<any>>(
     contracts: T,
     options: FromContractsOptions = {}
-  ): Promise<FromContracts<T, M>> {
+  ): Promise<FromContracts<T>> {
     const clarityBin = options.clarityBin || (await createClarityBin());
-    const instances = {} as ContractInstances<T, M>;
+    const instances = {} as ContractInstances<T>;
     await deployUtilContract(clarityBin);
     for (const k in contracts) {
       if (Object.prototype.hasOwnProperty.call(contracts, k)) {

@@ -94,26 +94,23 @@ interface EvalErr {
 
 type EvalResult = EvalOk | EvalErr;
 
-interface Eval extends EvalOk {
+export interface Eval extends EvalOk {
   stderr: string;
 }
 
-export const evalJson = async ({
+export const evalRaw = async ({
   contractAddress,
-  functionName,
+  code,
   provider,
-  args = [],
 }: {
   contractAddress: string;
-  functionName: string;
   provider: NativeClarityBinProvider;
-  args?: string[];
+  code: string;
 }): Promise<Eval> => {
-  const evalCode = `(${functionName} ${args.join(' ')})`;
   const receipt = await provider.runCommand(
     ['eval_at_chaintip', '--costs', contractAddress, provider.dbFilePath],
     {
-      stdin: evalCode,
+      stdin: code,
     }
   );
   if (process.env.PRINT_CLARIGEN_STDERR && receipt.stderr) {
@@ -127,6 +124,25 @@ export const evalJson = async ({
     ...response,
     stderr: receipt.stderr,
   };
+};
+
+export const evalJson = ({
+  contractAddress,
+  functionName,
+  provider,
+  args = [],
+}: {
+  contractAddress: string;
+  functionName: string;
+  provider: NativeClarityBinProvider;
+  args?: string[];
+}): Promise<Eval> => {
+  const code = `(${functionName} ${args.join(' ')})`;
+  return evalRaw({
+    contractAddress,
+    provider,
+    code,
+  });
 };
 
 export interface ClarinetAccount {
