@@ -14,10 +14,11 @@
     "start": "tsdx watch",
     "dev": "tsdx watch",
     "build": "tsdx build",
-    "test": "jest",
+    "test": "yarn build-test-types && jest",
     "lint": "tsdx lint",
     "prepublishOnly": "tsdx build",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "build-test-types": "cd test && yarn clarigen && cd .."
   },
   "prettier": "@stacks/prettier-config",
   "name": "@clarigen/test",
