@@ -52,6 +52,24 @@ export const TesterInterface: ClarityAbi = {
       }
     },
     {
+      "access": "public",
+      "args": [
+        {
+          "name": "num",
+          "type": "uint128"
+        }
+      ],
+      "name": "set-num",
+      "outputs": {
+        "type": {
+          "response": {
+            "error": "none",
+            "ok": "bool"
+          }
+        }
+      }
+    },
+    {
       "access": "read_only",
       "args": [
         {
@@ -125,5 +143,11 @@ export const TesterInterface: ClarityAbi = {
     }
   ],
   "non_fungible_tokens": [],
-  "variables": []
+  "variables": [
+    {
+      "access": "variable",
+      "name": "num-var",
+      "type": "uint128"
+    }
+  ]
 };

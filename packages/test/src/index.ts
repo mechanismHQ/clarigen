@@ -7,11 +7,10 @@ import {
   ContractCalls,
   ClarityTypes,
 } from '@clarigen/core';
-import { deployContract, deployUtilContract, ClarinetAccounts } from './utils';
+import { deployContract, deployUtilContract, ClarinetAccounts, UTIL_CONTRACT_ID } from './utils';
 import {
   evalCode,
   mapGet,
-  PublicResult,
   PublicResultErr,
   PublicResultOk,
   ReadOnlyResult,
@@ -154,12 +153,17 @@ export class TestProvider {
     return result;
   }
 
-  public evalCode<T>(contractAddress: string, code: string): Promise<ReadOnlyResult<T>> {
+  public evalCode<T>(code: string, contractAddress = UTIL_CONTRACT_ID): Promise<ReadOnlyResult<T>> {
     return evalCode({
       contractAddress,
       code,
       bin: this.clarityBin,
     });
+  }
+
+  public async eval<T>(code: string, contractAddress = UTIL_CONTRACT_ID): Promise<T> {
+    const result = await this.evalCode<T>(code, contractAddress);
+    return result.value;
   }
 
   public mapGet<T extends ContractCalls.Map<any, Val>, Val>(map: T): Promise<Val | null> {

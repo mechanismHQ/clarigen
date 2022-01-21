@@ -73,8 +73,16 @@ test('can get a map entry', async () => {
   const emptyVal = await t.mapGet(mapGet);
   expect(emptyVal).toEqual(null);
 
-  // const res = await t.evalCode(addr, `(map-set simple-map u1 true)`);
   await t.txOk(contract.setInMap(1, true), alice);
   const val = await t.mapGet(mapGet);
   expect(val).toEqual(true);
+});
+
+test('can run arbitrary code', async () => {
+  let num = await t.eval<bigint>(`(var-get num-var)`, addr);
+  expect(num).toEqual(0n);
+  await t.txOk(contract.setNum(1n), alice);
+
+  num = await t.eval<bigint>(`(var-get num-var)`, addr);
+  expect(num).toEqual(1n);
 });

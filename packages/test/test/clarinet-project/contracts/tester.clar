@@ -4,6 +4,12 @@
   (ok (map-set simple-map key val))
 )
 
+(define-data-var num-var uint u0)
+
+(define-public (set-num (num uint))
+  (ok (var-set num-var num))
+)
+
 (define-read-only (echo (val (string-ascii 33)))
   val
 )
