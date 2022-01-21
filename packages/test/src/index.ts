@@ -9,6 +9,7 @@ import {
 } from '@clarigen/core';
 import { deployContract, deployUtilContract, ClarinetAccounts } from './utils';
 import {
+  evalCode,
   PublicResult,
   PublicResultErr,
   PublicResultOk,
@@ -16,17 +17,16 @@ import {
   ro,
   tx as _tx,
 } from './utils/pure';
+export type { PublicResultErr, PublicResultOk, ReadOnlyResult } from './utils/pure';
 export {
   Allocation,
   createClarityBin,
-  tx,
-  txOk,
-  txErr,
   getBlockHeight,
   mineBlocks,
   getStxBalance,
   executeJson,
   evalJson,
+  makeRandomAddress,
 } from './utils';
 
 interface FromContractsOptions {
@@ -151,5 +151,13 @@ export class TestProvider {
     const result = await this.tx(tx, senderAddress);
     if (result.isOk) throw new Error(`Expected Err, received ok: ${result.value}`);
     return result;
+  }
+
+  public evalCode<T>(contractAddress: string, code: string): Promise<ReadOnlyResult<T>> {
+    return evalCode({
+      contractAddress,
+      code,
+      bin: this.clarityBin,
+    });
   }
 }

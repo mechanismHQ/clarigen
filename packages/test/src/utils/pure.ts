@@ -15,7 +15,7 @@ import {
   responseOkCV,
 } from 'micro-stacks/clarity';
 import { executeJson, getPrints } from '.';
-import { Costs, evalJson } from './clarity-cli-adapter';
+import { Costs, evalJson, evalRaw, Eval } from './clarity-cli-adapter';
 
 function formatArguments(args: ClarityValue[]) {
   return args.map(arg => cvToString(arg));
@@ -37,6 +37,17 @@ export interface ReadOnlyResult<T> {
   costs: Costs;
 }
 
+function makeEvalResult<T>(result: Eval): ReadOnlyResult<T> {
+  const resultCV = hexToCV(result.output_serialized);
+  const value = cvToValue(resultCV, true);
+  return {
+    value,
+    clarityValue: resultCV,
+    logs: getLogs(result.stderr),
+    costs: result.costs,
+  };
+}
+
 export async function ro<T>(
   tx: ContractCall<T>,
   bin: NativeClarityBinProvider
@@ -47,14 +58,24 @@ export async function ro<T>(
     contractAddress: getIdentifier(tx),
     provider: bin,
   });
-  const resultCV = hexToCV(result.output_serialized);
-  const value = cvToValue(resultCV, true);
-  return {
-    value,
-    clarityValue: resultCV,
-    logs: getLogs(result.stderr),
-    costs: result.costs,
-  };
+  return makeEvalResult(result);
+}
+
+export async function evalCode<T>({
+  contractAddress,
+  code,
+  bin,
+}: {
+  contractAddress: string;
+  code: string;
+  bin: NativeClarityBinProvider;
+}): Promise<ReadOnlyResult<T>> {
+  const result = await evalRaw({
+    contractAddress,
+    code,
+    provider: bin,
+  });
+  return makeEvalResult(result);
 }
 
 export interface PublicResultBase<T> {
