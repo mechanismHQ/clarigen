@@ -169,7 +169,7 @@ export const accounts = {
     contractMap.push(map);
   });
 
-  const contractsType = `\nexport type Contracts = ContractInstances<typeof contracts, any>;\n`;
+  const contractsType = `\nexport type Contracts = ContractInstances<typeof contracts>;\n`;
 
   const file = `${imports.join('\n')}
 ${exports.join('\n')}

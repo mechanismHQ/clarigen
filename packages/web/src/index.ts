@@ -42,11 +42,11 @@ export class WebProvider implements BaseProvider {
     this.appDetails = appDetails;
   }
 
-  static fromContracts<T extends Contracts<M>, M>(
+  static fromContracts<T extends Contracts<any>>(
     contracts: T,
     config: WebConfig
-  ): ContractInstances<T, M> {
-    const instances = {} as ContractInstances<T, M>;
+  ): ContractInstances<T> {
+    const instances = {} as ContractInstances<T>;
     for (const k in contracts) {
       const contract = contracts[k];
       contract.address = config.deployerAddress || contract.address;

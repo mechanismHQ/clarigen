@@ -1,5 +1,5 @@
 import { ClarityAbiFunction, ClarityValue } from 'micro-stacks/clarity';
-import { Ok } from 'neverthrow';
+import { Result } from 'neverthrow';
 import { ClarityTypes } from '..';
 import { ClarityAbi, transformArgsToCV } from '../clarity-types';
 import { toCamelCase } from '../utils';
@@ -17,6 +17,21 @@ export interface PureContractInfo {
   contractAddress: string;
   contractName: string;
 }
+
+export type ContractFn<T> = (args: any) => T;
+
+export type ContractReturn<
+  C extends ContractFn<ContractCalls.ReadOnly<any>>
+  // C
+> = C extends ContractFn<ContractCalls.ReadOnly<infer T>> ? T : unknown;
+
+export type ContractReturnOk<
+  C extends ContractFn<ContractCalls.ReadOnly<any>>
+> = ContractReturn<C> extends Result<infer O, any> ? O : unknown;
+
+export type ContractReturnErr<
+  C extends ContractFn<ContractCalls.ReadOnly<any>>
+> = ContractReturn<C> extends Result<any, infer E> ? E : unknown;
 
 // eslint-disable-next-line @typescript-eslint/no-namespace
 export namespace ContractCalls {

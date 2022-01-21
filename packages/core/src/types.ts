@@ -19,6 +19,6 @@ export interface ContractInstance<T> {
   contract: T;
 }
 
-export type ContractInstances<T extends Contracts<M>, M> = {
+export type ContractInstances<T extends Contracts<any>> = {
   [Name in keyof T]: ContractInstance<ReturnType<T[Name]['contract']>>;
 };

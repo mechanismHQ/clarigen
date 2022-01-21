@@ -4,7 +4,7 @@ import { nestedInfo } from './nested/nested';
 export type { EchoContract } from './echo';
 export type { NestedContract } from './nested/nested';
 
-export type Contracts = ContractInstances<typeof contracts, any>;
+export type Contracts = ContractInstances<typeof contracts>;
 
 export const contracts = {
   echo: echoInfo,
