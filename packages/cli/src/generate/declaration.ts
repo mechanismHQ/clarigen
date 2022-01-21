@@ -10,6 +10,7 @@ import {
 } from 'micro-stacks/transactions';
 import { ClarityAbiFunction, ClarityAbiType } from 'micro-stacks/clarity';
 import { toCamelCase, ClarityAbi } from '@clarigen/core';
+import { check } from 'reserved-words';
 
 export const jsTypeFromAbiType = (
   val: ClarityAbiType,
@@ -67,13 +68,20 @@ export const jsTypeFromAbiType = (
   }
 };
 
+// Check if it's a reserved word, and then camelCase
+function getArgName(name: string) {
+  const camel = toCamelCase(name);
+  const prefix = check(camel, 6) ? '_' : '';
+  return `${prefix}${camel}`;
+}
+
 export const makeTypes = (abi: ClarityAbi) => {
   let typings = '';
   abi.functions.forEach((func, index) => {
     if (func.access === 'private') return;
     let functionLine = `${toCamelCase(func.name)}: `;
     const args = func.args.map((arg) => {
-      return `${toCamelCase(arg.name)}: ${jsTypeFromAbiType(arg.type, true)}`;
+      return `${getArgName(arg.name)}: ${jsTypeFromAbiType(arg.type, true)}`;
     });
     functionLine += `(${args.join(', ')}) => `;
     if (func.access === 'public') {
@@ -114,7 +122,7 @@ export function makePureTypes(abi: ClarityAbi) {
   abi.functions.forEach((func, index) => {
     let functionLine = `${toCamelCase(func.name)}: `;
     const args = func.args.map((arg) => {
-      return `${toCamelCase(arg.name)}: ${jsTypeFromAbiType(arg.type, true)}`;
+      return `${getArgName(arg.name)}: ${jsTypeFromAbiType(arg.type, true)}`;
     });
     functionLine += `(${args.join(', ')}) => `;
     const funcType = accessToReturnType[func.access];

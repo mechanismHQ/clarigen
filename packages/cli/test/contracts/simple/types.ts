@@ -7,6 +7,8 @@ export interface SimpleContract {
   "a": bigint;
   "b": boolean
     }, null>;
+  fnWithFor: (_for: boolean) => ContractCalls.ReadOnly<boolean>;
+  getBuff: () => ContractCalls.ReadOnly<Uint8Array>;
   getTuple: () => ContractCalls.ReadOnly<{
   "a": bigint;
   "b": boolean

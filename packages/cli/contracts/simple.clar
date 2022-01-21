@@ -15,3 +15,5 @@
 )
 
 (define-read-only (get-buff) 0xaaaa)
+
+(define-read-only (fn-with-for (for bool)) true)

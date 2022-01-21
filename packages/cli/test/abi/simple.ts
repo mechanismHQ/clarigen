@@ -46,6 +46,31 @@ export const SimpleInterface: ClarityAbi = {
     },
     {
       "access": "read_only",
+      "args": [
+        {
+          "name": "for",
+          "type": "bool"
+        }
+      ],
+      "name": "fn-with-for",
+      "outputs": {
+        "type": "bool"
+      }
+    },
+    {
+      "access": "read_only",
+      "args": [],
+      "name": "get-buff",
+      "outputs": {
+        "type": {
+          "buffer": {
+            "length": 2
+          }
+        }
+      }
+    },
+    {
+      "access": "read_only",
       "args": [],
       "name": "get-tuple",
       "outputs": {
