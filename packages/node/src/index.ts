@@ -4,11 +4,12 @@ import { callReadOnlyFunction } from 'micro-stacks/api';
 import { AnchorMode, makeContractCall } from 'micro-stacks/transactions';
 import { broadcastTransaction } from 'micro-stacks/transactions';
 
-export interface ReadOnlyOptions {
+export interface NodeOptions {
   network: StacksNetwork;
+  privateKey?: string;
 }
 
-export async function ro<T>(tx: ContractCall<T>, options: ReadOnlyOptions): Promise<T> {
+export async function ro<T>(tx: ContractCall<T>, options: NodeOptions): Promise<T> {
   const result = await callReadOnlyFunction({
     contractAddress: tx.contractAddress,
     contractName: tx.contractName,
@@ -21,7 +22,7 @@ export async function ro<T>(tx: ContractCall<T>, options: ReadOnlyOptions): Prom
 
 export async function roOk<Ok>(
   tx: ContractCall<ClarityTypes.Response<Ok, any>>,
-  options: ReadOnlyOptions
+  options: NodeOptions
 ): Promise<Ok> {
   const result = await ro(tx, options);
   return result.match(
@@ -34,11 +35,9 @@ export async function roOk<Ok>(
   );
 }
 
-export interface PublicOptions extends ReadOnlyOptions {
-  privateKey: string;
-}
-
-export async function tx(tx: ContractCall<any>, options: PublicOptions) {
+export async function tx(tx: ContractCall<any>, options: NodeOptions) {
+  if (typeof options.privateKey === 'undefined')
+    throw new Error('Clarigen: `privateKey` is mandatory for making transactions');
   const transaction = await makeContractCall({
     contractAddress: tx.contractAddress,
     contractName: tx.contractName,
@@ -61,16 +60,16 @@ export async function tx(tx: ContractCall<any>, options: PublicOptions) {
   }
 }
 
-export function PureProvider(options: PublicOptions) {
+type Fn<A, R> = (arg: A, options: NodeOptions) => R;
+
+function curry<A, R>(f: Fn<A, R>, options: NodeOptions) {
+  return (arg: A) => f(arg, options);
+}
+
+export function NodeProvider(options: NodeOptions) {
   return {
-    ro: function <T>(tx: ContractCall<T>) {
-      return ro(tx, options);
-    },
-    roOk: function <Ok>(tx: ContractCall<ClarityTypes.Response<Ok, any>>) {
-      return roOk(tx, options);
-    },
-    tx: function (_tx: ContractCall<any>) {
-      return tx(_tx, options);
-    },
+    ro: curry(ro, options),
+    roOk: curry(roOk, options),
+    tx: curry(tx, options),
   };
 }
