@@ -10,6 +10,9 @@
     "@clarigen/web": "0.3.5"
   },
   "changesets": [
-    "fresh-dancers-trade"
+    "fresh-dancers-trade",
+    "six-dryers-mate",
+    "wicked-geckos-obey",
+    "wise-keys-ring"
   ]
 }

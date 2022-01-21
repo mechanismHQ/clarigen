@@ -1,5 +1,11 @@
 # @clarigen/node
 
+## 1.0.0-next.2
+
+### Patch Changes
+
+- Updates `@clarigen/node` to use the new core types built by Clarigen.
+
 ## 1.0.0-next.0
 
 ### Major Changes
