@@ -20,4 +20,16 @@ export interface SimpleContract {
   "d": bigint
     }
     }, null>>;
+  simpleMap: (key: number | bigint) => ContractCalls.Map<number | bigint, boolean>;
+  tupleKeyMap: (key: {
+  "a": bigint;
+  "b": boolean
+    }) => ContractCalls.Map<{
+  "a": bigint;
+  "b": boolean
+    }, string>;
+  tupleValMap: (key: number | bigint) => ContractCalls.Map<number | bigint, {
+  "a": bigint;
+  "b": boolean
+    }>;
 }

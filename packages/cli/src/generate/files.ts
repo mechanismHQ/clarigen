@@ -1,6 +1,5 @@
 import { NativeClarityBinProvider, hasStdErr } from '@clarigen/native-bin';
 import { ClarityAbi, toCamelCase } from '@clarigen/core';
-import { makeTypes } from './declaration';
 import { ConfigContract, ConfigFile } from '../config';
 import { dirname, resolve, join } from 'path';
 import { makePureTypes } from '..';

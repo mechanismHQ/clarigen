@@ -75,42 +75,6 @@ function getArgName(name: string) {
   return `${prefix}${camel}`;
 }
 
-export const makeTypes = (abi: ClarityAbi) => {
-  let typings = '';
-  abi.functions.forEach((func, index) => {
-    if (func.access === 'private') return;
-    let functionLine = `${toCamelCase(func.name)}: `;
-    const args = func.args.map((arg) => {
-      return `${getArgName(arg.name)}: ${jsTypeFromAbiType(arg.type, true)}`;
-    });
-    functionLine += `(${args.join(', ')}) => `;
-    if (func.access === 'public') {
-      const { type } = func.outputs;
-      if (!isClarityAbiResponse(type))
-        throw new Error('Expected response type for public function');
-      functionLine += 'Transaction';
-      const ok = jsTypeFromAbiType(type.response.ok);
-      const err = jsTypeFromAbiType(type.response.error);
-      functionLine += `<${ok}, ${err}>;`;
-    } else {
-      const jsType = jsTypeFromAbiType(func.outputs.type);
-      functionLine += `Promise<${jsType}>;`;
-      // const { type } = func.outputs;
-      // if (isClarityAbiResponse(type)) {
-      //   const ok = jsTypeFromAbiType(type.response.ok);
-      //   const err = jsTypeFromAbiType(type.response.error);
-      //   functionLine += `Promise<ClarityTypes.Response<${ok}, ${err}>>;`;
-      // } else {
-      //   const jsType = jsTypeFromAbiType(func.outputs.type);
-      //   functionLine += `Promise<${jsType}>;`;
-      // }
-    }
-    typings += `${index === 0 ? '' : '\n'}  ${functionLine}`;
-  });
-
-  return typings;
-};
-
 const accessToReturnType = {
   public: 'Public',
   read_only: 'ReadOnly',
@@ -139,6 +103,14 @@ export function makePureTypes(abi: ClarityAbi) {
       functionLine += `${returnType}>;`;
     }
     typings += `${index === 0 ? '' : '\n'}  ${functionLine}`;
+  });
+  abi.maps.forEach((map) => {
+    let functionLine = `${toCamelCase(map.name)}: `;
+    const keyType = jsTypeFromAbiType(map.key, true);
+    const arg = `key: ${keyType}`;
+    const valType = jsTypeFromAbiType(map.value);
+    functionLine += `(${arg}) => ContractCalls.Map<${keyType}, ${valType}>;`;
+    typings += `\n  ${functionLine}`;
   });
   return typings;
 }

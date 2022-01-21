@@ -1,13 +1,6 @@
 import { generateTypesFile, makePureTypes } from '../src';
-import { appmap } from './abi/appmap';
 import { SimpleInterface } from './abi/simple';
 import { readFile } from './test-utils';
-import { check } from 'reserved-words';
-
-test('can gen', () => {
-  const typesFile = generateTypesFile(appmap, 'app-map');
-  expect(typesFile).toBeTruthy();
-});
 
 test('generate simple interface', () => {
   const typesFile = generateTypesFile(SimpleInterface, 'simple');
@@ -31,5 +24,13 @@ test('can properly name reserved variable named arguments', () => {
   const line = typings.split('\n').find((l) => l.includes('fnWithFor'));
   expect(line).toEqual(
     '  fnWithFor: (_for: boolean) => ContractCalls.ReadOnly<boolean>;'
+  );
+});
+
+test('can generate map types', () => {
+  const typings = makePureTypes(SimpleInterface);
+  const line = typings.split('\n').find((l) => l.includes('simpleMap'));
+  expect(line).toEqual(
+    '  simpleMap: (key: number | bigint) => ContractCalls.Map<number | bigint, boolean>;'
   );
 });

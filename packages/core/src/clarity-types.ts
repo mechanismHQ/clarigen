@@ -39,20 +39,8 @@ export namespace ClarityTypes {
 
 export interface ClarityAbiMap {
   name: string;
-  key:
-    | {
-        name: string;
-        type: ClarityAbiType;
-      }[]
-    | ClarityAbiTypeTuple
-    | ClarityAbiType;
-  value:
-    | {
-        name: string;
-        type: ClarityAbiType;
-      }[]
-    | ClarityAbiTypeTuple
-    | ClarityAbiType;
+  key: ClarityAbiType;
+  value: ClarityAbiType;
 }
 
 export interface ClarityAbi extends Omit<_ClarityAbi, 'maps'> {

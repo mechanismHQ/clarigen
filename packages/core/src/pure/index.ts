@@ -1,7 +1,7 @@
 import { ClarityAbiFunction, ClarityValue } from 'micro-stacks/clarity';
 import { Result } from 'neverthrow';
 import { ClarityTypes } from '..';
-import { ClarityAbi, transformArgsToCV } from '../clarity-types';
+import { ClarityAbi, ClarityAbiMap, parseToCV, transformArgsToCV } from '../clarity-types';
 import { toCamelCase } from '../utils';
 
 export interface ContractCall<T> {
@@ -33,11 +33,20 @@ export type ContractReturnErr<
   C extends ContractFn<ContractCalls.ReadOnly<any>>
 > = ContractReturn<C> extends Result<any, infer E> ? E : unknown;
 
+export interface MapGet<Key, Val> {
+  map: ClarityAbiMap;
+  nativeKey: Key;
+  key: ClarityValue;
+  contractAddress: string;
+  contractName: string;
+}
+
 // eslint-disable-next-line @typescript-eslint/no-namespace
 export namespace ContractCalls {
   export type ReadOnly<T> = ContractCall<T>;
   export type Public<Ok, Err> = ContractCall<ClarityTypes.Response<Ok, Err>>;
   export type Private<T> = ContractCall<T>;
+  export type Map<Key, Val> = MapGet<Key, Val>;
 }
 
 export function transformArguments(func: ClarityAbiFunction, args: any[]): ClarityValue[] {
@@ -47,21 +56,36 @@ export function transformArguments(func: ClarityAbiFunction, args: any[]): Clari
 function getter<T>(
   contract: PureContractInfo,
   property: string | symbol
-): (args: any[]) => ContractCall<T> {
+): (...args: any) => ContractCall<T> | MapGet<any, T> {
   const foundFunction = contract.abi.functions.find(func => toCamelCase(func.name) === property);
-  // TODO: maps, variables, tokens
-  if (!foundFunction)
-    throw new Error(`Invalid function call: no function exists for ${String(property)}`);
-  return function (...args: any[]) {
-    const functionArgs = transformArguments(foundFunction, args);
-    return {
-      functionArgs: functionArgs,
-      contractAddress: contract.contractAddress,
-      contractName: contract.contractName,
-      function: foundFunction,
-      nativeArgs: args,
+  if (foundFunction) {
+    return function (...args: any[]) {
+      const functionArgs = transformArguments(foundFunction, args);
+      return {
+        functionArgs: functionArgs,
+        contractAddress: contract.contractAddress,
+        contractName: contract.contractName,
+        function: foundFunction,
+        nativeArgs: args,
+      };
     };
-  };
+  }
+  const foundMap = contract.abi.maps.find(map => toCamelCase(map.name) === property);
+  if (foundMap) {
+    return (key: any) => {
+      const keyCV = parseToCV(key, foundMap.key);
+      const mapGet: MapGet<any, T> = {
+        contractAddress: contract.contractAddress,
+        contractName: contract.contractName,
+        map: foundMap,
+        nativeKey: key,
+        key: keyCV,
+      };
+      return mapGet;
+    };
+  }
+  // TODO: variables, tokens
+  throw new Error(`Invalid function call: no function exists for ${String(property)}`);
 }
 
 export const proxyHandler: ProxyHandler<PureContractInfo> = {
