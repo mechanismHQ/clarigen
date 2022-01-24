@@ -1,100 +1,60 @@
-import { ClarityAbiFunction, ClarityType } from 'micro-stacks/clarity';
-import { ok, err } from 'neverthrow';
-import {
-  BaseProvider,
-  Transaction,
-  getContractIdentifier,
-  Contracts,
-  ContractInstances,
-  cvToValue,
-  parseToCV,
-} from '@clarigen/core';
-import { AppDetails, makeTx } from './utils';
+import { ContractCall, ro, roOk, roErr } from '@clarigen/core';
+import { ContractCallTxOptions, makeContractCallToken } from 'micro-stacks/connect';
 import { StacksNetwork } from 'micro-stacks/network';
-import { callReadOnlyFunction } from 'micro-stacks/api';
+import { deserializeTransaction } from 'micro-stacks/transactions';
 
-export interface WebConfig {
-  stxAddress: string;
-  privateKey: string;
+export interface WebOptions {
   network: StacksNetwork;
-  appDetails: AppDetails;
-  deployerAddress?: string;
 }
 
-export class WebProvider implements BaseProvider {
-  identifier: string;
-  stxAddress: string;
-  privateKey: string;
-  network: StacksNetwork;
-  appDetails: AppDetails;
-
-  constructor({
-    network,
-    identifier,
-    stxAddress,
-    privateKey,
-    appDetails,
-  }: WebConfig & { identifier: string }) {
-    this.identifier = identifier;
-    this.privateKey = privateKey;
-    this.stxAddress = stxAddress;
-    this.network = network;
-    this.appDetails = appDetails;
+export async function tx(
+  tx: ContractCall<any>,
+  txOptions: Omit<
+    ContractCallTxOptions,
+    'contractName' | 'contractAddress' | 'functionName' | 'functionArgs'
+  >,
+  options: WebOptions
+) {
+  const token = await makeContractCallToken({
+    functionArgs: tx.functionArgs,
+    functionName: tx.function.name,
+    contractAddress: tx.contractAddress,
+    contractName: tx.contractName,
+    network: options.network,
+    ...txOptions,
+  });
+  if (!window.StacksProvider) {
+    throw new Error('Stacks wallet not installed.');
   }
+  const request = await window.StacksProvider.transactionRequest(token);
+  const { txRaw } = request;
+  const stacksTransaction = deserializeTransaction(txRaw);
+  return {
+    txId: request.txId,
+    stacksTransaction,
+  };
+}
 
-  static fromContracts<T extends Contracts<any>>(
-    contracts: T,
-    config: WebConfig
-  ): ContractInstances<T> {
-    const instances = {} as ContractInstances<T>;
-    for (const k in contracts) {
-      const contract = contracts[k];
-      contract.address = config.deployerAddress || contract.address;
-      const identifier = getContractIdentifier(contract);
-      const provider = new this({ ...config, identifier });
-      // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
-      const instance = contract.contract(provider) as ReturnType<T[typeof k]['contract']>;
-      instances[k] = {
-        identifier,
-        contract: instance,
-      };
-    }
-    return instances;
-  }
+type Fn<A, R> = (arg: A, options: WebOptions) => R;
 
-  async callReadOnly(func: ClarityAbiFunction, args: any[]) {
-    const argumentsFormatted = args.map((arg, index) => parseToCV(arg, func.args[index].type));
-    const [contractAddress, contractName] = this.identifier.split('.');
-    const resultCV = await callReadOnlyFunction({
-      contractAddress,
-      contractName,
-      functionArgs: argumentsFormatted,
-      functionName: func.name,
-      network: this.network,
-    });
-    const value = cvToValue(resultCV);
-    switch (resultCV.type) {
-      case ClarityType.ResponseOk:
-        return ok(value);
-      case ClarityType.ResponseErr:
-        return err(value);
-      default:
-        return value;
-    }
-  }
+function curry<A, R>(f: Fn<A, R>, options: WebOptions) {
+  return (arg: A) => f(arg, options);
+}
 
-  callPublic(func: ClarityAbiFunction, args: any[]): Transaction<any, any> {
-    const argumentsFormatted = args.map((arg, index) => parseToCV(arg, func.args[index].type));
-    const [contractAddress, contractName] = this.identifier.split('.');
-    return makeTx({
-      contractAddress,
-      contractName,
-      functionName: func.name,
-      functionArgs: argumentsFormatted,
-      network: this.network,
-      stxAddress: this.stxAddress,
-      privateKey: this.privateKey,
-      appDetails: this.appDetails,
-    });
-  }
+export function WebProvider(options: WebOptions) {
+  return {
+    ro: curry(ro, options),
+    roOk: curry(roOk, options),
+    roErr: curry(roErr, options),
+    tx: (
+      _tx: ContractCall<any>,
+      txOptions: Omit<
+        ContractCallTxOptions,
+        'contractName' | 'contractAddress' | 'functionName' | 'functionArgs'
+      >
+    ) => {
+      tx(_tx, txOptions, options);
+    },
+    // tx: curry(tx, options),
+  };
 }
