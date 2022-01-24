@@ -223,3 +223,21 @@ export function cvToString(val: ClarityValue, encoding: 'tryAscii' | 'hex' = 'he
 export function transformArgsToCV(func: ClarityAbiFunction, args: any[]): ClarityValue[] {
   return args.map((arg, index) => parseToCV(arg, func.args[index].type));
 }
+
+export function expectOk<Ok>(response: ClarityTypes.Response<Ok, any>): Ok {
+  return response.match(
+    ok => ok,
+    err => {
+      throw new Error(`Expected OK, received error: ${err}`);
+    }
+  );
+}
+
+export function expectErr<Err>(response: ClarityTypes.Response<any, Err>): Err {
+  return response.match(
+    ok => {
+      throw new Error(`Expected Err, received Ok: ${ok}`);
+    },
+    err => err
+  );
+}

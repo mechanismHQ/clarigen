@@ -23,7 +23,7 @@
   "author": "Hank Stoever",
   "module": "dist/core.esm.js",
   "dependencies": {
-    "micro-stacks": "^0.1.17",
+    "micro-stacks": "^0.2.0",
     "neverthrow": "4.2.1"
   },
   "publishConfig": {

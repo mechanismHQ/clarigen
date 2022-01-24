@@ -15,8 +15,16 @@ export type {
   ContractReturnErr,
   ContractReturnOk,
 } from './pure';
-export { cvToValue, parseToCV, cvToString, hexToCvValue } from './clarity-types';
+export {
+  cvToValue,
+  parseToCV,
+  cvToString,
+  hexToCvValue,
+  expectErr,
+  expectOk,
+} from './clarity-types';
 export { BaseProvider } from './base-provider';
+export * from './api';
 
 const makeHandler = (provider: BaseProvider) => {
   const handler: ProxyHandler<ClarityAbi> = {
