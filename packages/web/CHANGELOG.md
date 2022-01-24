@@ -1,5 +1,18 @@
 # @clarigen/web
 
+## 1.0.0-next.3
+
+### Minor Changes
+
+- [`a5785de`](https://github.com/obylabs/clarigen/commit/a5785debb2db928f209f8d119f96955af42dfdc9) Thanks [@hstove](https://github.com/hstove)! - Updated to use the new v1 Clarigen types
+
+### Patch Changes
+
+- [`1727e49`](https://github.com/obylabs/clarigen/commit/1727e49ba456130115c310527c93c562a07f1716) Thanks [@hstove](https://github.com/hstove)! - Bumps `micro-stacks` version
+
+- Updated dependencies [[`1727e49`](https://github.com/obylabs/clarigen/commit/1727e49ba456130115c310527c93c562a07f1716)]:
+  - @clarigen/core@1.0.0-next.3
+
 ## 1.0.0-next.1
 
 ### Patch Changes

@@ -1,5 +1,11 @@
 # @clarigen/core
 
+## 1.0.0-next.3
+
+### Patch Changes
+
+- [`1727e49`](https://github.com/obylabs/clarigen/commit/1727e49ba456130115c310527c93c562a07f1716) Thanks [@hstove](https://github.com/hstove)! - Bumps `micro-stacks` version
+
 ## 1.0.0-next.1
 
 ### Major Changes
