@@ -6,6 +6,7 @@ export * from './transaction';
 export * from './types';
 export * from './utils';
 export * from './events';
+export * from './contracts';
 export { pureProxy } from './pure';
 export type {
   ContractCalls,

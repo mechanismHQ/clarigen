@@ -1,5 +1,13 @@
 # @clarigen/cli
 
+## 1.0.0-next.4
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @clarigen/core@1.0.0-next.4
+  - @clarigen/native-bin@1.0.0-next.4
+
 ## 1.0.0-next.3
 
 ### Patch Changes
