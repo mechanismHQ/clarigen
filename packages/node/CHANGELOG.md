@@ -1,5 +1,11 @@
 # @clarigen/node
 
+## 1.0.0-next.5
+
+### Patch Changes
+
+- Fixes dependency on `core`
+
 ## 1.0.0-next.3
 
 ### Patch Changes
