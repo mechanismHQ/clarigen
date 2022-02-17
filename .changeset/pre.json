@@ -10,6 +10,7 @@
     "@clarigen/web": "0.3.5"
   },
   "changesets": [
+    "beige-dancers-help",
     "fresh-dancers-trade",
     "gold-starfishes-rush",
     "popular-mails-sniff",

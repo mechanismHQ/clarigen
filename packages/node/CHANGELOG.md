@@ -1,5 +1,14 @@
 # @clarigen/node
 
+## 1.0.0-next.6
+
+### Patch Changes
+
+- Adds `tip=latest` to read-only calls for node and web
+
+- Updated dependencies []:
+  - @clarigen/core@1.0.0-next.6
+
 ## 1.0.0-next.5
 
 ### Patch Changes

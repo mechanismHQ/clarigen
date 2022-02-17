@@ -15,6 +15,7 @@ export async function ro<T>(tx: ContractCall<T>, options: ApiOptions): Promise<T
     functionArgs: tx.functionArgs,
     functionName: tx.function.name,
     network: options.network,
+    tip: 'latest',
   });
   return cvToValue(result, true);
 }
