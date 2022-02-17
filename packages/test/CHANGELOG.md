@@ -1,5 +1,15 @@
 # @clarigen/test
 
+## 1.0.0-next.7
+
+### Patch Changes
+
+- Manually constructs read-only fn call to include `tip` param.
+
+- Updated dependencies []:
+  - @clarigen/core@1.0.0-next.7
+  - @clarigen/native-bin@1.0.0-next.7
+
 ## 1.0.0-next.6
 
 ### Patch Changes

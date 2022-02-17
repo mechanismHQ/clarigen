@@ -1,4 +1,6 @@
-import { callReadOnlyFunction } from 'micro-stacks/api';
+import { parseReadOnlyResponse, ReadOnlyFunctionResponse } from 'micro-stacks/api';
+import { cvToHex } from 'micro-stacks/clarity';
+import { fetchPrivate } from 'micro-stacks/common';
 import { StacksNetwork } from 'micro-stacks/network';
 import { broadcastTransaction, StacksTransaction } from 'micro-stacks/transactions';
 import { ClarityTypes, cvToValue, expectErr, expectOk } from './clarity-types';
@@ -9,15 +11,34 @@ interface ApiOptions {
 }
 
 export async function ro<T>(tx: ContractCall<T>, options: ApiOptions): Promise<T> {
-  const result = await callReadOnlyFunction({
-    contractAddress: tx.contractAddress,
-    contractName: tx.contractName,
-    functionArgs: tx.functionArgs,
-    functionName: tx.function.name,
-    network: options.network,
-    tip: 'latest',
+  const urlBase = options.network.getReadOnlyFunctionCallApiUrl(
+    tx.contractAddress,
+    tx.contractName,
+    tx.function.name
+  );
+  const url = `${urlBase}?tip=latest`;
+  const body = JSON.stringify({
+    sender: tx.contractAddress,
+    arguments: tx.functionArgs.map(arg => (typeof arg === 'string' ? arg : cvToHex(arg))),
   });
-  return cvToValue(result, true);
+  const response = await fetchPrivate(url, {
+    method: 'POST',
+    body,
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  });
+  if (!response.ok) {
+    let msg = '';
+    try {
+      msg = await response.text();
+    } catch (error) {}
+    throw new Error(
+      `Error calling read-only function. Response ${response.status}: ${response.statusText}. Attempted to fetch ${url} and failed with the message: "${msg}"`
+    );
+  }
+  const parsed = parseReadOnlyResponse((await response.json()) as ReadOnlyFunctionResponse);
+  return cvToValue(parsed, true);
 }
 
 export async function roOk<Ok>(
