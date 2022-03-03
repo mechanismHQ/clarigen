@@ -9,7 +9,7 @@ let t: TestProvider;
 const alice = accounts.deployer.address;
 
 beforeAll(async () => {
-  const { deployed, provider } = await TestProvider.fromContracts(contracts);
+  const { deployed, provider } = await TestProvider.fromContracts(contracts, { accounts });
   contract = deployed.tester.contract;
   addr = deployed.tester.identifier;
   t = provider;

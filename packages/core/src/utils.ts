@@ -23,8 +23,7 @@ export const getContractNameFromPath = (path: string) => {
 };
 
 export const getContractIdentifier = <T>(contract: Contract<T>) => {
-  const contractName = getContractNameFromPath(contract.contractFile);
-  return `${contract.address}.${contractName}`;
+  return `${contract.address}.${contract.name}`;
 };
 
 export const getContractPrincipalCV = <T>(contract: Contract<T>): ContractPrincipalCV => {
