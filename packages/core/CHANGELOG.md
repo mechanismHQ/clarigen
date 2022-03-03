@@ -1,5 +1,13 @@
 # @clarigen/core
 
+## 1.0.0-next.8
+
+### Patch Changes
+
+- [`741c968`](https://github.com/mechanismHQ/clarigen/commit/741c9687ef5e11a26c80f02233905136403ac940) Thanks [@hstove](https://github.com/hstove)! - Fixed an issue where deploying contracts in the test adapter didn't use the contracts specified name. Instead, it inferred the contract name from the contract file.
+
+* [`7b5ce6d`](https://github.com/mechanismHQ/clarigen/commit/7b5ce6db6460a313924a976e1cfaca3fdbb4dc49) Thanks [@hstove](https://github.com/hstove)! - Adds `mapGet` to node and web adapters, to support getting a map entry for a specific key.
+
 ## 1.0.0-next.7
 
 ### Patch Changes

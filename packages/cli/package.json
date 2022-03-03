@@ -2,7 +2,7 @@
   "name": "@clarigen/cli",
   "description": "A CLI for generating a Typescript interface for a Clarity contract.",
   "author": "Hank Stoever",
-  "version": "1.0.0-next.7",
+  "version": "1.0.0-next.8",
   "license": "MIT",
   "main": "dist/index.js",
   "files": [
@@ -47,8 +47,8 @@
     "ts-node": "^9.1.1"
   },
   "dependencies": {
-    "@clarigen/core": "1.0.0-next.7",
-    "@clarigen/native-bin": "1.0.0-next.7",
+    "@clarigen/core": "1.0.0-next.8",
+    "@clarigen/native-bin": "1.0.0-next.8",
     "@ltd/j-toml": "1.12.2",
     "@oclif/command": "^1.8.0",
     "@oclif/config": "^1.17.0",

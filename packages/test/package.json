@@ -1,5 +1,5 @@
 {
-  "version": "1.0.0-next.7",
+  "version": "1.0.0-next.8",
   "license": "MIT",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -26,8 +26,8 @@
   "module": "dist/test.esm.js",
   "devDependencies": {},
   "dependencies": {
-    "@clarigen/core": "1.0.0-next.7",
-    "@clarigen/native-bin": "1.0.0-next.7",
+    "@clarigen/core": "1.0.0-next.8",
+    "@clarigen/native-bin": "1.0.0-next.8",
     "micro-stacks": "^0.2.0"
   },
   "publishConfig": {
