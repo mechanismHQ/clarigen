@@ -1,4 +1,4 @@
-import { ContractCall, broadcast, ro, roOk, roErr } from '@clarigen/core';
+import { ContractCall, broadcast, ro, roOk, roErr, fetchMapGet } from '@clarigen/core';
 import { StacksNetwork } from 'micro-stacks/network';
 import { AnchorMode, makeContractCall, ContractCallOptions } from 'micro-stacks/transactions';
 
@@ -38,6 +38,7 @@ export function NodeProvider(options: NodeOptions) {
     ro: curry(ro, options),
     roOk: curry(roOk, options),
     roErr: curry(roErr, options),
+    mapGet: curry(fetchMapGet, options),
     tx: (_tx: ContractCall<any>, txOptions: Partial<ContractCallOptions>) =>
       tx(_tx, txOptions, options),
   };

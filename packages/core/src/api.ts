@@ -1,10 +1,14 @@
-import { parseReadOnlyResponse, ReadOnlyFunctionResponse } from 'micro-stacks/api';
-import { cvToHex } from 'micro-stacks/clarity';
+import {
+  parseReadOnlyResponse,
+  ReadOnlyFunctionResponse,
+  fetchContractDataMapEntry,
+} from 'micro-stacks/api';
+import { cvToHex, hexToCV } from 'micro-stacks/clarity';
 import { fetchPrivate } from 'micro-stacks/common';
 import { StacksNetwork } from 'micro-stacks/network';
 import { broadcastTransaction, StacksTransaction } from 'micro-stacks/transactions';
 import { ClarityTypes, cvToValue, expectErr, expectOk } from './clarity-types';
-import { ContractCall } from './pure';
+import { ContractCall, ContractCalls } from './pure';
 
 interface ApiOptions {
   network: StacksNetwork;
@@ -55,6 +59,24 @@ export async function roErr<Err>(
 ): Promise<Err> {
   const result = await ro(tx, options);
   return expectErr(result);
+}
+
+export async function fetchMapGet<T extends ContractCalls.Map<any, Val>, Val>(
+  map: T,
+  options: ApiOptions
+): Promise<Val | null> {
+  const lookupKey = cvToHex(map.key);
+  const response = await fetchContractDataMapEntry({
+    contract_address: map.contractAddress,
+    contract_name: map.contractName,
+    map_name: map.map.name,
+    lookup_key: lookupKey,
+    tip: 'latest',
+    url: options.network.getCoreApiUrl(),
+    proof: 0,
+  });
+  const valueCV = hexToCV(response.data);
+  return cvToValue(valueCV, true);
 }
 
 export async function broadcast(transaction: StacksTransaction, options: ApiOptions) {

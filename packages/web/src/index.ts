@@ -1,4 +1,4 @@
-import { ContractCall, ro, roOk, roErr } from '@clarigen/core';
+import { ContractCall, ro, roOk, roErr, fetchMapGet } from '@clarigen/core';
 import { ContractCallTxOptions, makeContractCallToken } from 'micro-stacks/connect';
 import { StacksNetwork } from 'micro-stacks/network';
 import { deserializeTransaction } from 'micro-stacks/transactions';
@@ -13,14 +13,14 @@ export async function tx(
     ContractCallTxOptions,
     'contractName' | 'contractAddress' | 'functionName' | 'functionArgs'
   >,
-  options: WebOptions
+  options?: WebOptions
 ) {
   const token = await makeContractCallToken({
     functionArgs: tx.functionArgs,
     functionName: tx.function.name,
     contractAddress: tx.contractAddress,
     contractName: tx.contractName,
-    network: options.network,
+    network: options?.network,
     ...txOptions,
   });
   if (!window.StacksProvider) {
@@ -55,6 +55,11 @@ export function WebProvider(options: WebOptions) {
     ) => {
       tx(_tx, txOptions, options);
     },
+    mapGet: curry(fetchMapGet, options),
     // tx: curry(tx, options),
   };
 }
+
+export { ro, roOk, roErr };
+
+export const mapGet = fetchMapGet;
