@@ -1,5 +1,11 @@
 # @clarigen/core
 
+## 1.0.0-next.9
+
+### Patch Changes
+
+- Adds a `filterEvents` helper function to `@clarigen/core` to do type-safe event filtering.
+
 ## 1.0.0-next.8
 
 ### Patch Changes
