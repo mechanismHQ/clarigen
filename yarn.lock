@@ -13463,6 +13463,84 @@ tunnel-agent@^0.6.0:
   dependencies:
     safe-buffer "^5.0.1"
 
+turbo-darwin-64@1.2.5-canary.0:
+  version "1.2.5-canary.0"
+  resolved "https://registry.yarnpkg.com/turbo-darwin-64/-/turbo-darwin-64-1.2.5-canary.0.tgz#b119a201a74533a23f5c96bcd3f7d9c4f5ab85b7"
+  integrity sha512-JzgtGPYCr4bXQz6oCNTBOGsu1IXctaK47wAEzDke7kE0bAt4DjvBRcizwQotHxwvRQ/w4Gp8S7tY3IEKDFtaLQ==
+
+turbo-darwin-arm64@1.2.5-canary.0:
+  version "1.2.5-canary.0"
+  resolved "https://registry.yarnpkg.com/turbo-darwin-arm64/-/turbo-darwin-arm64-1.2.5-canary.0.tgz#46b8372fd426b8c3eb9cb368e65816282c5aa039"
+  integrity sha512-YUrDBc8ojJVNWfWo/4bWQY40x417Md/Pb7zWX2hNsVn0JZEqVmEjAlXLCEzlnTnK357lEcXrbtiGw9xU5i3Szg==
+
+turbo-freebsd-64@1.2.5-canary.0:
+  version "1.2.5-canary.0"
+  resolved "https://registry.yarnpkg.com/turbo-freebsd-64/-/turbo-freebsd-64-1.2.5-canary.0.tgz#49b62575716ec77d3c359118c08b106dba302918"
+  integrity sha512-Mh+y2P/ILyTnBdS0Li+5chumUSgH0+sgzN4JXkRYSKrXh/Uf6/VL87y67l50CfJhpJ7Es9nVLTCRfD88Z223ZQ==
+
+turbo-freebsd-arm64@1.2.5-canary.0:
+  version "1.2.5-canary.0"
+  resolved "https://registry.yarnpkg.com/turbo-freebsd-arm64/-/turbo-freebsd-arm64-1.2.5-canary.0.tgz#d4ddb7561c24cea4d9f8dca934aed6a4e9f78cdd"
+  integrity sha512-411adHUPTmRxUzlt/xPfX+simddBbffTYRlYtoJAVMpE0lE3KjG1tbko0IckJ2HyVLmo1q1bZQ+MTkC/yVCMfw==
+
+turbo-linux-32@1.2.5-canary.0:
+  version "1.2.5-canary.0"
+  resolved "https://registry.yarnpkg.com/turbo-linux-32/-/turbo-linux-32-1.2.5-canary.0.tgz#d6b05daebe42b449f18495946106e57d1b7d0412"
+  integrity sha512-Xk+RJHRnZVVAV6lm2idKwGe1aA6lXWeTJJQSZk+gjsiDzIAxGQVpz4ZqKZhqMIcIS/qighL9RuTjHkp6AQs8Ig==
+
+turbo-linux-64@1.2.5-canary.0:
+  version "1.2.5-canary.0"
+  resolved "https://registry.yarnpkg.com/turbo-linux-64/-/turbo-linux-64-1.2.5-canary.0.tgz#46a2a4d1500fcb4f1d4cbc73a9df025e1e2dedff"
+  integrity sha512-97z4kC25orszB0lZtMBfk0z9/IAe8oNGyk45LMvcOJMk+MCwYPCdx4PE8PwbqJpu/vAwR6juYAIevRhtUsz/Iw==
+
+turbo-linux-arm64@1.2.5-canary.0:
+  version "1.2.5-canary.0"
+  resolved "https://registry.yarnpkg.com/turbo-linux-arm64/-/turbo-linux-arm64-1.2.5-canary.0.tgz#b683901371dd8633d1b21813ecb9db2e006d9796"
+  integrity sha512-6a5OduFd4hZ27vIoWd0QCZJhU/OTZ/Nn6546W+9n1gQsFSsl/jpMBMUyDNalIPfPxQ07c/swnaU5IGUtzKSNLw==
+
+turbo-linux-arm@1.2.5-canary.0:
+  version "1.2.5-canary.0"
+  resolved "https://registry.yarnpkg.com/turbo-linux-arm/-/turbo-linux-arm-1.2.5-canary.0.tgz#54a63e0c30de2bcbe6dacfcae64e4d5dce435948"
+  integrity sha512-b4cB7f+6Hc0XMM/SEhjOi9uPHwdEA9njFF0QdQeVixo9dkBWTjPza1i4ffJ2CzlcYAdSYiKrxPE1D7HdCx9QwA==
+
+turbo-linux-mips64le@1.2.5-canary.0:
+  version "1.2.5-canary.0"
+  resolved "https://registry.yarnpkg.com/turbo-linux-mips64le/-/turbo-linux-mips64le-1.2.5-canary.0.tgz#9baf850e7a73a29adfbad00f403ebf3ca1eeef76"
+  integrity sha512-uApneVqS9IITFDuu0YBzwtXORhzdv0xKG7LAFKEPOW/rdkbzq3rzpYmprfJ/fGsHZEwOHtnVlhL5jVVJukwstA==
+
+turbo-linux-ppc64le@1.2.5-canary.0:
+  version "1.2.5-canary.0"
+  resolved "https://registry.yarnpkg.com/turbo-linux-ppc64le/-/turbo-linux-ppc64le-1.2.5-canary.0.tgz#4b336de5d0ae4ad75b26c6432c996e48e498f4e1"
+  integrity sha512-khlkdYYIxaZO3P0d5SzMqzjJmClMt8y4vnSIYL8dj/En9dk/0InTFSt2LRgMJIoe7eW5618+/HNvKfsSYMv5WQ==
+
+turbo-windows-32@1.2.5-canary.0:
+  version "1.2.5-canary.0"
+  resolved "https://registry.yarnpkg.com/turbo-windows-32/-/turbo-windows-32-1.2.5-canary.0.tgz#9a325e16f6bca0b917bc7d920b6213105451ec56"
+  integrity sha512-6MLNDA9z8SVxNfMyaVVnAxDvSyV0iizsw5lITu/qtzGEvGNIv5AGnYjntTHDSnGmmfNsUyTjSdbRutWIOEhAuQ==
+
+turbo-windows-64@1.2.5-canary.0:
+  version "1.2.5-canary.0"
+  resolved "https://registry.yarnpkg.com/turbo-windows-64/-/turbo-windows-64-1.2.5-canary.0.tgz#f913aa72424657cd00bb97d619ce57a44844058e"
+  integrity sha512-WnxQlDBtR7t0bAvFmdp/he2xvR5rv74Pt/KghBpdUtomrZu2yXZlaRjnw2jI2iLu19sOl0B9OYevw0mL6PtNgg==
+
+turbo@1.2.5-canary.0:
+  version "1.2.5-canary.0"
+  resolved "https://registry.yarnpkg.com/turbo/-/turbo-1.2.5-canary.0.tgz#3eaa5f8d5664d7a30fb97ae44333f27e2c7f1184"
+  integrity sha512-ihCg4wkdHXAJjVXfLJ5Ac9Pd6XfaInoq4LIjl1NrbaQb+c7svh9mm86MxdLpvo6sHQtA5Ztd+ah6iID8P/n6Kw==
+  optionalDependencies:
+    turbo-darwin-64 "1.2.5-canary.0"
+    turbo-darwin-arm64 "1.2.5-canary.0"
+    turbo-freebsd-64 "1.2.5-canary.0"
+    turbo-freebsd-arm64 "1.2.5-canary.0"
+    turbo-linux-32 "1.2.5-canary.0"
+    turbo-linux-64 "1.2.5-canary.0"
+    turbo-linux-arm "1.2.5-canary.0"
+    turbo-linux-arm64 "1.2.5-canary.0"
+    turbo-linux-mips64le "1.2.5-canary.0"
+    turbo-linux-ppc64le "1.2.5-canary.0"
+    turbo-windows-32 "1.2.5-canary.0"
+    turbo-windows-64 "1.2.5-canary.0"
+
 tweetnacl@^0.14.3, tweetnacl@~0.14.0:
   version "0.14.5"
   resolved "https://registry.yarnpkg.com/tweetnacl/-/tweetnacl-0.14.5.tgz#5ae68177f192d4456269d108afa93ff8743f4f64"

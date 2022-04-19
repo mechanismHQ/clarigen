@@ -15,9 +15,9 @@
   "scripts": {
     "start": "tsup --watch",
     "dev": "tsup --watch",
-    "build": "shx rm -rf ./dist && tsup",
+    "build": "shx rm -rf ./dist && tsup-node",
     "test": "yarn build-test-types && jest",
-    "lint": "tsdx lint",
+    "lint": "eslint \"src/**/*.{ts,tsx}\" && prettier  --check src/**/*.ts",
     "prepublishOnly": "tsdx build",
     "typecheck": "tsc --noEmit",
     "build-test-types": "cd test && yarn clarigen && cd .."

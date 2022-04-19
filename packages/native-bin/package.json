@@ -16,7 +16,7 @@
     "build": "shx rm -rf ./dist && tsup-node src/index.ts src/direct-install.ts --splitting false",
     "build-installer": "yarn tsc --esModuleInterop --outDir ./installer src/direct-install.ts",
     "test": "jest --passWithNoTests",
-    "lint": "tsdx lint",
+    "lint": "eslint \"src/**/*.{ts,tsx}\" && prettier  --check src/**/*.ts",
     "prepublishOnly": "yarn build",
     "typecheck": "tsc --noEmit",
     "postinstall": "node post-install.js"

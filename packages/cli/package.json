@@ -21,7 +21,7 @@
     "compile": "ncc build src/index.ts --no-source-map-register -e @oclif/command -e @oclif/errors",
     "build-single-file": "yarn compile && oclif-dev readme",
     "test": "jest",
-    "lint": "tsdx lint",
+    "lint": "eslint \"src/**/*.{ts,tsx}\" && prettier  --check src/**/*.ts",
     "typecheck": "tsc --noEmit -p tsconfig-test.json",
     "prepublishOnly": "yarn build"
   },

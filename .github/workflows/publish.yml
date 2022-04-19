@@ -18,8 +18,7 @@ jobs:
         uses: actions/setup-node@v2-beta
         with:
           node-version: 16.9.1
-      - name: Restore lerna cache
-        id: lerna-cache
+      - name: Restore cache
         uses: actions/cache@v2
         with:
           path: |
@@ -27,13 +26,15 @@ jobs:
             */*/node_modules
           key: ${{ runner.os }}-${{ hashFiles('**/yarn.lock') }}
       - name: Install monorepo deps
-        run: npx lerna bootstrap
+        run: yarn
       - name: Build packages
         run: yarn build
       - name: Type checks
         run: yarn typecheck
       - name: Tests
         run: yarn test
+      - name: Lint
+        run: yarn lint
       - name: Stash changes
         run: git stash
       - name: Create Release Pull Request or Publish to npm

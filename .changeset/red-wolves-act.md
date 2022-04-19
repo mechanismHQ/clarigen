@@ -7,4 +7,4 @@
 '@clarigen/web': patch
 ---
 
-Updates internal build processes with tsup
+Updates internal build processes with tsup and turborepo

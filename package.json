@@ -2,11 +2,11 @@
   "name": "root",
   "private": true,
   "scripts": {
-    "build": "lerna run build",
-    "lint": "eslint packages/**/*.{ts,js}",
+    "build": "turbo run build",
+    "lint": "turbo run lint",
     "lint:fix": "eslint --fix packages/**/*.{ts,js}",
-    "test": "lerna run test --no-bail --parallel",
-    "typecheck": "lerna run typecheck --no-bail --parallel",
+    "test": "turbo run test --continue",
+    "typecheck": "turbo run typecheck --continue",
     "publish-packages": "yarn build && yarn changeset publish"
   },
   "prettier": "@stacks/prettier-config",
@@ -30,6 +30,7 @@
     "tsdx": "^0.14.1",
     "tslib": "^2.1.0",
     "tsup": "^5.12.5",
+    "turbo": "1.2.5-canary.0",
     "typedoc": "0.20.36",
     "typescript": "4.5.4"
   },

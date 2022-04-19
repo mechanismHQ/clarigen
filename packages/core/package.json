@@ -16,7 +16,7 @@
     "dev": "tsup --watch",
     "build": "shx rm -rf ./dist && tsup",
     "test": "jest",
-    "lint": "tsdx lint",
+    "lint": "eslint \"src/**/*.{ts,tsx}\" && prettier  --check src/**/*.ts",
     "prepublishOnly": "yarn build",
     "typecheck": "tsc --noEmit"
   },
