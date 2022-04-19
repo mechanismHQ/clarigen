@@ -1,5 +1,11 @@
 # @clarigen/core
 
+## 1.0.0-next.10
+
+### Patch Changes
+
+- [`2e62568`](https://github.com/mechanismHQ/clarigen/commit/2e6256853efab622c3d61039c1d55073cb72ff17) Thanks [@hstove](https://github.com/hstove)! - Updates internal build processes with tsup and turborepo
+
 ## 1.0.0-next.9
 
 ### Patch Changes
