@@ -5,16 +5,15 @@
   "types": "dist/index.d.ts",
   "files": [
     "dist",
-    "installer",
     "post-install.js"
   ],
   "engines": {
     "node": ">=10"
   },
   "scripts": {
-    "start": "tsdx watch",
-    "dev": "tsdx watch",
-    "build": "tsdx build && yarn build-installer",
+    "start": "tsup-node --watch",
+    "dev": "tsup-node --watch",
+    "build": "shx rm -rf ./dist && tsup-node src/index.ts src/direct-install.ts --splitting false",
     "build-installer": "yarn tsc --esModuleInterop --outDir ./installer src/direct-install.ts",
     "test": "jest --passWithNoTests",
     "lint": "tsdx lint",

@@ -4,17 +4,18 @@
       "module": "CommonJS"
     }
   },
-  "extends": "../../tsconfig.json",
+  // "extends": "../../tsconfig.json",
   "compilerOptions": {
     "module": "esnext",
     "lib": ["dom", "esnext"],
     "outDir": "./dist",
     "rootDir": "./src",
+    "esModuleInterop": true,
     "resolveJsonModule": true,
     "moduleResolution": "node",
     "noUnusedLocals": false,
     "noUnusedParameters": false,
     "types": ["jest", "node"]
   },
-  "include": ["./src/**/*"]
+  "include": ["./src/**/*", "./src/*.ts"]
 }

@@ -4,7 +4,13 @@ import {
   getDefaultBinaryFilePath,
   hasStdErr,
 } from '@clarigen/native-bin';
-import { CoreNodeEvent, cvToValue, ResultAssets } from '@clarigen/core';
+import {
+  CoreNodeEvent,
+  CoreNodeEventType,
+  cvToValue,
+  filterEvents,
+  ResultAssets,
+} from '@clarigen/core';
 import { hexToCV } from 'micro-stacks/clarity';
 
 export interface Allocation {
@@ -258,13 +264,9 @@ export async function deployContract({
 }
 
 export function getPrints(events: CoreNodeEvent[]) {
-  const prints: any[] = [];
-  events.forEach(e => {
-    if (e.type === 'contract_event') {
-      const hex = e.contract_event.raw_value;
-      const cv = hexToCV(hex);
-      prints.push(cvToValue(cv));
-    }
+  return filterEvents(events, CoreNodeEventType.ContractEvent).map(e => {
+    const hex = e.contract_event.raw_value;
+    const cv = hexToCV(hex);
+    return cvToValue(cv);
   });
-  return prints;
 }

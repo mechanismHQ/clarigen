@@ -1,8 +1,10 @@
 {
   "version": "1.0.0-next.9",
   "license": "MIT",
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
+  "types": "./dist/index.d.ts",
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "import": "./dist/index.mjs",
   "files": [
     "dist"
   ],
@@ -10,9 +12,9 @@
     "node": ">=10"
   },
   "scripts": {
-    "start": "tsdx watch",
-    "dev": "tsdx watch",
-    "build": "tsdx build",
+    "start": "tsup --watch",
+    "dev": "tsup --watch",
+    "build": "shx rm -rf .dist && tsup",
     "test": "jest --passWithNoTests",
     "lint": "tsdx lint",
     "prepublishOnly": "tsdx build",
@@ -21,7 +23,6 @@
   "prettier": "@stacks/prettier-config",
   "name": "@clarigen/node",
   "author": "Hank Stoever",
-  "module": "dist/web.esm.js",
   "devDependencies": {},
   "dependencies": {
     "@clarigen/core": "1.0.0-next.9",
@@ -29,6 +30,5 @@
   },
   "publishConfig": {
     "access": "public"
-  },
-  "gitHead": "d3825e8cae60fc7a00bbd88a6abb84d1a5a7dfa6"
+  }
 }

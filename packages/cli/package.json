@@ -4,7 +4,8 @@
   "author": "Hank Stoever",
   "version": "1.0.0-next.9",
   "license": "MIT",
-  "main": "dist/index.js",
+  "types": "./dist/index.d.ts",
+  "main": "./dist/index.js",
   "files": [
     "dist",
     "src",
@@ -14,11 +15,11 @@
     "node": ">=10"
   },
   "scripts": {
-    "dev": "tsdx watch",
-    "start": "ts-node-script src/start.ts",
+    "start": "tsup-node --watch",
+    "dev": "tsup-node --watch",
+    "build": "shx rm -rf ./dist && tsup-node src/index.ts src/commands/index.ts --splitting false",
     "compile": "ncc build src/index.ts --no-source-map-register -e @oclif/command -e @oclif/errors",
     "build-single-file": "yarn compile && oclif-dev readme",
-    "build": "rm -rf dist && tsc -b",
     "test": "jest",
     "lint": "tsdx lint",
     "typecheck": "tsc --noEmit -p tsconfig-test.json",
