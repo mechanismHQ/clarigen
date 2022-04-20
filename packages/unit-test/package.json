@@ -1,5 +1,5 @@
 {
-  "version": "1.0.0-next.10",
+  "version": "1.0.0-next.11",
   "license": "MIT",
   "types": "./dist/index.d.ts",
   "main": "./dist/index.js",
@@ -18,7 +18,7 @@
     "build": "shx rm -rf ./dist && tsup-node",
     "test": "yarn build-test-types && jest",
     "lint": "eslint \"src/**/*.{ts,tsx}\" && prettier  --check src/**/*.ts",
-    "prepublishOnly": "tsdx build",
+    "prepublishOnly": "yarn build",
     "typecheck": "tsc --noEmit",
     "build-test-types": "cd test && yarn clarigen && cd .."
   },
@@ -27,12 +27,11 @@
   "author": "Hank Stoever",
   "devDependencies": {},
   "dependencies": {
-    "@clarigen/core": "1.0.0-next.10",
-    "@clarigen/native-bin": "1.0.0-next.10",
+    "@clarigen/core": "1.0.0-next.11",
+    "@clarigen/native-bin": "1.0.0-next.11",
     "micro-stacks": "^0.2.0"
   },
   "publishConfig": {
     "access": "public"
-  },
-  "gitHead": "d3825e8cae60fc7a00bbd88a6abb84d1a5a7dfa6"
+  }
 }
