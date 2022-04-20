@@ -19,6 +19,8 @@ jobs:
             node_modules
             */*/node_modules
           key: ${{ runner.os }}-${{ hashFiles('**/yarn.lock') }}
+      - name: Lerna bootstrap
+        run: npx lerna bootstrap
       - name: Yarn --force
         run: yarn --force
       - name: Build packages
