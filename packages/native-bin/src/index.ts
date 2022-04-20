@@ -11,7 +11,7 @@ export { getTempFilePath } from './fs-util';
  * Should correspond to both a git tag on the blockstack-core repo and a
  * set of clarity-binary distributables uploaded to the cloud storage endpoint.
  */
-export const CORE_SDK_TAG = '2.0.11.3.0';
+export const CORE_SDK_TAG = '2.05.0.1.0';
 
 export const BLOCKSTACK_CORE_SOURCE_PATH_ENV_VAR = 'BLOCKSTACK_CORE_SOURCE_PATH';
 export const CLARITY_CLI_SOURCE_PATH = 'CLARITY_CLI_SOURCE_PATH';

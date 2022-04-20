@@ -1,5 +1,5 @@
 {
-  "version": "1.0.0-next.11",
+  "version": "1.0.0-next.12",
   "license": "MIT",
   "types": "./dist/index.d.ts",
   "main": "./dist/index.js",
@@ -28,7 +28,7 @@
   "devDependencies": {},
   "dependencies": {
     "@clarigen/core": "1.0.0-next.11",
-    "@clarigen/native-bin": "1.0.0-next.11",
+    "@clarigen/native-bin": "1.0.0-next.12",
     "micro-stacks": "^0.2.0"
   },
   "publishConfig": {

@@ -1,5 +1,11 @@
 # @clarigen/native-bin
 
+## 1.0.0-next.12
+
+### Patch Changes
+
+- Updates `@clarigen/native-bin` to use the natively built binaries for macos and linux arm64.
+
 ## 1.0.0-next.11
 
 ### Patch Changes
