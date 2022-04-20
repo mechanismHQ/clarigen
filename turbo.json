@@ -6,8 +6,8 @@
         "^build"
       ],
       "outputs": [
-        "dist",
-        "installer"
+        "dist/**",
+        "installer/**"
       ]
     },
     "test": {
