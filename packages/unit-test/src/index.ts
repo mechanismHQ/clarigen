@@ -1,4 +1,4 @@
-import { createClarityBin, NativeClarityBinProvider } from '@clarigen/native-bin';
+import { NativeClarityBinProvider } from '@clarigen/native-bin';
 import {
   ContractInstances,
   Contracts,
@@ -7,7 +7,13 @@ import {
   ContractCalls,
   ClarityTypes,
 } from '@clarigen/core';
-import { deployContract, deployUtilContract, ClarinetAccounts, UTIL_CONTRACT_ID } from './utils';
+import {
+  deployContract,
+  deployUtilContract,
+  ClarinetAccounts,
+  UTIL_CONTRACT_ID,
+  createClarityBin,
+} from './utils';
 import {
   evalCode,
   mapGet,
@@ -50,7 +56,11 @@ export class TestProvider {
     contracts: T,
     options: FromContractsOptions = {}
   ): Promise<FromContracts<T>> {
-    const clarityBin = options.clarityBin || (await createClarityBin());
+    const clarityBin =
+      options.clarityBin ||
+      (await createClarityBin({
+        allocations: options.accounts,
+      }));
     const instances = {} as ContractInstances<T>;
     await deployUtilContract(clarityBin);
     for (const k in contracts) {
