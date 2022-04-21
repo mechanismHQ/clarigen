@@ -1,5 +1,11 @@
 # @clarigen/test
 
+## 1.0.0-next.13
+
+### Patch Changes
+
+- [#30](https://github.com/mechanismHQ/clarigen/pull/30) [`faa6f3e`](https://github.com/mechanismHQ/clarigen/commit/faa6f3e0b174732e8c9887a711af7e2ece6b258d) Thanks [@hstove](https://github.com/hstove)! - Fixed an issue when passing accounts to `TestProvider.fromContracts`
+
 ## 1.0.0-next.12
 
 ### Patch Changes
