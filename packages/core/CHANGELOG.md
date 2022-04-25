@@ -1,5 +1,13 @@
 # @clarigen/core
 
+## 1.0.0-next.14
+
+### Patch Changes
+
+- [#30](https://github.com/mechanismHQ/clarigen/pull/30) [`a585ecb`](https://github.com/mechanismHQ/clarigen/commit/a585ecb3eb44d2a7b6a6850dcc5f01f76ba43b3c) Thanks [@hstove](https://github.com/hstove)! - Moved to a native `Response` type, instead of from `neverthrow`
+
+* Moves to a native `Response` type, instead of using the 'neverthrow' library.
+
 ## 1.0.0-next.11
 
 ### Patch Changes
