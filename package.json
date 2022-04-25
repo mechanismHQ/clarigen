@@ -8,7 +8,7 @@
     "test": "turbo run test --continue",
     "typecheck": "turbo run typecheck --continue",
     "publish-packages": "yarn build && yarn changeset publish",
-    "public-local": "yarn lerna publish from-package"
+    "publish-local": "yarn lerna publish from-package"
   },
   "prettier": "@stacks/prettier-config",
   "devDependencies": {
