@@ -5,7 +5,9 @@ import {
   getContractIdentifier,
   ContractCall,
   ContractCalls,
-  ClarityTypes,
+  Response,
+  expectOk,
+  expectErr,
 } from '@clarigen/core';
 import {
   deployContract,
@@ -95,45 +97,29 @@ export class TestProvider {
     return result.value;
   }
 
-  public async roOk<Ok, Err>(
-    tx: ContractCall<ClarityTypes.Response<Ok, Err>>
-  ): Promise<ReadOnlyResult<Ok>> {
+  public async roOk<Ok, Err>(tx: ContractCall<Response<Ok, Err>>): Promise<ReadOnlyResult<Ok>> {
     const result = await this.ro(tx);
-    return result.value.match(
-      ok => {
-        return {
-          ...result,
-          value: ok,
-        };
-      },
-      err => {
-        throw new Error(`Expected OK, received error: ${err}`);
-      }
-    );
+    const value = expectOk(result.value);
+    return {
+      ...result,
+      value,
+    };
   }
 
-  public async roErr<Ok, Err>(
-    tx: ContractCall<ClarityTypes.Response<Ok, Err>>
-  ): Promise<ReadOnlyResult<Err>> {
+  public async roErr<Ok, Err>(tx: ContractCall<Response<Ok, Err>>): Promise<ReadOnlyResult<Err>> {
     const result = await this.ro(tx);
-    return result.value.match(
-      ok => {
-        throw new Error(`Expected err, received ok: ${ok}`);
-      },
-      err => {
-        return {
-          ...result,
-          value: err,
-        };
-      }
-    );
+    const value = expectErr(result.value);
+    return {
+      ...result,
+      value,
+    };
   }
 
-  public async rovOk<Ok, Err>(tx: ContractCall<ClarityTypes.Response<Ok, Err>>): Promise<Ok> {
+  public async rovOk<Ok, Err>(tx: ContractCall<Response<Ok, Err>>): Promise<Ok> {
     return (await this.roOk(tx)).value;
   }
 
-  public async rovErr<Ok, Err>(tx: ContractCall<ClarityTypes.Response<Ok, Err>>): Promise<Err> {
+  public async rovErr<Ok, Err>(tx: ContractCall<Response<Ok, Err>>): Promise<Err> {
     return (await this.roErr(tx)).value;
   }
 

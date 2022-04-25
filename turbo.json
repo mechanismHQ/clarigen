@@ -23,6 +23,7 @@
       "cache": false
     },
     "typecheck": {
+      "dependsOk": ["^build"],
       "outputs": []
     }
   }

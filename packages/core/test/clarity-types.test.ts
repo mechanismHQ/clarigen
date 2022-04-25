@@ -1,6 +1,5 @@
-import { cvToValue, parseToCV } from '../src/clarity-types';
+import { cvToValue, parseToCV, ok } from '../src/clarity-types';
 import { contractPrincipalCV, intCV, responseOkCV, uintCV } from 'micro-stacks/clarity';
-import { ok } from 'neverthrow';
 
 describe('cvToValue', () => {
   test('can turn clarity negative integer into bignum', () => {

@@ -30,11 +30,31 @@ import {
   parseToCV as _parseToCV,
 } from 'micro-stacks/transactions';
 import { bytesToAscii, bytesToHex } from 'micro-stacks/common';
-import { ok, err, Result } from 'neverthrow';
 
-// eslint-disable-next-line @typescript-eslint/no-namespace
-export namespace ClarityTypes {
-  export type Response<Ok, Err> = Result<Ok, Err>;
+export interface ResponseOk<T> {
+  value: T;
+  isOk: true;
+}
+
+export interface ResponseErr<T> {
+  value: T;
+  isOk: false;
+}
+
+export type Response<Ok, Err> = ResponseOk<Ok> | ResponseErr<Err>;
+
+export function ok<T>(value: T): ResponseOk<T> {
+  return {
+    isOk: true,
+    value,
+  };
+}
+
+export function err<T>(value: T): ResponseErr<T> {
+  return {
+    isOk: false,
+    value,
+  };
 }
 
 export interface ClarityAbiMap {
@@ -61,8 +81,8 @@ function principalToString(principal: PrincipalCV): string {
 
 /**
  * @param val - ClarityValue
- * @param returnResponse - if true, this will return a "response" object from the `neverthrow`
- * library. Otherwise, it returns the inner value of the response (whether ok or err)
+ * @param returnResponse - if true, this will return a "response" object.
+ * Otherwise, it returns the inner value of the response (whether ok or err)
  */
 export function cvToValue<T = any>(val: ClarityValue, returnResponse = false): T {
   switch (val.type) {
@@ -224,20 +244,16 @@ export function transformArgsToCV(func: ClarityAbiFunction, args: any[]): Clarit
   return args.map((arg, index) => parseToCV(arg, func.args[index].type));
 }
 
-export function expectOk<Ok>(response: ClarityTypes.Response<Ok, any>): Ok {
-  return response.match(
-    ok => ok,
-    err => {
-      throw new Error(`Expected OK, received error: ${err}`);
-    }
-  );
+export function expectOk<Ok>(response: Response<Ok, any>): Ok {
+  if (response.isOk) {
+    return response.value;
+  }
+  throw new Error(`Expected OK, received error: ${response.value}`);
 }
 
-export function expectErr<Err>(response: ClarityTypes.Response<any, Err>): Err {
-  return response.match(
-    ok => {
-      throw new Error(`Expected Err, received Ok: ${ok}`);
-    },
-    err => err
-  );
+export function expectErr<Err>(response: Response<any, Err>): Err {
+  if (!response.isOk) {
+    return response.value;
+  }
+  throw new Error(`Expected Err, received ok: ${response.value}`);
 }

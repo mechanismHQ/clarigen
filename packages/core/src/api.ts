@@ -7,7 +7,7 @@ import { cvToHex, hexToCV } from 'micro-stacks/clarity';
 import { fetchPrivate } from 'micro-stacks/common';
 import { StacksNetwork } from 'micro-stacks/network';
 import { broadcastTransaction, StacksTransaction } from 'micro-stacks/transactions';
-import { ClarityTypes, cvToValue, expectErr, expectOk } from './clarity-types';
+import { Response, cvToValue, expectErr, expectOk } from './clarity-types';
 import { ContractCall, ContractCalls } from './pure';
 
 interface ApiOptions {
@@ -46,7 +46,7 @@ export async function ro<T>(tx: ContractCall<T>, options: ApiOptions): Promise<T
 }
 
 export async function roOk<Ok>(
-  tx: ContractCall<ClarityTypes.Response<Ok, any>>,
+  tx: ContractCall<Response<Ok, any>>,
   options: ApiOptions
 ): Promise<Ok> {
   const result = await ro(tx, options);
@@ -54,7 +54,7 @@ export async function roOk<Ok>(
 }
 
 export async function roErr<Err>(
-  tx: ContractCall<ClarityTypes.Response<any, Err>>,
+  tx: ContractCall<Response<any, Err>>,
   options: ApiOptions
 ): Promise<Err> {
   const result = await ro(tx, options);

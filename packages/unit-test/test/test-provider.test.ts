@@ -1,6 +1,6 @@
 import { TestProvider } from '../src';
 import { contracts, TesterContract, accounts } from './clarinet-project/clarigen';
-import { ok } from 'neverthrow';
+import { ok } from '@clarigen/core';
 
 let contract: TesterContract;
 let addr: string;

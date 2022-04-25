@@ -1,7 +1,11 @@
 import { ClarityAbiFunction, ClarityValue } from 'micro-stacks/clarity';
-import { Result } from 'neverthrow';
-import { ClarityTypes } from '..';
-import { ClarityAbi, ClarityAbiMap, parseToCV, transformArgsToCV } from '../clarity-types';
+import {
+  ClarityAbi,
+  ClarityAbiMap,
+  parseToCV,
+  transformArgsToCV,
+  Response,
+} from '../clarity-types';
 import { toCamelCase } from '../utils';
 
 export interface ContractCall<T> {
@@ -27,11 +31,11 @@ export type ContractReturn<
 
 export type ContractReturnOk<
   C extends ContractFn<ContractCalls.ReadOnly<any>>
-> = ContractReturn<C> extends Result<infer O, any> ? O : unknown;
+> = ContractReturn<C> extends Response<infer O, any> ? O : unknown;
 
 export type ContractReturnErr<
   C extends ContractFn<ContractCalls.ReadOnly<any>>
-> = ContractReturn<C> extends Result<any, infer E> ? E : unknown;
+> = ContractReturn<C> extends Response<any, infer E> ? E : unknown;
 
 export interface MapGet<Key, Val> {
   map: ClarityAbiMap;
@@ -44,7 +48,7 @@ export interface MapGet<Key, Val> {
 // eslint-disable-next-line @typescript-eslint/no-namespace
 export namespace ContractCalls {
   export type ReadOnly<T> = ContractCall<T>;
-  export type Public<Ok, Err> = ContractCall<ClarityTypes.Response<Ok, Err>>;
+  export type Public<Ok, Err> = ContractCall<Response<Ok, Err>>;
   export type Private<T> = ContractCall<T>;
   export type Map<Key, Val> = MapGet<Key, Val>;
 }
