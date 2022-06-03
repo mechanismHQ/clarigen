@@ -122,14 +122,20 @@ export const evalRaw = async ({
   if (process.env.PRINT_CLARIGEN_STDERR && receipt.stderr) {
     console.log(receipt.stderr);
   }
-  const response: EvalResult = JSON.parse(receipt.stdout);
-  if (!response.success) {
-    throw new Error(JSON.stringify(response.error, null, 2));
+  try {
+    const response: EvalResult = JSON.parse(receipt.stdout);
+    if (!response.success) {
+      throw new Error(JSON.stringify(response.error, null, 2));
+    }
+    return {
+      ...response,
+      stderr: receipt.stderr,
+    };
+  } catch (error) {
+    console.error('[@clarigen/test] Invalid JSON result from `clarity-cli`:', receipt.stdout);
+    console.error('[@clarigen/test] stderr:', receipt.stderr);
+    throw error;
   }
-  return {
-    ...response,
-    stderr: receipt.stderr,
-  };
 };
 
 export const evalJson = ({

@@ -25,6 +25,9 @@
     "typecheck": {
       "dependsOk": ["^build"],
       "outputs": []
+    },
+    "publish:dev": {
+      "outputs": []
     }
   }
 }
