@@ -1,5 +1,12 @@
 # @clarigen/native-bin
 
+## 1.0.0-next.15
+
+### Patch Changes
+
+- Updated dependencies [[`6916cb8`](https://github.com/mechanismHQ/clarigen/commit/6916cb8ea69715634399a4a48680323257c35719)]:
+  - @clarigen/core@1.0.0-next.15
+
 ## 1.0.0-next.14
 
 ### Patch Changes

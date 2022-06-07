@@ -1,5 +1,15 @@
 # @clarigen/test
 
+## 1.0.0-next.15
+
+### Patch Changes
+
+- [#30](https://github.com/mechanismHQ/clarigen/pull/30) [`1e7fd30`](https://github.com/mechanismHQ/clarigen/commit/1e7fd302e0cf74e6f7bd45ca0b80399ba969a1e4) Thanks [@hstove](https://github.com/hstove)! - Adds coverage capabilities to `@clarigen/test`
+
+- Updated dependencies [[`6916cb8`](https://github.com/mechanismHQ/clarigen/commit/6916cb8ea69715634399a4a48680323257c35719)]:
+  - @clarigen/core@1.0.0-next.15
+  - @clarigen/native-bin@1.0.0-next.15
+
 ## 1.0.0-next.14
 
 ### Patch Changes
