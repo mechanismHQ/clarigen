@@ -12,6 +12,11 @@ import {
   ResultAssets,
 } from '@clarigen/core';
 import { hexToCV } from 'micro-stacks/clarity';
+import { resolve } from 'path';
+
+function coverageArgs(folder?: string) {
+  return folder ? ['--c', folder] : [];
+}
 
 export interface Allocation {
   principal: string;
@@ -54,17 +59,20 @@ export const executeJson = async ({
   functionName,
   provider,
   args = [],
+  coverageFolder,
 }: {
   contractAddress: string;
   senderAddress: string;
   provider: NativeClarityBinProvider;
   functionName: string;
   args?: string[];
+  coverageFolder?: string;
 }): Promise<ExecuteResult> => {
   const result = await provider.runCommand([
     'execute',
     '--costs',
     '--assets',
+    ...coverageArgs(coverageFolder),
     provider.dbFilePath,
     contractAddress,
     functionName,
@@ -74,17 +82,24 @@ export const executeJson = async ({
   if (process.env.PRINT_CLARIGEN_STDERR && result.stderr) {
     console.log(result.stderr);
   }
-  const response: ExecuteResult = JSON.parse(result.stdout);
-  if (response && 'error' in response) {
-    throw new Error(`Transaction error: ${JSON.stringify(response.error, null, 2)}`);
+  try {
+    const response: ExecuteResult = JSON.parse(result.stdout);
+    if (response && 'error' in response) {
+      throw new Error(`Transaction error: ${JSON.stringify(response.error, null, 2)}`);
+    }
+    if (result.exitCode !== 0) {
+      throw new Error(`Execution error: ${result.stderr}`);
+    }
+    return {
+      ...response,
+      stderr: result.stderr,
+    };
+  } catch (error) {
+    // console.error('[clarigen]: error parsing execute result:', result.stdout);
+    throw new Error(
+      `Error parsing clarity execution.\nstdout: ${result.stdout}\nstderr:${result.stderr}`
+    );
   }
-  if (result.exitCode !== 0) {
-    throw new Error(`Execution error: ${result.stderr}`);
-  }
-  return {
-    ...response,
-    stderr: result.stderr,
-  };
 };
 
 interface EvalOk {
@@ -108,13 +123,21 @@ export const evalRaw = async ({
   contractAddress,
   code,
   provider,
+  coverageFolder,
 }: {
   contractAddress: string;
   provider: NativeClarityBinProvider;
   code: string;
+  coverageFolder?: string;
 }): Promise<Eval> => {
   const receipt = await provider.runCommand(
-    ['eval_at_chaintip', '--costs', contractAddress, provider.dbFilePath],
+    [
+      'eval_at_chaintip',
+      '--costs',
+      ...coverageArgs(coverageFolder),
+      contractAddress,
+      provider.dbFilePath,
+    ],
     {
       stdin: code,
     }
@@ -143,17 +166,20 @@ export const evalJson = ({
   functionName,
   provider,
   args = [],
+  coverageFolder,
 }: {
   contractAddress: string;
   functionName: string;
   provider: NativeClarityBinProvider;
   args?: string[];
+  coverageFolder?: string;
 }): Promise<Eval> => {
   const code = `(${functionName} ${args.join(' ')})`;
   return evalRaw({
     contractAddress,
     provider,
     code,
+    coverageFolder,
   });
 };
 
@@ -202,7 +228,7 @@ export const createClarityBin = async ({
   const provider = new NativeClarityBinProvider(dbFileName, binFile);
   const args = ['initialize', '-', dbFileName];
   if (testnet) args.push('--testnet');
-  await provider.runCommand(args, {
+  const receipt = await provider.runCommand(args, {
     stdin: stringifyAllocations(_allocations),
   });
   return provider;
@@ -229,10 +255,12 @@ export async function deployContract({
   contractIdentifier,
   contractFilePath,
   provider,
+  coverageFolder,
 }: {
   contractIdentifier: string;
   contractFilePath: string;
   provider: NativeClarityBinProvider;
+  coverageFolder?: string;
 }) {
   const receipt = await provider.runCommand([
     'launch',
@@ -241,6 +269,7 @@ export async function deployContract({
     provider.dbFilePath,
     '--costs',
     '--assets',
+    ...coverageArgs(coverageFolder),
   ]);
   if (hasStdErr(receipt.stderr)) {
     throw new Error(`Error on ${contractFilePath}:

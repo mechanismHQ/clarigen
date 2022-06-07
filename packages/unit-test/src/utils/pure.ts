@@ -49,15 +49,21 @@ function makeEvalResult<T>(result: Eval): ReadOnlyResult<T> {
   };
 }
 
-export async function ro<T>(
-  tx: ContractCall<T>,
-  bin: NativeClarityBinProvider
-): Promise<ReadOnlyResult<T>> {
+export async function ro<T>({
+  tx,
+  bin,
+  coverageFolder,
+}: {
+  tx: ContractCall<T>;
+  bin: NativeClarityBinProvider;
+  coverageFolder?: string;
+}): Promise<ReadOnlyResult<T>> {
   const result = await evalJson({
     functionName: tx.function.name,
     args: formatArguments(tx.functionArgs),
     contractAddress: getIdentifier(tx),
     provider: bin,
+    coverageFolder,
   });
   return makeEvalResult(result);
 }
@@ -66,15 +72,18 @@ export async function evalCode<T>({
   contractAddress,
   code,
   bin,
+  coverageFolder,
 }: {
   contractAddress: string;
   code: string;
   bin: NativeClarityBinProvider;
+  coverageFolder?: string;
 }): Promise<ReadOnlyResult<T>> {
   const result = await evalRaw({
     contractAddress,
     code,
     provider: bin,
+    coverageFolder,
   });
   return makeEvalResult(result);
 }
@@ -106,10 +115,12 @@ export async function tx<Ok, Err>({
   tx,
   senderAddress,
   bin,
+  coverageFolder,
 }: {
   tx: ContractCalls.Public<Ok, Err>;
   senderAddress: string;
   bin: NativeClarityBinProvider;
+  coverageFolder?: string;
 }): Promise<PublicResult<Ok, Err>> {
   const result = await executeJson({
     contractAddress: getIdentifier(tx),
@@ -117,6 +128,7 @@ export async function tx<Ok, Err>({
     provider: bin,
     functionName: tx.function.name,
     args: formatArguments(tx.functionArgs),
+    coverageFolder,
   });
   const resultCV = hexToCV(result.output_serialized);
   const value = cvToValue(resultCV);

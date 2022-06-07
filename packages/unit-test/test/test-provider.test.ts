@@ -1,4 +1,4 @@
-import { TestProvider } from '../src';
+import { TestProvider, setupCoverage, finishCoverage } from '../src';
 import { contracts, TesterContract, accounts } from './clarinet-project/clarigen';
 import { ok } from '@clarigen/core';
 
@@ -9,11 +9,19 @@ let t: TestProvider;
 const alice = accounts.deployer.address;
 
 beforeAll(async () => {
-  const { deployed, provider } = await TestProvider.fromContracts(contracts, { accounts });
+  // const coverageFolder = await setupCoverage('coverage');
+  const { deployed, provider } = await TestProvider.fromContracts(contracts, {
+    accounts,
+    // coverageFolder,
+  });
   contract = deployed.tester.contract;
   addr = deployed.tester.identifier;
   t = provider;
 });
+
+// afterAll(async () => {
+//   await finishCoverage(t.clarityBin, t.coverageFolder);
+// });
 
 test('can call read-only fn', async () => {
   const result = await t.ro(contract.echo('asdf'));

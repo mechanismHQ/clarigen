@@ -25,6 +25,7 @@ import {
   ro,
   tx as _tx,
 } from './utils/pure';
+import { resolve } from 'path';
 export type { PublicResultErr, PublicResultOk, ReadOnlyResult } from './utils/pure';
 export {
   Allocation,
@@ -35,11 +36,14 @@ export {
   executeJson,
   evalJson,
   makeRandomAddress,
+  setupCoverage,
+  finishCoverage,
 } from './utils';
 
 interface FromContractsOptions {
   accounts?: ClarinetAccounts;
   clarityBin?: NativeClarityBinProvider;
+  coverageFolder?: string;
 }
 
 interface FromContracts<T extends Contracts<any>> {
@@ -49,6 +53,7 @@ interface FromContracts<T extends Contracts<any>> {
 
 export class TestProvider {
   public clarityBin: NativeClarityBinProvider;
+  public coverageFolder?: string;
 
   constructor(clarityBin: NativeClarityBinProvider) {
     this.clarityBin = clarityBin;
@@ -64,6 +69,10 @@ export class TestProvider {
         allocations: options.accounts,
       }));
     const instances = {} as ContractInstances<T>;
+    let coverageFolder = options.coverageFolder;
+    if (process.env.CLARIGEN_COVERAGE) {
+      coverageFolder = resolve(process.cwd(), 'coverage');
+    }
     await deployUtilContract(clarityBin);
     for (const k in contracts) {
       if (Object.prototype.hasOwnProperty.call(contracts, k)) {
@@ -73,6 +82,7 @@ export class TestProvider {
           contractIdentifier: identifier,
           contractFilePath: contract.contractFile,
           provider: clarityBin,
+          coverageFolder,
         });
         const instance = contract.contract(contract.address, contract.name);
         instances[k] = {
@@ -82,6 +92,7 @@ export class TestProvider {
       }
     }
     const provider = new this(clarityBin);
+    provider.coverageFolder = coverageFolder;
     return {
       deployed: instances,
       provider,
@@ -89,7 +100,7 @@ export class TestProvider {
   }
 
   public ro<T>(tx: ContractCall<T>): Promise<ReadOnlyResult<T>> {
-    return ro(tx, this.clarityBin);
+    return ro({ tx, bin: this.clarityBin, coverageFolder: this.coverageFolder });
   }
 
   public async rov<T>(tx: ContractCall<T>): Promise<T> {
@@ -128,6 +139,7 @@ export class TestProvider {
       tx,
       senderAddress,
       bin: this.clarityBin,
+      coverageFolder: this.coverageFolder,
     });
   }
 
@@ -154,6 +166,7 @@ export class TestProvider {
       contractAddress,
       code,
       bin: this.clarityBin,
+      coverageFolder: this.coverageFolder,
     });
   }
 

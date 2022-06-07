@@ -12,12 +12,12 @@ export const contracts = {
 export const accounts = {
   "deployer": {
     mnemonic: "fetch outside black test wash cover just actual execute nice door want airport betray quantum stamp fish act pen trust portion fatigue scissors vague",
-    balance: 1000000000000000000000n,
+    balance: 1000000000000000n,
     address: "ST1HTBVD3JG9C05J7HBJTHGR0GGW7KXW28M5JS8QE",
   },
   "wallet_1": {
     mnemonic: "spoil sock coyote include verify comic jacket gain beauty tank flush victory illness edge reveal shallow plug hobby usual juice harsh pact wreck eight",
-    balance: 1000000000000000000000n,
+    balance: 1000000000000000n,
     address: "ST1J4G6RR643BCG8G8SR6M2D9Z9KXT2NJDRK3FBTK",
   },
   "wallet_2": {
