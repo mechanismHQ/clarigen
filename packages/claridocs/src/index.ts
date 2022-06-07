@@ -1,17 +1,25 @@
 import { ClarityAbi } from '@clarigen/core';
 import { ClarityAbiFunction } from 'micro-stacks/clarity';
+export * from './markdown';
 
 export const FN_TYPES = ['read-only', 'public', 'private'];
 
+export type ClarityAbiArg = ClarityAbiFunction['args'][0];
+
 export interface ClaridocFunction {
   abi: ClarityAbiFunction;
-  comments: string[];
+  comments: Comments;
   startLine: number;
   source: string[];
 }
 
 export interface ClaridocContract {
   functions: ClaridocFunction[];
+  comments: string[];
+}
+
+export interface ClaridocParam {
+  abi: ClarityAbiArg;
   comments: string[];
 }
 
@@ -41,6 +49,7 @@ export function createContractDocInfo({
         contract.functions.push(currentFn);
         currentFn = undefined;
       }
+      return;
     }
     // Are we gathering comments?
     if (isComment(line)) {
@@ -70,12 +79,18 @@ export function createContractDocInfo({
         return;
       }
       parensCount = traceParens(line, 0);
+      const metaComments = parseComments(comments, abiFn);
       currentFn = {
         abi: abiFn,
-        comments,
+        comments: metaComments,
         startLine: lineNumber,
         source: [line],
       };
+      if (parensCount === 0) {
+        // end of fn - single line fn
+        contract.functions.push(currentFn);
+        currentFn = undefined;
+      }
       comments = [];
     }
   });
@@ -108,4 +123,54 @@ export function traceParens(line: string, count: number) {
     if (char === ')') newCount--;
   });
   return newCount;
+}
+
+export interface Comments {
+  params: Record<string, ClaridocParam>;
+  text: string[];
+}
+
+export function parseComments(comments: string[], abi: ClarityAbiFunction): Comments {
+  // const params: Record<string, ClaridocParam> = {};
+  let curParam: string | undefined;
+  // const newComments: string[] = [];
+  const parsed: Comments = {
+    text: [],
+    params: {},
+  };
+  comments.forEach(line => {
+    const paramMatches = line.match(/\s*@param\s([\w|\-]+)([;|-|\s]*)(.*)/);
+
+    if (paramMatches === null) {
+      if (!curParam || line.trim() === '') {
+        curParam = undefined;
+        parsed.text.push(line);
+      } else {
+        parsed.params[curParam].comments.push(line);
+      }
+      return;
+    }
+
+    const [full, name, separator, rest] = paramMatches;
+    const arg = abi.args.find(arg => arg.name === name);
+    if (!arg) {
+      console.debug(`[claridocs]: Unable to find ABI for @param ${name}`);
+      return;
+    }
+    curParam = name;
+    parsed.params[curParam] = {
+      abi: arg,
+      comments: [rest],
+    };
+  });
+
+  abi.args.forEach(arg => {
+    if (!parsed.params[arg.name]) {
+      parsed.params[arg.name] = {
+        abi: arg,
+        comments: [],
+      };
+    }
+  });
+  return parsed;
 }

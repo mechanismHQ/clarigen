@@ -5,3 +5,7 @@ name = "clarinet"
 [contracts.simple]
 path = "contracts/simple.clar"
 depends_on = []
+
+[contracts.ext]
+path = "contracts/external/ext.clar"
+depends_on = []

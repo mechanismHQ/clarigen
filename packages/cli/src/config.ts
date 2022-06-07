@@ -16,6 +16,7 @@ export interface ConfigContract {
 export interface ConfigFileContents {
   outputDir: string;
   clarinet: string;
+  docs?: string;
 }
 
 export interface ConfigFile extends ConfigFileContents {

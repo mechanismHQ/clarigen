@@ -1,4 +1,5 @@
 {
   "outputDir": "test/clarinet-project/clarigen",
-  "clarinet": "test/clarinet-project"
+  "clarinet": "test/clarinet-project",
+  "docs": "test/docs"
 }

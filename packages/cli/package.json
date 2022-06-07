@@ -51,6 +51,7 @@
   "dependencies": {
     "@clarigen/core": "1.0.0-next.14",
     "@clarigen/native-bin": "1.0.0-next.14",
+    "@clarigen/claridocs": "1.0.0-next.14",
     "@ltd/j-toml": "1.12.2",
     "@oclif/command": "^1.8.0",
     "@oclif/config": "^1.17.0",

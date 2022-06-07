@@ -3,6 +3,10 @@
 
 (define-map simple-map uint bool)
 
+;; Add a key/val to map
+;;
+;; @param key; key for the map
+;; @param val; value to set
 (define-public (set-in-map (key uint) (val bool))
   (ok (map-set simple-map key val))
 )

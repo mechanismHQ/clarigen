@@ -12,6 +12,7 @@ import {
 import { resolve, relative, dirname } from 'path';
 import { mkdir, writeFile } from 'fs/promises';
 import { getProjectConfig } from './config';
+import { generateMarkdownDoc } from './docs';
 
 export const generateFilesForContract = async ({
   contractFile: _contractFile,
@@ -20,6 +21,7 @@ export const generateFilesForContract = async ({
   contractAddress,
   dirName,
   contractName,
+  docsPath,
 }: {
   contractFile: string;
   outputFolder: string;
@@ -27,6 +29,7 @@ export const generateFilesForContract = async ({
   contractAddress: string;
   dirName?: string;
   contractName: string;
+  docsPath?: string;
 }) => {
   const contractFile = resolve(process.cwd(), _contractFile);
 
@@ -43,6 +46,16 @@ export const generateFilesForContract = async ({
     contractName,
   });
   const abiFile = generateInterfaceFile({ contractName, abi });
+
+  if (typeof docsPath !== 'undefined') {
+    await generateMarkdownDoc({
+      contractFile,
+      contractName,
+      abi,
+      docsPath,
+      dirName,
+    });
+  }
 
   const outputPath = resolve(outputFolder, dirName || '.', contractName);
   await mkdir(outputPath, { recursive: true });
@@ -68,6 +81,7 @@ export const generateProject = async (projectPath: string) => {
       contractAddress: contract.address,
       dirName,
       contractName: contract.name,
+      docsPath: configFile.docs,
     });
   }
 
