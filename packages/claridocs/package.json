@@ -14,16 +14,19 @@
   "scripts": {
     "start": "tsup --watch",
     "dev": "tsup --watch",
-    "build": "shx rm -rf dist && tsup",
+    "build": "shx rm -rf dist && tsup-node",
     "test": "jest --passWithNoTests",
     "lint": "eslint \"src/**/*.{ts,tsx}\" && prettier  --check src/**/*.ts",
     "prepublishOnly": "yarn build",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "build-test-types": "cd test && yarn clarigen && cd .."
   },
   "prettier": "@stacks/prettier-config",
-  "name": "@clarigen/node",
+  "name": "@clarigen/claridocs",
   "author": "Hank Stoever",
-  "devDependencies": {},
+  "devDependencies": {
+    "@clarigen/cli": "1.0.0-next.14"
+  },
   "dependencies": {
     "@clarigen/core": "1.0.0-next.14",
     "micro-stacks": "^0.2.0"
