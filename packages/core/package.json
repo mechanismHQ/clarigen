@@ -14,7 +14,7 @@
   "scripts": {
     "start": "tsup --watch",
     "dev": "tsup --watch",
-    "build": "shx rm -rf ./dist && tsup",
+    "build": "shx rm -rf ./dist && tsup && node make-deno.js",
     "test": "jest",
     "lint": "eslint \"src/**/*.{ts,tsx}\" && prettier  --check src/**/*.ts",
     "prepublishOnly": "yarn build",

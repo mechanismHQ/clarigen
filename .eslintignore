@@ -2,3 +2,5 @@ node_modules/
 *.d.ts
 packages/cli/test/sample-project
 packages/cli/test/clarion-project
+packages/core/dist/deno
+packages/cli/tmp/tests/deno

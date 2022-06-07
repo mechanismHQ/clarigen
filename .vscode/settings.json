@@ -1,0 +1,6 @@
+{
+  "deno.enablePaths": [
+    "packages/cli/tmp/tests/deno",
+    "packages/core/dist/deno"
+  ]
+}

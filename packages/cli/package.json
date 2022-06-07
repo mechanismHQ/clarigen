@@ -23,7 +23,8 @@
     "test": "jest",
     "lint": "eslint \"src/**/*.{ts,tsx}\" && prettier  --check src/**/*.ts",
     "typecheck": "tsc --noEmit -p tsconfig-test.json",
-    "prepublishOnly": "yarn build"
+    "prepublishOnly": "yarn build",
+    "demo": "yarn build && node bin/run"
   },
   "bin": {
     "clarigen": "./bin/run"
