@@ -1,5 +1,15 @@
 # @clarigen/test
 
+## 1.0.0-next.17
+
+### Patch Changes
+
+- [#30](https://github.com/mechanismHQ/clarigen/pull/30) [`1a94545`](https://github.com/mechanismHQ/clarigen/commit/1a94545e482d42cc842e241d5484c69bb9188e7c) Thanks [@hstove](https://github.com/hstove)! - Fixed a bug where the CLI exported invalid types for Response
+
+- Updated dependencies [[`1a94545`](https://github.com/mechanismHQ/clarigen/commit/1a94545e482d42cc842e241d5484c69bb9188e7c)]:
+  - @clarigen/core@1.0.0-next.17
+  - @clarigen/native-bin@1.0.0-next.17
+
 ## 1.0.0-next.16
 
 ### Patch Changes
