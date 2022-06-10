@@ -1,5 +1,5 @@
 {
-  "version": "1.0.0-next.15",
+  "version": "1.0.0-next.16",
   "license": "MIT",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -31,7 +31,7 @@
     "@types/unzipper": "^0.10.3"
   },
   "dependencies": {
-    "@clarigen/core": "1.0.0-next.15",
+    "@clarigen/core": "1.0.0-next.16",
     "fs-extra": "^10.0.0",
     "node-fetch": "^2.6.0",
     "unzipper": "^0.10.11"

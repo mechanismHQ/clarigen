@@ -1,5 +1,15 @@
 # @clarigen/test
 
+## 1.0.0-next.16
+
+### Patch Changes
+
+- [#30](https://github.com/mechanismHQ/clarigen/pull/30) [`f1cc407`](https://github.com/mechanismHQ/clarigen/commit/f1cc407fe3430e79468d38b5acdb60cf051ea5c5) Thanks [@hstove](https://github.com/hstove)! - Adds an index-level docs page when generating docs
+
+- Updated dependencies [[`f1cc407`](https://github.com/mechanismHQ/clarigen/commit/f1cc407fe3430e79468d38b5acdb60cf051ea5c5)]:
+  - @clarigen/core@1.0.0-next.16
+  - @clarigen/native-bin@1.0.0-next.16
+
 ## 1.0.0-next.15
 
 ### Patch Changes
