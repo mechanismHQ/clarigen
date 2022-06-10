@@ -25,7 +25,7 @@
   "name": "@clarigen/claridocs",
   "author": "Hank Stoever",
   "devDependencies": {
-    "@clarigen/cli": "1.0.0-next.15"
+    
   },
   "dependencies": {
     "@clarigen/core": "1.0.0-next.15",

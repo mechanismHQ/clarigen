@@ -12,7 +12,7 @@ import {
 import { resolve, relative, dirname } from 'path';
 import { mkdir, writeFile } from 'fs/promises';
 import { getProjectConfig } from './config';
-import { generateMarkdownDoc } from './docs';
+import { generateDocsIndex, generateMarkdownDoc } from './docs';
 
 export const generateFilesForContract = async ({
   contractFile: _contractFile,
@@ -86,6 +86,7 @@ export const generateProject = async (projectPath: string) => {
   }
 
   const indexFile = generateProjectIndexFile(configFile);
+  await generateDocsIndex(configFile);
 
   const indexPath = resolve(outputFolder, 'index.ts');
   await writeFile(indexPath, indexFile);
