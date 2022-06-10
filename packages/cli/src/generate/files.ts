@@ -115,7 +115,7 @@ export const ${varName}Info: Contract<${contractType}> = {
 export const generateTypesFile = (abi: ClarityAbi, contractName: string) => {
   const name = toCamelCase(contractName, true);
   const typings = makePureTypes(abi);
-  const fileContents = `import { ClarityTypes, ContractCalls } from '@clarigen/core';
+  const fileContents = `import { Response, ContractCalls } from '@clarigen/core';
 
 // prettier-ignore
 export interface ${name}Contract {

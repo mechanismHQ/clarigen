@@ -41,7 +41,7 @@ export const jsTypeFromAbiType = (
   } else if (isClarityAbiResponse(val)) {
     const ok: any = jsTypeFromAbiType(val.response.ok);
     const err: any = jsTypeFromAbiType(val.response.error);
-    return `ClarityTypes.Response<${ok}, ${err}>`;
+    return `Response<${ok}, ${err}>`;
   } else if (isClarityAbiOptional(val)) {
     const innerType = jsTypeFromAbiType(val.optional);
     return `${innerType} | null`;

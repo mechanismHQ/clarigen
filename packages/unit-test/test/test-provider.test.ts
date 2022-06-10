@@ -65,6 +65,9 @@ describe('read-only with response', () => {
     const result = await t.roOk(contract.roResp(false));
     expect(result.value).toEqual('asdf');
 
+    const ok = await t.rovOk(contract.roResp(false));
+    // expect(ok);
+
     expect(await t.rovOk(contract.roResp(false))).toEqual('asdf');
   });
 
