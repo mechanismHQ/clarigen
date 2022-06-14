@@ -30,7 +30,25 @@ import {
   parseToCV as _parseToCV,
 } from 'micro-stacks/transactions';
 import { bytesToAscii, bytesToHex } from 'micro-stacks/common';
-import { Response, ResponseOk, ResponseErr } from './abi-types';
+import {
+  Response,
+  ResponseOk,
+  ResponseErr,
+  ClarityAbiTypeUInt128,
+  ClarityAbiTypeBool,
+  ClarityAbiTypeBuffer,
+  ClarityAbiTypeInt128,
+  ClarityAbiTypeList,
+  ClarityAbiTypeNone,
+  ClarityAbiTypeOptional,
+  ClarityAbiTypePrimitive,
+  ClarityAbiTypePrincipal,
+  ClarityAbiTypeResponse,
+  ClarityAbiTypeStringAscii,
+  ClarityAbiTypeStringUtf8,
+  ClarityAbiTypeTraitReference,
+  ClarityAbiMap,
+} from './abi-types';
 
 export function ok<T>(value: T): ResponseOk<T> {
   return {
@@ -44,12 +62,6 @@ export function err<T>(value: T): ResponseErr<T> {
     isOk: false,
     value,
   };
-}
-
-export interface ClarityAbiMap {
-  name: string;
-  key: ClarityAbiType;
-  value: ClarityAbiType;
 }
 
 export interface ClarityAbi extends Omit<_ClarityAbi, 'maps'> {
@@ -246,3 +258,51 @@ export function expectErr<Err>(response: Response<any, Err>): Err {
   }
   throw new Error(`Expected Err, received ok: ${response.value}`);
 }
+
+export type AbiPrimitiveTo<T extends ClarityAbiTypePrimitive> = T extends ClarityAbiTypeInt128
+  ? bigint
+  : T extends ClarityAbiTypeUInt128
+  ? bigint
+  : T extends ClarityAbiTypeBool
+  ? boolean
+  : T extends ClarityAbiTypePrincipal
+  ? string
+  : T extends ClarityAbiTypeTraitReference
+  ? string
+  : T extends ClarityAbiTypeNone
+  ? never
+  : T;
+
+type ReadonlyTuple = {
+  readonly tuple: Readonly<ClarityAbiTypeTuple['tuple']>;
+};
+
+type TupleTypeUnion<T> = T extends Readonly<ClarityAbiTypeTuple['tuple'][number]>
+  ? { -readonly [Z in T['name']]: AbiTypeTo<T['type']> }
+  : never;
+type UnionToIntersection<U> = (U extends any ? (k: U) => void : never) extends (k: infer I) => void
+  ? I
+  : never;
+export type Compact<T> = { [K in keyof T]: T[K] };
+
+export type AbiTupleTo<T extends ReadonlyTuple> = Compact<
+  UnionToIntersection<TupleTypeUnion<T['tuple'][number]>>
+>;
+
+export type AbiTypeTo<T extends ClarityAbiType | ReadonlyTuple> = T extends ClarityAbiTypePrimitive
+  ? AbiPrimitiveTo<T>
+  : T extends ClarityAbiTypeBuffer
+  ? Uint8Array
+  : T extends ClarityAbiTypeStringAscii
+  ? string
+  : T extends ClarityAbiTypeStringUtf8
+  ? string
+  : T extends ClarityAbiTypeList
+  ? AbiTypeTo<T['list']['type']>[]
+  : T extends ClarityAbiTypeOptional
+  ? AbiTypeTo<T['optional']> | null
+  : T extends ClarityAbiTypeResponse
+  ? Response<AbiTypeTo<T['response']['ok']>, AbiTypeTo<T['response']['error']>>
+  : T extends ReadonlyTuple
+  ? AbiTupleTo<T>
+  : T;

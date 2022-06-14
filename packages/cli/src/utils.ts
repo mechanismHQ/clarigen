@@ -11,17 +11,22 @@ import {
   deployContract,
 } from '@clarigen/native-bin';
 import { resolve, relative, dirname } from 'path';
-import { mkdir, writeFile } from 'fs/promises';
+import { mkdir } from 'fs/promises';
 import { getProjectConfig } from './config';
 import { generateDocsIndex, generateMarkdownDoc } from './docs';
 import { ClarityAbi, Contract } from '@clarigen/core';
 import { generateContractMeta, generateSingleFile } from './generate/single';
+import { writeFile } from './writer';
+import { getVariables, TypedAbiVariable } from './generate/vars';
+import { ClarityAbiVariable } from 'micro-stacks/clarity';
 
 export interface ContractMeta {
   abi: ClarityAbi;
   contractFile: string;
   dirName: string;
   contractName: string;
+  contractAddress: string;
+  variables: TypedAbiVariable<unknown>[];
 }
 
 export const generateFilesForContract = async ({
@@ -49,6 +54,12 @@ export const generateFilesForContract = async ({
     contractFilePath: contractFile,
     provider,
   });
+  const variables = await getVariables({
+    abi,
+    contractIdentifier,
+    provider,
+  });
+
   const typesFile = generateTypesFile(abi, contractName);
   const indexFile = generateIndexFile({
     contractFile: relative(process.cwd(), contractFile),
@@ -79,6 +90,8 @@ export const generateFilesForContract = async ({
     contractFile,
     contractName,
     dirName,
+    contractAddress,
+    variables,
   };
 };
 

@@ -49,6 +49,63 @@ export type TypedAbiFunction<T extends any[], R> = ClarityAbiFunction & {
   _r?: R;
 };
 
+export interface ClarityAbiVariable {
+  name: string;
+  access: 'variable' | 'constant';
+  type: ClarityAbiType;
+}
+
+export type TypedAbiVariable<T> = ClarityAbiVariable & {
+  defaultValue: T;
+};
+
+export interface ClarityAbiMap {
+  name: string;
+  key: ClarityAbiType;
+  value: ClarityAbiType;
+}
+
+export type TypedAbiMap<K, V> = ClarityAbiMap & {
+  _k?: K;
+  _v?: V;
+};
+
+export interface ClarityAbiTypeFungibleToken {
+  name: string;
+}
+
+export interface ClarityAbiTypeNonFungibleToken {
+  name: string;
+  type: ClarityAbiType;
+}
+
+export interface ClarityAbi {
+  functions: ClarityAbiFunction[];
+  variables: ClarityAbiVariable[];
+  maps: ClarityAbiMap[];
+  fungible_tokens: ClarityAbiTypeFungibleToken[];
+  non_fungible_tokens: ClarityAbiTypeNonFungibleToken[];
+}
+
+export type TypedAbi = Readonly<{
+  functions: {
+    [key: string]: TypedAbiFunction<unknown[], unknown>;
+  };
+  variables: {
+    [key: string]: TypedAbiVariable<unknown>;
+  };
+  maps: {
+    [key: string]: TypedAbiMap<unknown, unknown>;
+  };
+  constants: {
+    [key: string]: any;
+  };
+  fungible_tokens: Readonly<ClarityAbiTypeFungibleToken[]>;
+  non_fungible_tokens: Readonly<ClarityAbiTypeNonFungibleToken[]>;
+  contractName: string;
+  contractFile?: string;
+}>;
+
 export interface ResponseOk<T> {
   value: T;
   isOk: true;
