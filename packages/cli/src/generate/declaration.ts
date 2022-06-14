@@ -69,7 +69,7 @@ export const jsTypeFromAbiType = (
 };
 
 // Check if it's a reserved word, and then camelCase
-function getArgName(name: string) {
+export function getArgName(name: string) {
   const camel = toCamelCase(name);
   const prefix = check(camel, 6) ? '_' : '';
   return `${prefix}${camel}`;

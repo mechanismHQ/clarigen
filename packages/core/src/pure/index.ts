@@ -1,20 +1,8 @@
 import { ClarityAbiFunction, ClarityValue } from 'micro-stacks/clarity';
-import {
-  ClarityAbi,
-  ClarityAbiMap,
-  parseToCV,
-  transformArgsToCV,
-  Response,
-} from '../clarity-types';
+import { ClarityAbi, ClarityAbiMap, parseToCV, transformArgsToCV } from '../clarity-types';
+import { Response } from '../abi-types';
 import { toCamelCase } from '../utils';
-
-export interface ContractCall<T> {
-  function: ClarityAbiFunction;
-  nativeArgs: any[];
-  functionArgs: ClarityValue[];
-  contractAddress: string;
-  contractName: string;
-}
+import type { ContractCall } from '../factory';
 
 export interface PureContractInfo {
   abi: ClarityAbi;

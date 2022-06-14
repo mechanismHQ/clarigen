@@ -30,18 +30,7 @@ import {
   parseToCV as _parseToCV,
 } from 'micro-stacks/transactions';
 import { bytesToAscii, bytesToHex } from 'micro-stacks/common';
-
-export interface ResponseOk<T> {
-  value: T;
-  isOk: true;
-}
-
-export interface ResponseErr<T> {
-  value: T;
-  isOk: false;
-}
-
-export type Response<Ok, Err> = ResponseOk<Ok> | ResponseErr<Err>;
+import { Response, ResponseOk, ResponseErr } from './abi-types';
 
 export function ok<T>(value: T): ResponseOk<T> {
   return {

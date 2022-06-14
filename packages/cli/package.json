@@ -60,6 +60,7 @@
     "chokidar": "3.5.1",
     "micro-stacks": "^0.2.0",
     "ora": "5.4.0",
+    "prettier": "2.6.2",
     "toposort": "2.0.2",
     "reserved-words": "0.1.2"
   },

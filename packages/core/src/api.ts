@@ -7,8 +7,10 @@ import { cvToHex, hexToCV } from 'micro-stacks/clarity';
 import { fetchPrivate } from 'micro-stacks/common';
 import { StacksNetwork } from 'micro-stacks/network';
 import { broadcastTransaction, StacksTransaction } from 'micro-stacks/transactions';
-import { Response, cvToValue, expectErr, expectOk } from './clarity-types';
-import { ContractCall, ContractCalls } from './pure';
+import { cvToValue, expectErr, expectOk } from './clarity-types';
+import { ContractCalls } from './pure';
+import { Response } from './abi-types';
+import { ContractCall } from './factory';
 
 interface ApiOptions {
   network: StacksNetwork;
