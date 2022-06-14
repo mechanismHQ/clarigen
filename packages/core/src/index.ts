@@ -9,7 +9,6 @@ export * from './contracts';
 export { pureProxy } from './pure';
 export type {
   ContractCalls,
-  ContractCall,
   ContractFn,
   ContractReturn,
   ContractReturnErr,
@@ -18,3 +17,4 @@ export type {
 export * from './clarity-types';
 export * from './api';
 export * from './abi-types';
+export * from './factory';

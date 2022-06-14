@@ -1,4 +1,4 @@
-import { ClarityTypes, ContractCalls } from '@clarigen/core';
+import { Response, ContractCalls } from '@clarigen/core';
 
 // prettier-ignore
 export interface SimpleContract {
@@ -13,7 +13,7 @@ export interface SimpleContract {
   "a": bigint;
   "b": boolean
     }>;
-  getTupleResp: () => ContractCalls.ReadOnly<ClarityTypes.Response<{
+  getTupleResp: () => ContractCalls.ReadOnly<Response<{
   "a": bigint;
   "b": boolean;
   "c": {
