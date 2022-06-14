@@ -1,7 +1,7 @@
 import { deserializeCV, hexToCV } from 'micro-stacks/clarity';
 import { join } from 'path';
 import { cvToValue } from '@clarigen/core';
-import { deployContract, evalJson, executeJson } from './clarity-cli-adapter';
+import { deployContract, evalJson, executeJson } from '@clarigen/native-bin';
 import { NativeClarityBinProvider } from '@clarigen/native-bin';
 import { IntegerType, intToBigInt } from 'micro-stacks/common';
 

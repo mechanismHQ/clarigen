@@ -6,8 +6,17 @@ import {
   ResultAssets,
   cvToValue,
   Response,
+  filterEvents,
+  CoreNodeEventType,
 } from '@clarigen/core';
-import { NativeClarityBinProvider } from '@clarigen/native-bin';
+import {
+  NativeClarityBinProvider,
+  evalRaw,
+  evalJson,
+  Eval,
+  Costs,
+  executeJson,
+} from '@clarigen/native-bin';
 import {
   ClarityValue,
   hexToCV,
@@ -15,8 +24,14 @@ import {
   responseErrorCV,
   responseOkCV,
 } from 'micro-stacks/clarity';
-import { executeJson, getPrints } from '.';
-import { Costs, evalJson, evalRaw, Eval } from './clarity-cli-adapter';
+
+export function getPrints(events: CoreNodeEvent[]) {
+  return filterEvents(events, CoreNodeEventType.ContractEvent).map(e => {
+    const hex = e.contract_event.raw_value;
+    const cv = hexToCV(hex);
+    return cvToValue(cv);
+  });
+}
 
 function formatArguments(args: ClarityValue[]) {
   return args.map(arg => cvToString(arg));

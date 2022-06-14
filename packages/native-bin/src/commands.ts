@@ -1,18 +1,7 @@
-import {
-  getTempFilePath,
-  NativeClarityBinProvider,
-  getDefaultBinaryFilePath,
-  hasStdErr,
-} from '@clarigen/native-bin';
-import {
-  CoreNodeEvent,
-  CoreNodeEventType,
-  cvToValue,
-  filterEvents,
-  ResultAssets,
-} from '@clarigen/core';
-import { hexToCV } from 'micro-stacks/clarity';
-import { resolve } from 'path';
+import { ClarityAbi, ResultAssets } from '@clarigen/core';
+import { getTempFilePath } from './fs-util';
+import { getDefaultBinaryFilePath } from './helpers';
+import { NativeClarityBinProvider } from './provider';
 
 function coverageArgs(folder?: string) {
   return folder ? ['--c', folder] : [];
@@ -147,7 +136,7 @@ export const evalRaw = async ({
   }
   try {
     const response: EvalResult = JSON.parse(receipt.stdout);
-    if (!response.success) {
+    if (response.success === false) {
       throw new Error(JSON.stringify(response.error, null, 2));
     }
     return {
@@ -261,7 +250,7 @@ export async function deployContract({
   contractFilePath: string;
   provider: NativeClarityBinProvider;
   coverageFolder?: string;
-}) {
+}): Promise<ClarityAbi> {
   const receipt = await provider.runCommand([
     'launch',
     contractIdentifier,
@@ -269,6 +258,7 @@ export async function deployContract({
     provider.dbFilePath,
     '--costs',
     '--assets',
+    '--output_analysis',
     ...coverageArgs(coverageFolder),
   ]);
   if (hasStdErr(receipt.stderr)) {
@@ -296,12 +286,13 @@ export async function deployContract({
   ${JSON.stringify(output.error, null, 2)}
     `);
   }
+  const abi = output.analysis;
+  return abi;
 }
 
-export function getPrints(events: CoreNodeEvent[]) {
-  return filterEvents(events, CoreNodeEventType.ContractEvent).map(e => {
-    const hex = e.contract_event.raw_value;
-    const cv = hexToCV(hex);
-    return cvToValue(cv);
-  });
+export function hasStdErr(stderr: string) {
+  if (!stderr) return false;
+  if (stderr.includes('Used unimplemented cost function')) return false;
+  if (stderr.includes('INFO [')) return false;
+  return true;
 }

@@ -1,4 +1,9 @@
-import { NativeClarityBinProvider } from '@clarigen/native-bin';
+import {
+  NativeClarityBinProvider,
+  deployContract,
+  ClarinetAccounts,
+  createClarityBin,
+} from '@clarigen/native-bin';
 import {
   ContractInstances,
   Contracts,
@@ -9,13 +14,7 @@ import {
   expectOk,
   expectErr,
 } from '@clarigen/core';
-import {
-  deployContract,
-  deployUtilContract,
-  ClarinetAccounts,
-  UTIL_CONTRACT_ID,
-  createClarityBin,
-} from './utils';
+import { deployUtilContract, UTIL_CONTRACT_ID } from './utils';
 import {
   evalCode,
   mapGet,
@@ -28,17 +27,14 @@ import {
 import { resolve } from 'path';
 export type { PublicResultErr, PublicResultOk, ReadOnlyResult } from './utils/pure';
 export {
-  Allocation,
-  createClarityBin,
   getBlockHeight,
   mineBlocks,
   getStxBalance,
-  executeJson,
-  evalJson,
   makeRandomAddress,
   setupCoverage,
   finishCoverage,
 } from './utils';
+export { Allocation, createClarityBin, executeJson, evalJson } from '@clarigen/native-bin';
 
 interface FromContractsOptions {
   accounts?: ClarinetAccounts;

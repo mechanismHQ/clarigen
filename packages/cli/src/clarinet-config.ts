@@ -48,6 +48,12 @@ export interface ClarinetConfig {
   contracts: ClarinetContracts;
 }
 
+export const CLARINET_SETTINGS = [
+  'Devnet.toml',
+  'Testnet.toml',
+  'Mainnet.toml',
+];
+
 export async function getClarinetConfig(folder: string) {
   const baseConfigPath = resolve(folder, 'Clarinet.toml');
   const configContents = await readFile(baseConfigPath, { encoding: 'utf-8' });

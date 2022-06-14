@@ -1,6 +1,5 @@
 import { publicKeyToStxAddress, StacksNetworkVersion } from 'micro-stacks/crypto';
 import { getPublicKeyFromStacksPrivateKey, makeRandomPrivKey } from 'micro-stacks/transactions';
-export * from './clarity-cli-adapter';
 export * from './util-contract';
 export * from './coverage';
 

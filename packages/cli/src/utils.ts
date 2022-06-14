@@ -8,6 +8,7 @@ import {
 import {
   NativeClarityBinProvider,
   createClarityBin,
+  deployContract,
 } from '@clarigen/native-bin';
 import { resolve, relative, dirname } from 'path';
 import { mkdir, writeFile } from 'fs/promises';
@@ -41,12 +42,12 @@ export const generateFilesForContract = async ({
   docsPath?: string;
 }): Promise<ContractMeta> => {
   const contractFile = resolve(process.cwd(), _contractFile);
+  const contractIdentifier = `${contractAddress}.${contractName}`;
 
-  const abi = await generateInterface({
-    contractFile,
+  const abi = await deployContract({
+    contractIdentifier,
+    contractFilePath: contractFile,
     provider,
-    contractAddress,
-    contractName,
   });
   const typesFile = generateTypesFile(abi, contractName);
   const indexFile = generateIndexFile({

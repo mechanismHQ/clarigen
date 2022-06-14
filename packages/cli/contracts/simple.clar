@@ -4,6 +4,11 @@
 
 (define-map simple-map uint bool)
 
+(define-constant MY_CONSTANT u499)
+(define-constant TUPLE_CONST { a: true, b: "100", c: 0xaaaa })
+
+(define-data-var my-var uint u111)
+
 (define-public (get-name)
   (ok "hello, world")
 )
