@@ -12,7 +12,7 @@ export const defaultConfig: Options = {
 
 export function makeConfig(opts: Partial<Options> = {}) {
   return defineConfig({
-    ...opts,
     ...defaultConfig,
+    ...opts,
   });
 }

@@ -5,4 +5,7 @@ export default makeConfig({
   format: ['cjs'],
   dts: false,
   entry: ['src/index.ts', 'src/commands.index.ts'],
+  onSuccess: 'node copy-types.js',
+  shims: false,
+  minify: false,
 });

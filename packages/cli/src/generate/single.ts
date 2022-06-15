@@ -2,7 +2,6 @@ import { toCamelCase } from '@clarigen/core';
 import type { ConfigFile } from '../config';
 import { getArgName, jsTypeFromAbiType } from './declaration';
 import type { ContractMeta } from '../utils';
-import { resolveConfig, format } from 'prettier';
 import { relative, resolve } from 'path';
 import { readFile } from 'fs/promises';
 import { inspect } from 'util';
@@ -122,7 +121,8 @@ function serializeLines(key: string, lines: string[]) {
 }
 
 export async function getSingleTypes() {
-  const typesPath = resolve(__dirname, '../../../core/src/abi-types.ts');
+  // 🤔 weird stuff with tsup shims
+  const typesPath = resolve(__dirname, '../../dist/abi-types.ts.txt');
   const typesFile = await readFile(typesPath, { encoding: 'utf-8' });
   return typesFile;
 }
