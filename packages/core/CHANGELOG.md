@@ -1,5 +1,11 @@
 # @clarigen/core
 
+## 1.0.0-next.18
+
+### Patch Changes
+
+- [`8ae1862`](https://github.com/mechanismHQ/clarigen/commit/8ae18623f3535550c1707642dbde9ec79ae87585) Thanks [@hstove](https://github.com/hstove)! - Created a new generated file type through `@clarigen/cli`. New types allow Clarigen to only need a "typed ABI" in order to generate all of the same functionality. This greatly improve simplicity and portability. This new generated file has zero dependencies, meaning it can be used in Deno.
+
 ## 1.0.0-next.17
 
 ### Patch Changes
