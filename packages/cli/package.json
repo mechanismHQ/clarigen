@@ -24,7 +24,8 @@
     "lint": "eslint \"src/**/*.{ts,tsx}\" && prettier  --check src/**/*.ts",
     "typecheck": "tsc --noEmit -p tsconfig-test.json",
     "prepublishOnly": "yarn build",
-    "demo": "yarn build && node bin/run"
+    "demo": "yarn build && node bin/run",
+    "publish:dev": "yalc publish --push"
   },
   "bin": {
     "clarigen": "./bin/run"

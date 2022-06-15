@@ -19,7 +19,8 @@
     "lint": "eslint \"src/**/*.{ts,tsx}\" && prettier  --check src/**/*.ts",
     "prepublishOnly": "yarn build",
     "typecheck": "tsc --noEmit",
-    "postinstall": "node post-install.js"
+    "postinstall": "node post-install.js",
+    "publish:dev": "yalc publish --push"
   },
   "prettier": "@stacks/prettier-config",
   "name": "@clarigen/native-bin",
