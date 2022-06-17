@@ -1,5 +1,5 @@
 import { ClarityAbiFunction, ClarityValue } from 'micro-stacks/clarity';
-import { TypedAbiFunction } from '../src/abi-types';
+import { TypedAbi, TypedAbiFunction } from '../src/abi-types';
 import { transformArguments } from './pure';
 
 export interface ContractCall<T> {
@@ -18,12 +18,7 @@ export type ContractFunctions = {
   [key: string]: TypedAbiFunction<unknown[], unknown>;
 };
 
-export type AllContracts = {
-  [contractName: string]: {
-    functions: ContractFunctions;
-    [key: string]: any;
-  };
-};
+export type AllContracts = Record<string, TypedAbi>;
 
 export type ContractCallFunction<Args extends any[], R> = (
   ...args: Args
@@ -39,21 +34,25 @@ export type FunctionsToContractCalls<T> = T extends ContractFunctions
     }
   : never;
 
+export type FullContract<T> = T extends TypedAbi
+  ? T & FunctionsToContractCalls<T['functions']> & { identifier: string }
+  : never;
+
 export type ContractsToContractCalls<T> = T extends AllContracts
   ? {
-      [key in keyof T]: FunctionsToContractCalls<T[key]['functions']>;
+      [key in keyof T]: FullContract<T[key]>;
     }
   : never;
 
 type UnknownContractCallFunction = ContractCallFunction<unknown[], unknown>;
 
-export function contractFactory<T extends AllContracts>(contracts: T): ContractsToContractCalls<T> {
-  const result = {} as Record<keyof T, Record<string, UnknownContractCallFunction>>;
+export function contractFactory<T extends AllContracts>(
+  contracts: T,
+  deployer: string
+): ContractsToContractCalls<T> {
+  const result = contracts as ContractsToContractCalls<T>;
   Object.keys(contracts).forEach(contractName => {
-    result[contractName as keyof typeof contracts] = {} as Record<
-      string,
-      UnknownContractCallFunction
-    >;
+    result[contractName].identifier = `${deployer}.${contractName}`;
     const contract = contracts[contractName];
     Object.keys(contracts[contractName].functions).forEach(fnName => {
       const fn = (...args: any[]) => {
@@ -71,5 +70,5 @@ export function contractFactory<T extends AllContracts>(contracts: T): Contracts
       result[contractName][fnName] = fn;
     });
   });
-  return result as ContractsToContractCalls<T>;
+  return result;
 }

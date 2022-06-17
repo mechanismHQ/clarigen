@@ -50,14 +50,14 @@ import {
   ClarityAbiMap,
 } from './abi-types';
 
-export function ok<T>(value: T): ResponseOk<T> {
+export function ok<T, Err = never>(value: T): ResponseOk<T, Err> {
   return {
     isOk: true,
     value,
   };
 }
 
-export function err<T>(value: T): ResponseErr<T> {
+export function err<Ok = never, T = unknown>(value: T): ResponseErr<Ok, T> {
   return {
     isOk: false,
     value,

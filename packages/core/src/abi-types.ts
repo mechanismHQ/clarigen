@@ -106,14 +106,14 @@ export type TypedAbi = Readonly<{
   contractFile?: string;
 }>;
 
-export interface ResponseOk<T> {
+export interface ResponseOk<T, E> {
   value: T;
   isOk: true;
 }
 
-export interface ResponseErr<T> {
-  value: T;
+export interface ResponseErr<T, E> {
+  value: E;
   isOk: false;
 }
 
-export type Response<Ok, Err> = ResponseOk<Ok> | ResponseErr<Err>;
+export type Response<Ok, Err> = ResponseOk<Ok, Err> | ResponseErr<Ok, Err>;
