@@ -26,7 +26,7 @@ export function generateContractMeta(contract: ContractMeta) {
   const variableLines = contract.variables.map((v) => {
     let varLine = `${toCamelCase(v.name)}: `;
     const type = jsTypeFromAbiType(v.type);
-    const varJSON = inspect(v, false, null, false);
+    const varJSON = serialize(v);
     varLine += `${varJSON} as TypedAbiVariable<${type}>`;
     return varLine;
   });
