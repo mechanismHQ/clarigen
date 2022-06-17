@@ -78,7 +78,7 @@ export async function generateSingleFile(
   const file = `
 ${types}
 
-export const contracts: Record<string, TypedAbi> = {
+export const contracts = {
   ${contractDefs.join(',\n')}
 } as const;
 
@@ -110,8 +110,14 @@ Uint8Array.prototype[inspect.custom] = function (this: Uint8Array) {
   return `Uint8Array.from([${this.join(',')}])`;
 };
 
-function serialize(obj: any) {
-  return inspect(obj, false, null, false);
+export function serialize(obj: any) {
+  return inspect(obj, {
+    showHidden: false,
+    maxArrayLength: null,
+    maxStringLength: null,
+    depth: null,
+    colors: false,
+  });
 }
 
 function serializeLines(key: string, lines: string[]) {
