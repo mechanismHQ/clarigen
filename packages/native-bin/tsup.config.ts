@@ -5,4 +5,5 @@ export default makeConfig({
   // format: ['cjs', 'esm'],
   // outDir: 'dist',
   entry: ['src/index.ts', 'src/direct-install.ts'],
+  minify: false,
 });

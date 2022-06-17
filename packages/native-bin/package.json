@@ -13,7 +13,7 @@
   "scripts": {
     "start": "tsup-node --watch",
     "dev": "tsup-node --watch",
-    "build": "shx rm -rf ./dist && tsup-node src/index.ts src/direct-install.ts --splitting false",
+    "build": "shx rm -rf ./dist && tsup-node",
     "build-installer": "yarn tsc --esModuleInterop --outDir ./installer src/direct-install.ts",
     "test": "jest --passWithNoTests",
     "lint": "eslint \"src/**/*.{ts,tsx}\" && prettier  --check src/**/*.ts",

@@ -13,8 +13,8 @@
     "node": ">=10"
   },
   "scripts": {
-    "start": "tsup --watch",
-    "dev": "tsup --watch",
+    "start": "tsup-node --watch",
+    "dev": "tsup-node --watch",
     "build": "shx rm -rf ./dist && tsup-node",
     "test": "yarn build-test-types && jest",
     "lint": "eslint \"src/**/*.{ts,tsx}\" && prettier  --check src/**/*.ts",
