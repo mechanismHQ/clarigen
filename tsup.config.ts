@@ -11,8 +11,10 @@ export const defaultConfig: Options = {
 };
 
 export function makeConfig(opts: Partial<Options> = {}) {
-  return defineConfig({
+  const config: Options = {
     ...defaultConfig,
     ...opts,
-  });
+  }
+  // console.log('config', config);
+  return defineConfig(config);
 }

@@ -1,3 +1,5 @@
 import { makeConfig } from '../../tsup.config';
 
-export default makeConfig();
+export default makeConfig({
+  minify: false
+});
