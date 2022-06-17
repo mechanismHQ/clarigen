@@ -1,5 +1,11 @@
 # @clarigen/cli
 
+## 1.0.0-next.20
+
+### Patch Changes
+
+- [#30](https://github.com/mechanismHQ/clarigen/pull/30) [`078de12`](https://github.com/mechanismHQ/clarigen/commit/078de129265b9c88e2124c84cba12899614c3719) Thanks [@hstove](https://github.com/hstove)! - Fixed an issue when serializing variables
+
 ## 1.0.0-next.19
 
 ### Patch Changes
