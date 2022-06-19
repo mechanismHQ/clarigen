@@ -14,6 +14,7 @@
   "devDependencies": {
     "@babel/plugin-transform-typescript": "7.16.8",
     "@changesets/changelog-github": "0.4.1",
+    "@jest/environment": "28.1.1",
     "@stacks/eslint-config": "1.0.9",
     "@stacks/prettier-config": "0.0.9",
     "@strictsoftware/typedoc-plugin-monorepo": "^0.4.2",
@@ -24,8 +25,8 @@
     "eslint-plugin-jest": "^23.16.0",
     "eslint-plugin-prettier": "^3.1.4",
     "husky": "^4.2.5",
-    "jest": "^26.0.1",
-    "jest-cli": "^26.6.3",
+    "jest": "^28.0.1",
+    "jest-cli": "^28.0.1",
     "lerna": "^4.0.0",
     "prettier": "^2.0.5",
     "shx": "^0.3.4",

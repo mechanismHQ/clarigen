@@ -38,36 +38,34 @@ export type FullContract<T> = T extends TypedAbi
   ? T & FunctionsToContractCalls<T['functions']> & { identifier: string }
   : never;
 
-export type ContractsToContractCalls<T> = T extends AllContracts
-  ? {
-      [key in keyof T]: FullContract<T[key]>;
-    }
-  : never;
+export type ContractFactory<T extends AllContracts> = {
+  [key in keyof T]: FullContract<T[key]>;
+}
 
 type UnknownContractCallFunction = ContractCallFunction<unknown[], unknown>;
 
 export function contractFactory<T extends AllContracts>(
   contracts: T,
   deployer: string
-): ContractsToContractCalls<T> {
-  const result = contracts as ContractsToContractCalls<T>;
+): ContractFactory<T> {
+  const result = contracts as ContractFactory<T>;
   Object.keys(contracts).forEach(contractName => {
     result[contractName].identifier = `${deployer}.${contractName}`;
     const contract = contracts[contractName];
-    Object.keys(contracts[contractName].functions).forEach(fnName => {
-      const fn = (...args: any[]) => {
+    Object.keys(contracts[contractName].functions).forEach(_fnName => {
+      const fnName: keyof typeof contract['functions'] = _fnName;
+      const fn = ((...args: any[]) => {
         const foundFunction = contract.functions[fnName];
         const functionArgs = transformArguments(foundFunction, args);
         return {
           functionArgs: functionArgs,
-          // TODO
-          contractAddress: '',
+          contractAddress: deployer,
           contractName: contract.contractName,
           function: foundFunction,
           nativeArgs: args,
         };
-      };
-      result[contractName][fnName] = fn;
+      }) as FnToContractCall<typeof contract['functions']>;
+      result[contractName][fnName as keyof typeof result[typeof contractName]] = fn;
     });
   });
   return result;

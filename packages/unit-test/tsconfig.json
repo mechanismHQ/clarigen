@@ -10,7 +10,8 @@
     "noUnusedLocals": false,
     "noUnusedParameters": false,
     "skipLibCheck": true,
-    "types": ["node"]
+    "types": ["node", "./types/"],
+    "typeRoots": ["./types/", "./node_modules/@types/"]  
   },
-  "include": ["./src/**/*"]
+  "include": ["./src/**/*", "./types/*"]
 }
