@@ -110,14 +110,16 @@ export function cvToValue<T = any>(val: ClarityValue, returnResponse = false): T
     case ClarityType.PrincipalContract:
       return (principalToString(val) as unknown) as T;
     case ClarityType.List:
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-return
       return (val.list.map(v => cvToValue(v)) as unknown) as T;
     case ClarityType.Tuple:
       const result: { [key: string]: any } = {};
       const arr = Object.keys(val.data).map(key => {
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-return
         return [key, cvToValue(val.data[key])];
       });
       arr.forEach(([key, value]) => {
-        result[key] = value;
+        result[key as string] = value;
       });
       return result as T;
     case ClarityType.StringASCII:
@@ -133,6 +135,7 @@ export function cvToValue<T = any>(val: ClarityValue, returnResponse = false): T
  * @param jsonCompat - enable to serialize bigints to strings
  */
 export function hexToCvValue<T>(hex: string, jsonCompat = false) {
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-return
   return cvToValue(hexToCV(hex), jsonCompat);
 }
 
@@ -249,14 +252,14 @@ export function expectOk<Ok>(response: Response<Ok, any>): Ok {
   if (response.isOk) {
     return response.value;
   }
-  throw new Error(`Expected OK, received error: ${response.value}`);
+  throw new Error(`Expected OK, received error: ${String(response.value)}`);
 }
 
 export function expectErr<Err>(response: Response<any, Err>): Err {
   if (!response.isOk) {
     return response.value;
   }
-  throw new Error(`Expected Err, received ok: ${response.value}`);
+  throw new Error(`Expected Err, received ok: ${String(response.value)}`);
 }
 
 export type AbiPrimitiveTo<T extends ClarityAbiTypePrimitive> = T extends ClarityAbiTypeInt128

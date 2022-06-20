@@ -54,7 +54,7 @@ export async function readStream(
       streamArr.push(passThrough);
     }
     streamArr.push(memStream);
-    // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
     await pipelineAsync(...streamArr);
   }
@@ -62,7 +62,7 @@ export async function readStream(
     try {
       await startReadInternal();
     } catch (error) {
-      console.log(`ignored readStream error: ${error}`);
+      console.log(`ignored readStream error: ${String(error)}`);
     }
   } else {
     await startReadInternal();

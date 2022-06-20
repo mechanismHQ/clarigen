@@ -46,14 +46,14 @@ export function WebProvider(options: WebOptions) {
     ro: curry(ro, options),
     roOk: curry(roOk, options),
     roErr: curry(roErr, options),
-    tx: (
+    tx: async (
       _tx: ContractCall<any>,
       txOptions: Omit<
         ContractCallTxOptions,
         'contractName' | 'contractAddress' | 'functionName' | 'functionArgs'
       >
     ) => {
-      tx(_tx, txOptions, options);
+      await tx(_tx, txOptions, options);
     },
     mapGet: curry(fetchMapGet, options),
     // tx: curry(tx, options),

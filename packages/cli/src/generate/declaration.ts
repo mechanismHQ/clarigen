@@ -39,8 +39,8 @@ export const jsTypeFromAbiType = (
   } else if (isClarityAbiBuffer(val)) {
     return 'Uint8Array';
   } else if (isClarityAbiResponse(val)) {
-    const ok: any = jsTypeFromAbiType(val.response.ok);
-    const err: any = jsTypeFromAbiType(val.response.error);
+    const ok = jsTypeFromAbiType(val.response.ok);
+    const err = jsTypeFromAbiType(val.response.error);
     return `Response<${ok}, ${err}>`;
   } else if (isClarityAbiOptional(val)) {
     const innerType = jsTypeFromAbiType(val.optional);
@@ -55,7 +55,7 @@ export const jsTypeFromAbiType = (
   ${tupleDefs.join(';\n  ')}
     }`;
   } else if (isClarityAbiList(val)) {
-    const innerType: any = jsTypeFromAbiType(val.list.type);
+    const innerType = jsTypeFromAbiType(val.list.type);
     return `${innerType}[]`;
   } else if (isClarityAbiStringAscii(val)) {
     return 'string';

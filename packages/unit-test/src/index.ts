@@ -97,36 +97,39 @@ export class TestProvider {
     };
   }
 
-  public static async fromFactory(contracts: ContractFactory<AllContracts>, options: FromContractsOptions = {}) {
-      const clarityBin =
-        options.clarityBin ||
-        (await createClarityBin({
-          allocations: options.accounts,
-        }));
-      let coverageFolder = options.coverageFolder;
-      if (process.env.CLARIGEN_COVERAGE) {
-        coverageFolder = resolve(process.cwd(), 'coverage');
-      }
-      await deployUtilContract(clarityBin);
-      for (const k in contracts) {
-        if (Object.prototype.hasOwnProperty.call(contracts, k)) {
-          const contract = contracts[k];
-          const contractFilePath = contract.contractFile;
-          if (typeof contractFilePath === 'undefined') {
-            throw new Error('Cannot setup @clarigen/test - missing contract file.');
-          }
-          await deployContract({
-            contractIdentifier: contract.identifier,
-            contractFilePath,
-            provider: clarityBin,
-            coverageFolder,
-          });
-        }
-      }
-      const provider = new this(clarityBin);
-      provider.coverageFolder = coverageFolder;
-      return provider;
+  public static async fromFactory(
+    contracts: ContractFactory<AllContracts>,
+    options: FromContractsOptions = {}
+  ) {
+    const clarityBin =
+      options.clarityBin ||
+      (await createClarityBin({
+        allocations: options.accounts,
+      }));
+    let coverageFolder = options.coverageFolder;
+    if (process.env.CLARIGEN_COVERAGE) {
+      coverageFolder = resolve(process.cwd(), 'coverage');
     }
+    await deployUtilContract(clarityBin);
+    for (const k in contracts) {
+      if (Object.prototype.hasOwnProperty.call(contracts, k)) {
+        const contract = contracts[k];
+        const contractFilePath = contract.contractFile;
+        if (typeof contractFilePath === 'undefined') {
+          throw new Error('Cannot setup @clarigen/test - missing contract file.');
+        }
+        await deployContract({
+          contractIdentifier: contract.identifier,
+          contractFilePath,
+          provider: clarityBin,
+          coverageFolder,
+        });
+      }
+    }
+    const provider = new this(clarityBin);
+    provider.coverageFolder = coverageFolder;
+    return provider;
+  }
 
   public ro<T>(tx: ContractCall<T>): Promise<ReadOnlyResult<T>> {
     return ro({ tx, bin: this.clarityBin, coverageFolder: this.coverageFolder });
@@ -177,7 +180,7 @@ export class TestProvider {
     senderAddress: string
   ): Promise<PublicResultOk<Ok>> {
     const result = await this.tx(tx, senderAddress);
-    if (!result.isOk) throw new Error(`Expected OK, received error: ${result.value}`);
+    if (!result.isOk) throw new Error(`Expected OK, received error: ${String(result.value)}`);
     return result;
   }
 
@@ -186,7 +189,7 @@ export class TestProvider {
     senderAddress: string
   ): Promise<PublicResultErr<Err>> {
     const result = await this.tx(tx, senderAddress);
-    if (result.isOk) throw new Error(`Expected Err, received ok: ${result.value}`);
+    if (result.isOk) throw new Error(`Expected Err, received ok: ${String(result.value)}`);
     return result;
   }
 

@@ -25,10 +25,11 @@ import {
   responseOkCV,
 } from 'micro-stacks/clarity';
 
-export function getPrints(events: CoreNodeEvent[]) {
+export function getPrints(events: CoreNodeEvent[]): any[] {
   return filterEvents(events, CoreNodeEventType.ContractEvent).map(e => {
     const hex = e.contract_event.raw_value;
     const cv = hexToCV(hex);
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return cvToValue(cv);
   });
 }

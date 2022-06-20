@@ -77,6 +77,7 @@ export async function fetchMapGet<T extends ContractCalls.Map<any, Val>, Val>(
     url: options.network.getCoreApiUrl(),
     proof: 0,
   });
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
   const valueCV = hexToCV(response.data);
   return cvToValue(valueCV, true);
 }
@@ -85,7 +86,7 @@ export async function broadcast(transaction: StacksTransaction, options: ApiOpti
   const result = await broadcastTransaction(transaction, options.network);
   if ('error' in result) {
     throw new Error(
-      `Error broadcasting tx: ${result.error} - ${result.reason} - ${result.reason_data}`
+      `Error broadcasting tx: ${result.error} - ${result.reason} - ${result.reason_data as string}`
     );
   } else {
     return {

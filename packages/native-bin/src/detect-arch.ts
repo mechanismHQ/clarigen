@@ -67,7 +67,7 @@ export function detectArch(logger: Logger = ConsoleLogger): string {
       }
     }
   } catch (error) {
-    logger.error(`Unexpected error trying to detect system architecture: ${error}`);
+    logger.error(`Unexpected error trying to detect system architecture: ${String(error)}`);
   }
 
   /**

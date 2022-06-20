@@ -84,16 +84,18 @@ export const proxyHandler: ProxyHandler<PureContractInfo> = {
   get: getter,
 };
 
+type FnCalls = Record<string, unknown>;
+
 interface ProxyConstructor {
-  revocable<T extends object, S extends object>(
+  revocable<T extends FnCalls, S extends PureContractInfo>(
     target: T,
     handler: ProxyHandler<S>
   ): { proxy: T; revoke: () => void };
-  new <T extends object>(target: T, handler: ProxyHandler<T>): T;
-  new <T extends object, S extends object>(target: S, handler: ProxyHandler<S>): T;
+  new <T extends FnCalls>(target: T, handler: ProxyHandler<T>): T;
+  new <T extends FnCalls, S extends PureContractInfo>(target: S, handler: ProxyHandler<S>): T;
 }
 declare const Proxy: ProxyConstructor;
 
-export const pureProxy = <T extends object>(target: PureContractInfo): T => {
+export const pureProxy = <T extends FnCalls>(target: PureContractInfo): T => {
   return new Proxy<T, PureContractInfo>(target, proxyHandler);
 };

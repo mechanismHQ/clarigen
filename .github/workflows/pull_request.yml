@@ -25,6 +25,8 @@ jobs:
         run: yarn --force
       - name: Build packages
         run: yarn build
+      - name: Link
+        run: yarn lint
       - name: Type checks
         run: yarn typecheck
       - name: Tests

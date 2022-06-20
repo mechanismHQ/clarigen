@@ -1,6 +1,5 @@
 import {
   generateIndexFile,
-  generateInterface,
   generateInterfaceFile,
   generateProjectIndexFile,
   generateTypesFile,

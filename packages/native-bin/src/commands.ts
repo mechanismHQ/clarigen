@@ -199,11 +199,13 @@ export function getAllocations(allocations?: AllocationOrAccounts): Allocation[]
 
 function bigintReplacer(key: string, value: any) {
   if (typeof value === 'bigint') return `${value}n`;
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-return
   return value;
 }
 
 function stringifyAllocations(allocations: Allocation[]) {
   const json = JSON.stringify(allocations, bigintReplacer);
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-return
   return json.replace(/"(-?\d+)n"/g, (_, a) => a);
 }
 
@@ -240,6 +242,16 @@ export async function getDefaultClarityBin(
   return clarityBin;
 }
 
+interface DeployOutputErr {
+  error: {
+    initialization: string;
+  };
+}
+
+interface DeployOutputOk {
+  analysis: ClarityAbi;
+}
+
 export async function deployContract({
   contractIdentifier,
   contractFilePath,
@@ -266,8 +278,8 @@ export async function deployContract({
   ${receipt.stderr}
     `);
   }
-  const output = JSON.parse(receipt.stdout);
-  if (output.error) {
+  const output = JSON.parse(receipt.stdout) as DeployOutputErr | DeployOutputOk;
+  if ('error' in output) {
     const { initialization } = output.error;
     if (initialization?.includes('\nNear:\n')) {
       const [error, trace] = initialization.split('\nNear:\n');

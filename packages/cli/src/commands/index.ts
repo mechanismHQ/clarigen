@@ -4,8 +4,7 @@ import { getProjectConfig } from '../config';
 import { watch } from 'chokidar';
 import { basename } from 'path';
 import { red, green } from 'chalk';
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-const ora = require('ora');
+import ora from 'ora';
 
 export class Generate extends Command {
   static description = `Generate project files`;
@@ -36,29 +35,35 @@ export class Generate extends Command {
         await generateProject(cwd);
         spinner.succeed(`Finished generating files. Watching for changes.`);
       } catch (error) {
-        // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
-        spinner.fail(`Error generating files.\n${(error as any).message}`);
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+        spinner.fail(`Error generating files.\n${String(error.message)}`);
       }
-      watcher.on('change', async (path) => {
-        const file = basename(path);
-        spinner.clear();
-        spinner.start(`Change detected for ${green(file)}, generating.`);
-        try {
-          await generateProject(cwd);
-          spinner.succeed(
-            `Finished generating files for ${green(
-              file
-            )}. Watching for changes.`
-          );
-        } catch (error) {
-          // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
-          const msg = (error as any).message;
-          spinner.fail(`Error after saving ${red(file)}.\n${msg}`);
-        }
+      watcher.on('change', (path) => {
+        const cb = async () => {
+          const file = basename(path);
+          spinner.clear();
+          spinner.start(`Change detected for ${green(file)}, generating.`);
+          try {
+            await generateProject(cwd);
+            spinner.succeed(
+              `Finished generating files for ${green(
+                file
+              )}. Watching for changes.`
+            );
+          } catch (error) {
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+            const msg = error.message as string;
+            spinner.fail(`Error after saving ${red(file)}.\n${msg}`);
+          }
+        };
+        void cb();
       });
-      process.on('SIGINT', async () => {
-        await watcher.close();
-        process.exit();
+      process.on('SIGINT', () => {
+        async function cb() {
+          await watcher.close();
+          process.exit();
+        }
+        void cb();
       });
     } else {
       await generateProject(cwd);

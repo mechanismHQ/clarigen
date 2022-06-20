@@ -40,7 +40,7 @@ export type FullContract<T> = T extends TypedAbi
 
 export type ContractFactory<T extends AllContracts> = {
   [key in keyof T]: FullContract<T[key]>;
-}
+};
 
 type UnknownContractCallFunction = ContractCallFunction<unknown[], unknown>;
 

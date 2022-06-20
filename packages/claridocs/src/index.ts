@@ -108,7 +108,7 @@ export function getFnName(line: string) {
   if (typeof fnType === 'undefined') return;
   const prefix = `(define-${fnType} (`;
   const startString = line.slice(prefix.length);
-  const match = startString.match(/[\w|\-]+/);
+  const match = /[\w|\-]+/.exec(startString);
   if (!match) {
     console.debug(`[claridocs]: Unable to determine function name from line:\n  \`${line}\``);
     return;
@@ -139,7 +139,7 @@ export function parseComments(comments: string[], abi: ClarityAbiFunction): Comm
     params: {},
   };
   comments.forEach(line => {
-    const paramMatches = line.match(/\s*@param\s([\w|\-]+)([;|-|\s]*)(.*)/);
+    const paramMatches = /\s*@param\s([\w|\-]+)([;|-|\s]*)(.*)/.exec(line);
 
     if (paramMatches === null) {
       if (!curParam || line.trim() === '') {

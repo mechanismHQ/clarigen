@@ -43,13 +43,13 @@ export async function executeCommand(
       proc.stdin.end(opts.stdin, 'utf8');
     } else {
       writeStdin = pipelineAsync(opts.stdin, proc.stdin).catch((error: any) => {
-        console.debug(`spawn stdin error: ${error}`);
+        console.debug(`spawn stdin error: ${String(error)}`);
       });
     }
   }
 
   proc.on('error', (error: any) => {
-    console.error(`Unexpected process exec error: ${error}`);
+    console.error(`Unexpected process exec error: ${String(error)}`);
   });
 
   const exitCode = await new Promise<number>(resolve => {
