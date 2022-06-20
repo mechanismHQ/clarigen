@@ -17,7 +17,7 @@
     "build": "shx rm -rf ./dist && tsup",
     "test": "jest --passWithNoTests",
     "lint": "eslint \"src/**/*.{ts,tsx}\" && prettier  --check src/**/*.ts",
-    "prepublishOnly": "build",
+    "prepublishOnly": "pnpm build",
     "typecheck": "tsc --noEmit"
   },
   "prettier": "@stacks/prettier-config",
