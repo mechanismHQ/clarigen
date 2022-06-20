@@ -46,6 +46,10 @@ export interface ClarinetContracts {
 
 export interface ClarinetConfig {
   contracts: ClarinetContracts;
+  clarigen?: {
+    output_dir?: string;
+    docs?: string;
+  };
 }
 
 export const CLARINET_SETTINGS = [
@@ -66,11 +70,10 @@ export async function getClarinetConfig(folder: string) {
   return config;
 }
 
-export async function getContractsFromClarinet(
-  folder: string,
+export function getContractsFromClarinet(
+  clarinetConfig: ClarinetConfig,
   accounts: ClarinetAccounts
-): Promise<ConfigContract[]> {
-  const clarinetConfig = await getClarinetConfig(folder);
+): ConfigContract[] {
   const deployerAddress = accounts.deployer.address;
   const sortedContracts = sortClarinetContracts(clarinetConfig.contracts);
   const contracts: ConfigContract[] = sortedContracts.map((contractName) => {

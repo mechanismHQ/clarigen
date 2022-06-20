@@ -4,6 +4,7 @@ import { constants } from 'fs';
 import {
   ClarinetAccounts,
   getClarinetAccounts,
+  getClarinetConfig,
   getContractsFromClarinet,
 } from './clarinet-config';
 
@@ -62,18 +63,21 @@ export async function getConfigFile(
 
 export async function getProjectConfig(rootPath: string): Promise<ConfigFile> {
   const configFile = await getConfigFile(rootPath);
-  const clarinetPath = resolve(rootPath, configFile.clarinet || '.');
+  const clarinetPath = resolve(rootPath, configFile.clarinet);
+  const clarinet = await getClarinetConfig(clarinetPath);
   const accounts = await getClarinetAccounts(clarinetPath);
-  const contracts = await getContractsFromClarinet(clarinetPath, accounts);
+  const contracts = getContractsFromClarinet(clarinet, accounts);
   const contractsDir = relative(
     process.cwd(),
     join(configFile.clarinet, 'contracts')
   );
   return {
     ...configFile,
+    outputDir: clarinet.clarigen.output_dir || configFile.outputDir,
+    docs: clarinet.clarigen.docs || configFile.docs,
     contracts,
     contractsDir,
     accounts,
-    clarinet: configFile.clarinet || '.',
+    clarinet: configFile.clarinet,
   };
 }

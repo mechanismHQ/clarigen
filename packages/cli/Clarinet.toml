@@ -2,6 +2,10 @@
 [project]
 name = "clarinet"
 
+[clarigen]
+output_dir = "tmp/clarion"
+docs = "tmp/docs"
+
 [contracts.simple]
 path = "contracts/simple.clar"
 depends_on = []
