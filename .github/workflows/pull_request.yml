@@ -9,25 +9,19 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
       - name: Set Node Version
-        uses: actions/setup-node@v2-beta
+        uses: actions/setup-node@v3
         with:
           node-version: 16.9.1
-      - name: Restore cache
-        uses: actions/cache@v2
-        with:
-          path: |
-            node_modules
-            */*/node_modules
-          key: ${{ runner.os }}-${{ hashFiles('**/yarn.lock') }}
+          cache: 'pnpm'
       - name: Lerna bootstrap
         run: npx lerna bootstrap
       - name: Yarn --force
-        run: yarn --force
+        run: pnpm install
       - name: Build packages
-        run: yarn build
+        run: pnpm build
       - name: Link
-        run: yarn lint
+        run: pnpm lint
       - name: Type checks
-        run: yarn typecheck
+        run: pnpm typecheck
       - name: Tests
-        run: yarn test
+        run: pnpm test

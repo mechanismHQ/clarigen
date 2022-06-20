@@ -73,8 +73,8 @@ export async function getProjectConfig(rootPath: string): Promise<ConfigFile> {
   );
   return {
     ...configFile,
-    outputDir: clarinet.clarigen.output_dir || configFile.outputDir,
-    docs: clarinet.clarigen.docs || configFile.docs,
+    outputDir: clarinet.clarigen?.output_dir || configFile.outputDir,
+    docs: clarinet.clarigen?.docs || configFile.docs,
     contracts,
     contractsDir,
     accounts,

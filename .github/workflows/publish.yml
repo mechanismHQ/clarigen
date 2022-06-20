@@ -15,32 +15,26 @@ jobs:
       - name: Prepare repository
         run: git checkout main
       - name: Set Node Version
-        uses: actions/setup-node@v2-beta
+        uses: actions/setup-node@v3
         with:
           node-version: 16.9.1
-      - name: Restore cache
-        uses: actions/cache@v2
-        with:
-          path: |
-            node_modules
-            */*/node_modules
-          key: ${{ runner.os }}-${{ hashFiles('**/yarn.lock') }}
+          cache: 'pnpm'
       - name: Install monorepo deps
         run: npx lerna bootstrap
       - name: Build packages
-        run: yarn build
+        run: pnpm build
       - name: Type checks
-        run: yarn typecheck
+        run: pnpm typecheck
       - name: Tests
-        run: yarn test
+        run: pnpm test
       - name: Lint
-        run: yarn lint
+        run: pnpm lint
       - name: Stash changes
         run: git stash
       - name: Create Release Pull Request or Publish to npm
         uses: changesets/action@c3d88279fd9abe11410de073005e34863f735b1c
         with:
-          publish: yarn publish-packages
+          publish: pnpm publish-packages
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}

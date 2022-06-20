@@ -17,7 +17,7 @@
     "build": "shx rm -rf ./dist && tsup && node make-deno.js",
     "test": "jest",
     "lint": "eslint \"src/**/*.{ts,tsx}\" && prettier  --check src/**/*.ts",
-    "prepublishOnly": "yarn build",
+    "prepublishOnly": "pnpm build",
     "typecheck": "tsc --noEmit"
   },
   "prettier": "@stacks/prettier-config",

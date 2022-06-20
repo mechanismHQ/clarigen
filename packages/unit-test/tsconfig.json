@@ -4,14 +4,14 @@
     "module": "esnext",
     "lib": ["dom", "esnext"],
     "outDir": "./dist",
-    "rootDir": "./src",
+    "rootDir": ".",
     "resolveJsonModule": true,
     "moduleResolution": "node",
     "noUnusedLocals": false,
     "noUnusedParameters": false,
     "skipLibCheck": true,
-    "types": ["node", "./types/"],
+    "types": ["node", "./types/", "@types/jest"],
     "typeRoots": ["./types/", "./node_modules/@types/"]  
   },
-  "include": ["./src/**/*", "./types/*"]
+  "include": ["./src/**/*", "./types/*", "./test/**/*"]
 }

@@ -19,12 +19,12 @@
     "dev": "tsup-node --watch",
     "build": "shx rm -rf ./dist && tsup-node",
     "compile": "ncc build src/index.ts --no-source-map-register -e @oclif/command -e @oclif/errors",
-    "build-single-file": "yarn compile && oclif-dev readme",
+    "build-single-file": "compile && oclif-dev readme",
     "test": "jest",
     "lint": "eslint \"src/**/*.{ts,tsx}\" && prettier  --check src/**/*.ts",
     "typecheck": "tsc --noEmit -p tsconfig-test.json",
-    "prepublishOnly": "yarn build",
-    "demo": "yarn build && node bin/run",
+    "prepublishOnly": "pnpm build",
+    "demo": "pnpm build && node bin/run",
     "publish:dev": "yalc publish --push"
   },
   "bin": {
@@ -50,9 +50,9 @@
     "ts-node": "^9.1.1"
   },
   "dependencies": {
-    "@clarigen/core": "1.0.0-next.19",
-    "@clarigen/native-bin": "1.0.0-next.19",
-    "@clarigen/claridocs": "1.0.0-next.19",
+    "@clarigen/core": "workspace:*",
+    "@clarigen/native-bin": "workspace:*",
+    "@clarigen/claridocs": "workspace:*",
     "@ltd/j-toml": "1.12.2",
     "@oclif/command": "^1.8.0",
     "@oclif/config": "^1.17.0",

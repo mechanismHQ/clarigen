@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/ban-types */
 import { ClarityAbiFunction, ClarityValue } from 'micro-stacks/clarity';
 import { ClarityAbi, parseToCV, transformArgsToCV } from '../clarity-types';
 import { Response, ClarityAbiMap } from '../abi-types';
@@ -17,13 +18,11 @@ export type ContractReturn<
   // C
 > = C extends ContractFn<ContractCalls.ReadOnly<infer T>> ? T : unknown;
 
-export type ContractReturnOk<
-  C extends ContractFn<ContractCalls.ReadOnly<any>>
-> = ContractReturn<C> extends Response<infer O, any> ? O : unknown;
+export type ContractReturnOk<C extends ContractFn<ContractCalls.ReadOnly<any>>> =
+  ContractReturn<C> extends Response<infer O, any> ? O : unknown;
 
-export type ContractReturnErr<
-  C extends ContractFn<ContractCalls.ReadOnly<any>>
-> = ContractReturn<C> extends Response<any, infer E> ? E : unknown;
+export type ContractReturnErr<C extends ContractFn<ContractCalls.ReadOnly<any>>> =
+  ContractReturn<C> extends Response<any, infer E> ? E : unknown;
 
 export interface MapGet<Key, Val> {
   map: ClarityAbiMap;
@@ -84,18 +83,16 @@ export const proxyHandler: ProxyHandler<PureContractInfo> = {
   get: getter,
 };
 
-type FnCalls = Record<string, unknown>;
-
 interface ProxyConstructor {
-  revocable<T extends FnCalls, S extends PureContractInfo>(
+  revocable<T extends object, S extends PureContractInfo>(
     target: T,
     handler: ProxyHandler<S>
   ): { proxy: T; revoke: () => void };
-  new <T extends FnCalls>(target: T, handler: ProxyHandler<T>): T;
-  new <T extends FnCalls, S extends PureContractInfo>(target: S, handler: ProxyHandler<S>): T;
+  new <T extends object>(target: T, handler: ProxyHandler<T>): T;
+  new <T extends object, S extends PureContractInfo>(target: S, handler: ProxyHandler<S>): T;
 }
 declare const Proxy: ProxyConstructor;
 
-export const pureProxy = <T extends FnCalls>(target: PureContractInfo): T => {
+export const pureProxy = <T extends object>(target: PureContractInfo): T => {
   return new Proxy<T, PureContractInfo>(target, proxyHandler);
 };

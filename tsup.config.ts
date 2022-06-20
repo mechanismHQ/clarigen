@@ -14,7 +14,7 @@ export function makeConfig(opts: Partial<Options> = {}) {
   const config: Options = {
     ...defaultConfig,
     ...opts,
-  }
+  };
   // console.log('config', config);
   return defineConfig(config);
 }

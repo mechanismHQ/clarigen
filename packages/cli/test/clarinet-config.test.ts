@@ -28,8 +28,9 @@ test('can get base config', async () => {
 
 test('getting contracts from clarinet', async () => {
   const path = resolve(process.cwd(), 'test/clarinet-project/clarinet');
+  const clarinet = await getClarinetConfig(path);
   const accounts = await getClarinetAccounts(path);
-  const contracts = await getContractsFromClarinet(path, accounts);
+  const contracts = getContractsFromClarinet(clarinet, accounts);
   const [echo, nested] = contracts;
   expect(echo.address).toEqual('ST1HTBVD3JG9C05J7HBJTHGR0GGW7KXW28M5JS8QE');
   expect(echo.file).toEqual('echo.clar');

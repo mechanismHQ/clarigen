@@ -17,14 +17,14 @@
     "build": "shx rm -rf ./dist && tsup",
     "test": "jest --passWithNoTests",
     "lint": "eslint \"src/**/*.{ts,tsx}\" && prettier  --check src/**/*.ts",
-    "prepublishOnly": "yarn build",
+    "prepublishOnly": "build",
     "typecheck": "tsc --noEmit"
   },
   "prettier": "@stacks/prettier-config",
   "name": "@clarigen/web",
   "author": "Hank Stoever",
   "dependencies": {
-    "@clarigen/core": "1.0.0-next.19",
+    "@clarigen/core": "workspace:*",
     "micro-stacks": "^0.2.0"
   },
   "publishConfig": {

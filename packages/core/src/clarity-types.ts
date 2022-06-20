@@ -88,30 +88,30 @@ function principalToString(principal: PrincipalCV): string {
 export function cvToValue<T = any>(val: ClarityValue, returnResponse = false): T {
   switch (val.type) {
     case ClarityType.BoolTrue:
-      return (true as unknown) as T;
+      return true as unknown as T;
     case ClarityType.BoolFalse:
-      return (false as unknown) as T;
+      return false as unknown as T;
     case ClarityType.Int:
     case ClarityType.UInt:
-      return (val.value as unknown) as T;
+      return val.value as unknown as T;
     case ClarityType.Buffer:
-      return (val.buffer as unknown) as T;
+      return val.buffer as unknown as T;
     case ClarityType.OptionalNone:
-      return (null as unknown) as T;
+      return null as unknown as T;
     case ClarityType.OptionalSome:
       return cvToValue(val.value);
     case ClarityType.ResponseErr:
-      if (returnResponse) return (err(cvToValue(val.value)) as unknown) as T;
+      if (returnResponse) return err(cvToValue(val.value)) as unknown as T;
       return cvToValue(val.value);
     case ClarityType.ResponseOk:
-      if (returnResponse) return (ok(cvToValue(val.value)) as unknown) as T;
+      if (returnResponse) return ok(cvToValue(val.value)) as unknown as T;
       return cvToValue(val.value);
     case ClarityType.PrincipalStandard:
     case ClarityType.PrincipalContract:
-      return (principalToString(val) as unknown) as T;
+      return principalToString(val) as unknown as T;
     case ClarityType.List:
       // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-      return (val.list.map(v => cvToValue(v)) as unknown) as T;
+      return val.list.map(v => cvToValue(v)) as unknown as T;
     case ClarityType.Tuple:
       const result: { [key: string]: any } = {};
       const arr = Object.keys(val.data).map(key => {
@@ -123,9 +123,9 @@ export function cvToValue<T = any>(val: ClarityValue, returnResponse = false): T
       });
       return result as T;
     case ClarityType.StringASCII:
-      return (val.data as unknown) as T;
+      return val.data as unknown as T;
     case ClarityType.StringUTF8:
-      return (val.data as unknown) as T;
+      return val.data as unknown as T;
   }
 }
 

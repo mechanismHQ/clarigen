@@ -4,7 +4,6 @@ import {
 } from 'micro-stacks/transactions';
 import {
   generateIndexFile,
-  generateInterface,
   generateInterfaceFile,
   generateProjectIndexFile,
   generateTypesFile,
@@ -15,6 +14,7 @@ import { resolve } from 'path';
 import {
   createClarityBin,
   NativeClarityBinProvider,
+  deployContract,
 } from '@clarigen/native-bin';
 
 let provider: NativeClarityBinProvider;
@@ -24,11 +24,10 @@ beforeEach(async () => {
 });
 
 test('can generate an interface', async () => {
-  const abi = await generateInterface({
-    contractFile: 'test/contracts/simple/simple.clar',
+  const abi = await deployContract({
+    contractFilePath: 'test/contracts/simple/simple.clar',
     provider,
-    contractName: 'simple',
-    contractAddress: 'ST1HTBVD3JG9C05J7HBJTHGR0GGW7KXW28M5JS8QE',
+    contractIdentifier: 'ST1HTBVD3JG9C05J7HBJTHGR0GGW7KXW28M5JS8QE.simple',
   });
   const getNameFn = abi.functions.find((func) => {
     return func.name === 'get-name';
@@ -45,12 +44,11 @@ test('can generate an interface', async () => {
 
 test('can generate interface file', async () => {
   const expectedFile = await readFile('./mocks/abi.txt');
-  const contractFile = 'test/contracts/simple/simple.clar';
-  const abi = await generateInterface({
-    contractFile,
+  const contractFilePath = 'test/contracts/simple/simple.clar';
+  const abi = await deployContract({
+    contractFilePath,
     provider,
-    contractName: 'simple',
-    contractAddress: 'ST1HTBVD3JG9C05J7HBJTHGR0GGW7KXW28M5JS8QE',
+    contractIdentifier: 'ST1HTBVD3JG9C05J7HBJTHGR0GGW7KXW28M5JS8QE.simple',
   });
   const fileContents = generateInterfaceFile({
     contractName: 'simple',
@@ -61,12 +59,11 @@ test('can generate interface file', async () => {
 
 test('can generate a types file', async () => {
   const expectedFile = await readFile('./mocks/types.txt');
-  const contractFile = 'test/contracts/simple/simple.clar';
-  const abi = await generateInterface({
-    contractFile,
+  const contractFilePath = 'test/contracts/simple/simple.clar';
+  const abi = await deployContract({
+    contractFilePath,
     provider,
-    contractName: 'simple',
-    contractAddress: 'ST1HTBVD3JG9C05J7HBJTHGR0GGW7KXW28M5JS8QE',
+    contractIdentifier: 'ST1HTBVD3JG9C05J7HBJTHGR0GGW7KXW28M5JS8QE.simple',
   });
   const fileContents = generateTypesFile(abi, 'simple');
   expect(fileContents).toEqual(expectedFile);

@@ -1,19 +1,11 @@
 import NodeEnvironment from 'jest-environment-node';
-import type {JestEnvironmentConfig, EnvironmentContext} from '@jest/environment';
+import type { JestEnvironmentConfig, EnvironmentContext } from '@jest/environment';
 import { contracts, accounts } from './clarinet-project/clarigen/single';
 import type { Config, Global } from '@jest/types';
 import { contractFactory, ContractFactory } from '@clarigen/core';
 import { TestProvider } from '../src';
 
 type Contracts = ContractFactory<typeof contracts>;
-
-declare global {
-  namespace NodeJS {
-    interface Global {
-      t: TestProvider;
-    }
-  }
-}
 
 class ClarigenEnvironment extends NodeEnvironment {
   public contracts: Contracts;

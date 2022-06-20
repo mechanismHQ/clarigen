@@ -9,7 +9,7 @@
     "module": "esnext",
     "lib": ["dom", "esnext"],
     "outDir": "./dist",
-    "rootDir": "./src",
+    "rootDir": ".",
     "esModuleInterop": true,
     "resolveJsonModule": true,
     "skipLibCheck": true,

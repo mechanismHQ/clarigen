@@ -3,7 +3,6 @@
  */
 import { contractFactory } from '@clarigen/core';
 import { contracts, accounts } from './clarinet-project/clarigen/single';
-import '../types';
 
 const factory = contractFactory(contracts, accounts.deployer.address);
 const contract = factory.tester;

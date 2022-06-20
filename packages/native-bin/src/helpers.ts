@@ -32,7 +32,7 @@ function getOverriddenCoreSource(): string | undefined {
  * @see https://stackoverflow.com/a/49455609/794962
  */
 function getThisPackageDir(): string {
-  const packagePath = dirname(require.resolve('../package.json'));
+  const packagePath = dirname(resolve(__filename, '..'));
   return packagePath;
 }
 
