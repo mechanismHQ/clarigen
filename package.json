@@ -7,8 +7,8 @@
     "lint:fix": "eslint --fix packages/**/*.{ts,js}",
     "test": "turbo run test --continue",
     "typecheck": "turbo run typecheck --continue",
-    "publish-packages": "pnpm build && pnpm changeset publish",
-    "publish-local": "pnpm build && pnpm lerna publish from-package",
+    "publish-packages": "pnpm build && pnpm publish -r",
+    "publish-local": "pnpm build && pnpm publish -r --tag beta",
     "preinstall": "npx only-allow pnpm"
   },
   "prettier": "@stacks/prettier-config",
