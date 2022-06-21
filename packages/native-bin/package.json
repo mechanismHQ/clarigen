@@ -16,7 +16,6 @@
     "build": "shx rm -rf ./dist && tsup-node",
     "test": "jest --passWithNoTests",
     "lint": "eslint \"src/**/*.{ts,tsx}\" && prettier  --check src/**/*.ts",
-    "prepublishOnly": "pnpm build",
     "typecheck": "tsc --noEmit",
     "postinstall": "node dist/direct-install.js",
     "publish:dev": "yalc publish --push",

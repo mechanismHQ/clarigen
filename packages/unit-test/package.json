@@ -18,7 +18,6 @@
     "build": "shx rm -rf ./dist && tsup-node",
     "test": "pnpm build-test-types && jest",
     "lint": "eslint \"src/**/*.{ts,tsx}\" && prettier  --check src/**/*.ts",
-    "prepublishOnly": "pnpm build",
     "typecheck": "tsc --noEmit",
     "build-test-types": "cd test/clarinet-project && pnpm clarigen && cd ../..",
     "publish:dev": "yalc publish --push"

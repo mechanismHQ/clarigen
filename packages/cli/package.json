@@ -23,7 +23,6 @@
     "test": "jest",
     "lint": "eslint \"src/**/*.{ts,tsx}\" && prettier  --check src/**/*.ts",
     "typecheck": "tsc --noEmit -p tsconfig-test.json",
-    "prepublishOnly": "pnpm build",
     "demo": "pnpm build && node bin/run",
     "publish:dev": "yalc publish --push"
   },

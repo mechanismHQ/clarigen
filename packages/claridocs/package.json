@@ -17,7 +17,6 @@
     "build": "shx rm -rf dist && tsup-node",
     "test": "jest --passWithNoTests",
     "lint": "eslint \"src/**/*.{ts,tsx}\" && prettier  --check src/**/*.ts",
-    "prepublishOnly": "pnpm build",
     "typecheck": "tsc --noEmit",
     "build-test-types": "cd test && pnpm clarigen && cd .."
   },
