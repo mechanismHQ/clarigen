@@ -1,4 +1,4 @@
-import { parse } from '@ltd/j-toml';
+import { parse } from '@iarna/toml';
 import { resolve } from 'path';
 import { readFile } from 'fs/promises';
 import { ConfigContract } from './config';
@@ -29,15 +29,13 @@ export async function getClarinetDevConfig(
 ): Promise<ClarinetDevConfig> {
   const baseConfigPath = resolve(folder, 'settings', 'Devnet.toml');
   const configContents = await readFile(baseConfigPath, { encoding: 'utf-8' });
-  const config = parse(configContents, 1.0, '\n', true, {
-    longer: true,
-  }) as unknown as ClarinetDevConfig;
-  return config;
+  const config = parse(configContents);
+  return config as unknown as ClarinetDevConfig;
 }
 
 export interface ClarinetContract {
   path: string;
-  depends_on: string[];
+  depends_on?: string[];
 }
 
 export interface ClarinetContracts {
@@ -61,12 +59,7 @@ export const CLARINET_SETTINGS = [
 export async function getClarinetConfig(folder: string) {
   const baseConfigPath = resolve(folder, 'Clarinet.toml');
   const configContents = await readFile(baseConfigPath, { encoding: 'utf-8' });
-  const config = parse(
-    configContents,
-    1.0,
-    '\n',
-    true
-  ) as unknown as ClarinetConfig;
+  const config = parse(configContents) as unknown as ClarinetConfig;
   return config;
 }
 
@@ -93,7 +86,7 @@ export function sortClarinetContracts(contractsConfig: ClarinetContracts) {
   const nodes: string[] = [];
   Object.entries(contractsConfig).forEach(([contractName, info]) => {
     nodes.push(contractName);
-    info.depends_on.forEach((dependency) =>
+    info.depends_on?.forEach((dependency) =>
       edges.push([contractName, dependency])
     );
   });

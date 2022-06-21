@@ -1,15 +1,29 @@
-
 [project]
 name = "clarinet"
+authors = []
+description = ""
+telemetry = false
+cache_dir = "./tmp/requirements"
+boot_contracts = ["pox", "costs-v2", "bns"]
 
-[clarigen]
-output_dir = "tmp/clarion"
-docs = "tmp/docs"
-
-[contracts.simple]
-path = "contracts/simple.clar"
-depends_on = []
+[[project.requirements]]
+contract_id = "SP3DX3H4FEYZJZ586MFBS25ZW3HZDMEW92260R2PR.Wrapped-Bitcoin"
 
 [contracts.ext]
 path = "contracts/external/ext.clar"
-depends_on = []
+
+[contracts.simple]
+path = "contracts/simple.clar"
+
+[repl]
+costs_version = 2
+parser_version = 2
+
+[repl.analysis]
+passes = []
+
+[repl.analysis.check_checker]
+strict = false
+trusted_sender = false
+trusted_caller = false
+callee_filter = false

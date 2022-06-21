@@ -1,0 +1,38 @@
+---
+id: 0
+name: Devnet deployment
+network: devnet
+stacks-node: "http://localhost:20443"
+bitcoin-node: "http://devnet:devnet@0.0.0.0:18443"
+plan:
+  batches:
+    - id: 0
+      transactions:
+        - requirement-publish:
+            contract-id: SP3DX3H4FEYZJZ586MFBS25ZW3HZDMEW92260R2PR.ft-trait
+            remap-sender: ST1HTBVD3JG9C05J7HBJTHGR0GGW7KXW28M5JS8QE
+            remap-principals: {}
+            cost: 8350
+            path: /Users/hankstoever/blockstack/clarion/packages/cli/./tmp/requirements/SP3DX3H4FEYZJZ586MFBS25ZW3HZDMEW92260R2PR.ft-trait.clar
+        - requirement-publish:
+            contract-id: SP3DX3H4FEYZJZ586MFBS25ZW3HZDMEW92260R2PR.restricted-token-trait
+            remap-sender: ST1HTBVD3JG9C05J7HBJTHGR0GGW7KXW28M5JS8QE
+            remap-principals: {}
+            cost: 5480
+            path: /Users/hankstoever/blockstack/clarion/packages/cli/./tmp/requirements/SP3DX3H4FEYZJZ586MFBS25ZW3HZDMEW92260R2PR.restricted-token-trait.clar
+        - requirement-publish:
+            contract-id: SP3DX3H4FEYZJZ586MFBS25ZW3HZDMEW92260R2PR.Wrapped-Bitcoin
+            remap-sender: ST1HTBVD3JG9C05J7HBJTHGR0GGW7KXW28M5JS8QE
+            remap-principals: {}
+            cost: 104220
+            path: /Users/hankstoever/blockstack/clarion/packages/cli/./tmp/requirements/SP3DX3H4FEYZJZ586MFBS25ZW3HZDMEW92260R2PR.Wrapped-Bitcoin.clar
+        - contract-publish:
+            contract-name: simple
+            expected-sender: ST1HTBVD3JG9C05J7HBJTHGR0GGW7KXW28M5JS8QE
+            cost: 6190
+            path: /Users/hankstoever/blockstack/clarion/packages/cli/contracts/simple.clar
+        - contract-publish:
+            contract-name: ext
+            expected-sender: ST1HTBVD3JG9C05J7HBJTHGR0GGW7KXW28M5JS8QE
+            cost: 1030
+            path: /Users/hankstoever/blockstack/clarion/packages/cli/contracts/external/ext.clar

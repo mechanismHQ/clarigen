@@ -18,6 +18,7 @@ import { generateContractMeta, generateSingleFile } from './generate/single';
 import { writeFile } from './writer';
 import { getVariables, TypedAbiVariable } from './generate/vars';
 import { ClarityAbiVariable } from 'micro-stacks/clarity';
+import { generateDeployments } from './generate/deployment';
 
 export interface ContractMeta {
   abi: ClarityAbi;
@@ -125,4 +126,5 @@ export const generateProject = async (projectPath: string) => {
   const singleFile = await generateSingleFile(configFile, metas);
   const singlePath = resolve(outputFolder, 'single.ts');
   await writeFile(singlePath, singleFile);
+  await generateDeployments(configFile);
 };
