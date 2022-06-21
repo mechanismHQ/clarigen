@@ -9,6 +9,7 @@ export interface ContractCall<T> {
   functionArgs: ClarityValue[];
   contractAddress: string;
   contractName: string;
+  _r?: T;
 }
 
 export interface ContractCallTyped<Args, R> extends Omit<ContractCall<R>, 'nativeArgs'> {
