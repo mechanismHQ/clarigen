@@ -24,7 +24,7 @@
   "name": "@clarigen/core",
   "author": "Hank Stoever",
   "dependencies": {
-    "micro-stacks": "^0.2.0"
+    "micro-stacks": "^0.5.2"
   },
   "publishConfig": {
     "access": "public"

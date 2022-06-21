@@ -1,7 +1,27 @@
-
 [project]
 name = "clarinet"
+authors = []
+description = ""
+telemetry = false
+boot_contracts = ["pox", "costs-v2", "bns"]
 
+[[project.requirements]]
+contract_id = "SP3DX3H4FEYZJZ586MFBS25ZW3HZDMEW92260R2PR.Wrapped-Bitcoin"
+
+[project.cache_location]
+path = "/Users/hankstoever/blockstack/clarion/packages/unit-test/test/clarinet-project/.requirements"
 [contracts.tester]
 path = "contracts/tester.clar"
-depends_on = []
+
+[repl]
+costs_version = 2
+parser_version = 2
+
+[repl.analysis]
+passes = []
+
+[repl.analysis.check_checker]
+strict = false
+trusted_sender = false
+trusted_caller = false
+callee_filter = false

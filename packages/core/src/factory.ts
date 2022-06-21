@@ -1,5 +1,6 @@
 import { ClarityAbiFunction, ClarityValue } from 'micro-stacks/clarity';
 import { TypedAbi, TypedAbiFunction } from '../src/abi-types';
+import { DeploymentPlan, getIdentifier } from './deployment';
 import { transformArguments } from './pure';
 
 export interface ContractCall<T> {
@@ -46,11 +47,15 @@ type UnknownContractCallFunction = ContractCallFunction<unknown[], unknown>;
 
 export function contractFactory<T extends AllContracts>(
   contracts: T,
-  deployer: string
+  deployer: string | DeploymentPlan
 ): ContractFactory<T> {
   const result = contracts as ContractFactory<T>;
   Object.keys(contracts).forEach(contractName => {
-    result[contractName].identifier = `${deployer}.${contractName}`;
+    if (typeof deployer === 'string') {
+      result[contractName].identifier = `${deployer}.${contractName}`;
+    } else {
+      result[contractName].identifier = getIdentifier(contractName, deployer);
+    }
     const contract = contracts[contractName];
     Object.keys(contracts[contractName].functions).forEach(_fnName => {
       const fnName: keyof typeof contract['functions'] = _fnName;

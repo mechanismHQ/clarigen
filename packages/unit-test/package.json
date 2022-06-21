@@ -27,12 +27,13 @@
   "name": "@clarigen/test",
   "author": "Hank Stoever",
   "devDependencies": {
-    "jest-environment-node": "28.1.1"
+    "jest-environment-node": "28.1.1",
+    "@clarigen/cli": "workspace:*"
   },
   "dependencies": {
     "@clarigen/core": "workspace:*",
     "@clarigen/native-bin": "workspace:*",
-    "micro-stacks": "^0.2.0"
+    "micro-stacks": "^0.5.2"
   },
   "publishConfig": {
     "access": "public"

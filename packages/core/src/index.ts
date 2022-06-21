@@ -18,3 +18,4 @@ export * from './clarity-types';
 export * from './api';
 export * from './abi-types';
 export * from './factory';
+export type { DeploymentPlan } from './deployment';
