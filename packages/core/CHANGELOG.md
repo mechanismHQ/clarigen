@@ -1,5 +1,11 @@
 # @clarigen/core
 
+## 1.0.0-next.23
+
+### Patch Changes
+
+- [#30](https://github.com/mechanismHQ/clarigen/pull/30) [`0413049`](https://github.com/mechanismHQ/clarigen/commit/041304944c408b0bdf4e6dcf3cd5c24025f473e0) Thanks [@hstove](https://github.com/hstove)! - Fixed an issue where `contractFactory` didn't have proper `ContractCall` types.
+
 ## 1.0.0-next.22
 
 ### Patch Changes
