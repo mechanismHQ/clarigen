@@ -1,5 +1,14 @@
 # @clarigen/native-bin
 
+## 1.0.0-next.24
+
+### Patch Changes
+
+- [#30](https://github.com/mechanismHQ/clarigen/pull/30) [`06ac766`](https://github.com/mechanismHQ/clarigen/commit/06ac7660898a481131082c83172afc3c2a8b80f9) Thanks [@hstove](https://github.com/hstove)! - Fix version bumps
+
+- Updated dependencies [[`06ac766`](https://github.com/mechanismHQ/clarigen/commit/06ac7660898a481131082c83172afc3c2a8b80f9)]:
+  - @clarigen/core@1.0.0-next.24
+
 ## 1.0.0-next.22
 
 ### Patch Changes
