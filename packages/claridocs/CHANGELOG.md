@@ -1,5 +1,14 @@
 # @clarigen/claridocs
 
+## 1.0.0-next.22
+
+### Patch Changes
+
+- [#30](https://github.com/mechanismHQ/clarigen/pull/30) [`d116788`](https://github.com/mechanismHQ/clarigen/commit/d116788fd5f8cfa4a14716c2c7c54f435cb01884) Thanks [@hstove](https://github.com/hstove)! - Adds parsing and saving of deployment plans in typescript form.
+
+- Updated dependencies [[`d116788`](https://github.com/mechanismHQ/clarigen/commit/d116788fd5f8cfa4a14716c2c7c54f435cb01884)]:
+  - @clarigen/core@1.0.0-next.22
+
 ## 1.0.0-next.21
 
 ### Patch Changes
