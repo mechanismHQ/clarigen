@@ -24,16 +24,16 @@ plan:
         - emulated-contract-publish:
             contract-name: ft-trait
             emulated-sender: SP3DX3H4FEYZJZ586MFBS25ZW3HZDMEW92260R2PR
-            path: /Users/hankstoever/blockstack/clarion/packages/unit-test/test/clarinet-project/.requirements/SP3DX3H4FEYZJZ586MFBS25ZW3HZDMEW92260R2PR.ft-trait.clar
+            path: .requirements/SP3DX3H4FEYZJZ586MFBS25ZW3HZDMEW92260R2PR.ft-trait.clar
         - emulated-contract-publish:
             contract-name: restricted-token-trait
             emulated-sender: SP3DX3H4FEYZJZ586MFBS25ZW3HZDMEW92260R2PR
-            path: /Users/hankstoever/blockstack/clarion/packages/unit-test/test/clarinet-project/.requirements/SP3DX3H4FEYZJZ586MFBS25ZW3HZDMEW92260R2PR.restricted-token-trait.clar
+            path: .requirements/SP3DX3H4FEYZJZ586MFBS25ZW3HZDMEW92260R2PR.restricted-token-trait.clar
         - emulated-contract-publish:
             contract-name: Wrapped-Bitcoin
             emulated-sender: SP3DX3H4FEYZJZ586MFBS25ZW3HZDMEW92260R2PR
-            path: /Users/hankstoever/blockstack/clarion/packages/unit-test/test/clarinet-project/.requirements/SP3DX3H4FEYZJZ586MFBS25ZW3HZDMEW92260R2PR.Wrapped-Bitcoin.clar
+            path: .requirements/SP3DX3H4FEYZJZ586MFBS25ZW3HZDMEW92260R2PR.Wrapped-Bitcoin.clar
         - emulated-contract-publish:
             contract-name: tester
             emulated-sender: ST1HTBVD3JG9C05J7HBJTHGR0GGW7KXW28M5JS8QE
-            path: /Users/hankstoever/blockstack/clarion/packages/unit-test/test/clarinet-project/contracts/tester.clar
+            path: contracts/tester.clar

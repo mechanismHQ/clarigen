@@ -1,10 +1,11 @@
 /**
  * @jest-environment <rootDir>/test/environment.ts
  */
-import { contractFactory } from '@clarigen/core';
+import { deploymentFactory, ok } from '@clarigen/core';
 import { contracts, accounts } from './clarinet-project/clarigen/single';
+import { simnetDeployment } from './clarinet-project/clarigen/deployments/simnet';
 
-const factory = contractFactory(contracts, accounts.deployer.address);
+const factory = deploymentFactory(contracts, simnetDeployment);
 const contract = factory.tester;
 const alice = accounts.wallet_1.address;
 
@@ -20,9 +21,9 @@ test('can get logs of ro fn', async () => {
   expect(result.logs[0]).toEqual('"asdf"');
 });
 
-test('can call public fn', async () => {
+test.only('can call public fn', async () => {
   const result = await t.tx(contract.printPub(), alice);
-  expect(result.value).toEqual(true);
+  expect(result.value).toEqual(ok(true));
 });
 
 test('can get parsed prints of public fn', async () => {
@@ -38,4 +39,8 @@ test('can get an error from public fn', async () => {
   const result = await t.txErr(contract.printErr(), alice);
   expect(result.logs[0]).toEqual('u100');
   expect(result.value).toEqual(210n);
+});
+
+test('handles err types', async () => {
+  const result = await t.txErr(contract.roResp(true), alice);
 });

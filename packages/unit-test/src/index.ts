@@ -15,6 +15,8 @@ import {
   expectErr,
   AllContracts,
   ContractFactory,
+  ResponseErr,
+  ResponseOk,
 } from '@clarigen/core';
 import { deployUtilContract, UTIL_CONTRACT_ID } from './utils';
 import {
@@ -42,12 +44,16 @@ interface FromContractsOptions {
   accounts?: ClarinetAccounts;
   clarityBin?: NativeClarityBinProvider;
   coverageFolder?: string;
+  clarinetPath?: string;
 }
 
 interface FromContracts<T extends Contracts<any>> {
   deployed: ContractInstances<T>;
   provider: TestProvider;
 }
+
+type OkType<T> = T extends ResponseOk<infer Ok, unknown> ? Ok : never;
+type ErrType<T> = T extends ResponseErr<unknown, infer Err> ? Err : never;
 
 export class TestProvider {
   public clarityBin: NativeClarityBinProvider;
@@ -114,7 +120,10 @@ export class TestProvider {
     for (const k in contracts) {
       if (Object.prototype.hasOwnProperty.call(contracts, k)) {
         const contract = contracts[k];
-        const contractFilePath = contract.contractFile;
+        let contractFilePath = contract.contractFile;
+        if (options.clarinetPath) {
+          contractFilePath = resolve(process.cwd(), options.clarinetPath, contractFilePath);
+        }
         if (typeof contractFilePath === 'undefined') {
           throw new Error('Cannot setup @clarigen/test - missing contract file.');
         }
@@ -140,33 +149,41 @@ export class TestProvider {
     return result.value;
   }
 
-  public async roOk<Ok, Err>(tx: ContractCall<Response<Ok, Err>>): Promise<ReadOnlyResult<Ok>> {
+  public async roOk<R extends Response<unknown, unknown>>(
+    tx: ContractCall<R>
+  ): Promise<ReadOnlyResult<OkType<R>>> {
     const result = await this.ro(tx);
     const value = expectOk(result.value);
     return {
       ...result,
-      value,
+      value: value as OkType<R>,
     };
   }
 
-  public async roErr<Ok, Err>(tx: ContractCall<Response<Ok, Err>>): Promise<ReadOnlyResult<Err>> {
+  public async roErr<R extends Response<unknown, unknown>>(
+    tx: ContractCall<R>
+  ): Promise<ReadOnlyResult<ErrType<R>>> {
     const result = await this.ro(tx);
     const value = expectErr(result.value);
     return {
       ...result,
-      value,
+      value: value as ErrType<R>,
     };
   }
 
-  public async rovOk<Ok, Err>(tx: ContractCall<Response<Ok, Err>>): Promise<Ok> {
+  public async rovOk<R extends Response<unknown, unknown>>(
+    tx: ContractCall<R>
+  ): Promise<OkType<R>> {
     return (await this.roOk(tx)).value;
   }
 
-  public async rovErr<Ok, Err>(tx: ContractCall<Response<Ok, Err>>): Promise<Err> {
+  public async rovErr<R extends Response<unknown, unknown>>(
+    tx: ContractCall<R>
+  ): Promise<ErrType<R>> {
     return (await this.roErr(tx)).value;
   }
 
-  public tx<Ok, Err>(tx: ContractCalls.Public<Ok, Err>, senderAddress: string) {
+  public tx<R extends Response<unknown, unknown>>(tx: ContractCall<R>, senderAddress: string) {
     return _tx({
       tx,
       senderAddress,
@@ -175,22 +192,30 @@ export class TestProvider {
     });
   }
 
-  public async txOk<Ok, Err>(
-    tx: ContractCalls.Public<Ok, Err>,
+  public async txOk<R extends Response<unknown, unknown>>(
+    tx: ContractCall<R>,
     senderAddress: string
-  ): Promise<PublicResultOk<Ok>> {
+  ): Promise<PublicResultOk<OkType<R>>> {
     const result = await this.tx(tx, senderAddress);
+    const value = expectOk(result.value);
     if (!result.isOk) throw new Error(`Expected OK, received error: ${String(result.value)}`);
-    return result;
+    return {
+      ...result,
+      value: value as OkType<R>,
+    };
   }
 
-  public async txErr<Ok, Err>(
-    tx: ContractCalls.Public<Ok, Err>,
+  public async txErr<R extends Response<unknown, unknown>>(
+    tx: ContractCall<R>,
     senderAddress: string
-  ): Promise<PublicResultErr<Err>> {
+  ): Promise<PublicResultErr<ErrType<R>>> {
     const result = await this.tx(tx, senderAddress);
+    const value = expectErr(result.value);
     if (result.isOk) throw new Error(`Expected Err, received ok: ${String(result.value)}`);
-    return result;
+    return {
+      ...result,
+      value: value as ErrType<R>,
+    };
   }
 
   public evalCode<T>(code: string, contractAddress = UTIL_CONTRACT_ID): Promise<ReadOnlyResult<T>> {

@@ -8,6 +8,8 @@ import {
   Response,
   filterEvents,
   CoreNodeEventType,
+  ok,
+  err,
 } from '@clarigen/core';
 import {
   NativeClarityBinProvider,
@@ -125,19 +127,19 @@ export interface PublicResultOk<T> extends PublicResultBase<T> {
   prints: any[];
 }
 
-export type PublicResult<Ok, Err> = PublicResultOk<Ok> | PublicResultErr<Err>;
+export type PublicResult<R> = PublicResultOk<R> | PublicResultErr<R>;
 
-export async function tx<Ok, Err>({
+export async function tx<R extends Response<unknown, unknown>>({
   tx,
   senderAddress,
   bin,
   coverageFolder,
 }: {
-  tx: ContractCalls.Public<Ok, Err>;
+  tx: ContractCall<R>;
   senderAddress: string;
   bin: NativeClarityBinProvider;
   coverageFolder?: string;
-}): Promise<PublicResult<Ok, Err>> {
+}): Promise<PublicResult<R>> {
   const result = await executeJson({
     contractAddress: getIdentifier(tx),
     senderAddress,
@@ -148,10 +150,11 @@ export async function tx<Ok, Err>({
   });
   const resultCV = hexToCV(result.output_serialized);
   const value = cvToValue(resultCV);
+  const resp = result.success ? ok(value) : err(value);
   const baseReturn = {
-    value,
     logs: getLogs(result.stderr),
     costs: result.costs,
+    value: resp as R,
   };
   if (result.success) {
     return {

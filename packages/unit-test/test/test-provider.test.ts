@@ -37,7 +37,7 @@ test('can get logs of ro fn', async () => {
 
 test('can call public fn', async () => {
   const result = await t.tx(contract.printPub(), alice);
-  expect(result.value).toEqual(true);
+  expect(result.value).toEqual(ok(true));
 });
 
 test('can get parsed prints of public fn', async () => {

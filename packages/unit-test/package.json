@@ -20,7 +20,7 @@
     "lint": "eslint \"src/**/*.{ts,tsx}\" && prettier  --check src/**/*.ts",
     "typecheck": "tsc --noEmit",
     "build-test-types": "cd test/clarinet-project && pnpm clarigen && cd ../..",
-    "publish:dev": "yalc publish --push"
+    "publish:dev": "pnpm build && yalc publish --push"
   },
   "prettier": "@stacks/prettier-config",
   "name": "@clarigen/test",
