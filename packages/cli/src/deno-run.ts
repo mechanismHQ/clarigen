@@ -20,10 +20,8 @@ export interface Session {
 }
 
 export async function getClarinetSession(cwd?: string): Promise<Session> {
-  const scriptPath = resolve(
-    homedir(),
-    'stacker/deno-clarigen/src/cli/print.ts'
-  );
+  const scriptPath =
+    'https://raw.githubusercontent.com/mechanismHQ/clarigen-deno/main/src/cli/print.ts';
   const command = `clarinet run ${scriptPath}`;
   try {
     const result = await exec(command, { cwd });
