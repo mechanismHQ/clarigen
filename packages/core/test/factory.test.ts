@@ -12,6 +12,10 @@ test('can make the factory', () => {
 });
 
 test('can work with deployment', () => {
+  const dep = simnetDeployment;
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+  (dep.plan.batches[0].transactions[3]['emulated-contract-publish'] as any).path = 'myPath';
   const { tester } = contractFactory(contracts, simnetDeployment);
+  expect(tester.contractFile).toEqual('myPath');
   expect(tester.identifier).toEqual('ST1HTBVD3JG9C05J7HBJTHGR0GGW7KXW28M5JS8QE.tester');
 });

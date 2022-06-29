@@ -8,6 +8,8 @@ import {
 } from 'micro-stacks/wallet-sdk';
 import { array as toposort } from 'toposort';
 import { StacksNetworkVersion } from 'micro-stacks/crypto';
+import { parseDeployment } from './generate/deployment';
+import { SimnetDeploymentPlan } from '@clarigen/core';
 
 interface ClarinetConfigAccount {
   mnemonic: string;
@@ -61,6 +63,27 @@ export async function getClarinetConfig(folder: string) {
   const configContents = await readFile(baseConfigPath, { encoding: 'utf-8' });
   const config = parse(configContents) as unknown as ClarinetConfig;
   return config;
+}
+
+export async function getContractsFromDeployment(
+  clarinetPath?: string
+): Promise<ConfigContract[]> {
+  const simnetPath = resolve(
+    clarinetPath || process.cwd(),
+    'deployments/default.simnet-plan.yaml'
+  );
+  const deployment = (await parseDeployment(
+    simnetPath
+  )) as SimnetDeploymentPlan;
+  const txs = deployment.plan.batches[0].transactions;
+  return txs.map((_tx) => {
+    const tx = _tx['emulated-contract-publish'];
+    return {
+      file: tx.path,
+      name: tx['contract-name'],
+      address: tx['emulated-sender'],
+    };
+  });
 }
 
 export function getContractsFromClarinet(

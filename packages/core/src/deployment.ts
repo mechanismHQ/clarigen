@@ -28,7 +28,7 @@ interface ContractPublishTransaction {
 export type Transaction = EmulatedTransaction | RequirementTransaction | ContractPublishTransaction;
 
 // type Batch = Transaction[];
-interface Batch<T extends Transaction> {
+export interface Batch<T extends Transaction> {
   id: number;
   transactions: Readonly<T[]>;
 }
@@ -63,31 +63,62 @@ export interface DevnetDeploymentPlan {
 
 export type DeploymentPlan = SimnetDeploymentPlan | DevnetDeploymentPlan;
 
-function flatBatch<T extends Transaction>(batches: Batch<T>[]) {
+export function flatBatch<T extends Transaction>(batches: Batch<T>[]) {
   // const start: T[][] = [];
   const txs: T[] = [];
   batches.forEach(batch => txs.push(...batch.transactions));
   return txs;
 }
 
-export function getIdentifier(contractName: string, deployment: DeploymentPlan): string {
+export function getDeploymentContract(
+  contractName: string,
+  deployment: DeploymentPlan
+): Transaction {
   const txs: Transaction[] = flatBatch(deployment.plan.batches as Batch<Transaction>[]);
   for (const tx of txs) {
     if ('requirement-publish' in tx) {
       const [_, name] = tx['requirement-publish']['contract-id'].split('.');
       if (name === contractName) {
-        return tx['requirement-publish']['contract-id'];
+        return tx;
       }
     } else if ('emulated-contract-publish' in tx) {
       if (tx['emulated-contract-publish']['contract-name'] === contractName) {
-        return `${tx['emulated-contract-publish']['emulated-sender']}.${contractName}`;
+        return tx;
       }
     } else if ('contract-publish' in tx) {
       const contract = tx['contract-publish'];
       if (contract['contract-name'] === contractName) {
-        return `${contract['expected-sender']}.${contract['contract-name']}`;
+        return tx;
       }
     }
   }
-  throw new Error(`Unable to find ID for contract '${contractName}'`);
+  throw new Error(`Unable to find deployment tx for contract '${contractName}'`);
+}
+
+export function getDeploymentTxPath(tx: Transaction): string {
+  if ('requirement-publish' in tx) {
+    return tx['requirement-publish'].path;
+  } else if ('emulated-contract-publish' in tx) {
+    const contract = tx['emulated-contract-publish'];
+    return contract.path;
+  } else if ('contract-publish' in tx) {
+    const contract = tx['contract-publish'];
+    return contract.path;
+  }
+  throw new Error('Couldnt get path for deployment tx.');
+}
+
+export function getIdentifier(tx: Transaction): string {
+  if ('requirement-publish' in tx) {
+    const [_, name] = tx['requirement-publish']['contract-id'].split('.');
+    return tx['requirement-publish']['contract-id'];
+  } else if ('emulated-contract-publish' in tx) {
+    const contract = tx['emulated-contract-publish'];
+    return `${contract['emulated-sender']}.${contract['contract-name']}`;
+  } else if ('contract-publish' in tx) {
+    const contract = tx['contract-publish'];
+    return `${contract['expected-sender']}.${contract['contract-name']}`;
+  }
+  console.log(tx);
+  throw new Error(`Unable to find ID for contract.`);
 }

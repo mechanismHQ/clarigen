@@ -7,7 +7,8 @@ export const MAINNET_BURN_ADDRESS = 'SP000000000000000000002Q6VF78';
 export const toCamelCase = (input: string | number | symbol, titleCase?: boolean) => {
   const inputStr = typeof input === 'string' ? input : String(input);
   const [first, ...parts] = inputStr.replace('!', '').replace('?', '').split('-');
-  let result = titleCase ? `${first[0].toUpperCase()}${first.slice(1)}` : first;
+  const firstChar = titleCase ? first[0].toUpperCase() : first[0].toLowerCase();
+  let result = `${firstChar}${first.slice(1)}`;
   parts.forEach(part => {
     const capitalized = part[0].toUpperCase() + part.slice(1);
     result += capitalized;

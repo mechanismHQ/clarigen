@@ -107,7 +107,7 @@ export const accounts = {
     const contractInfo = `${contractVar}Info`;
     const contractInterface = `${toCamelCase(contractName, true)}Contract`;
     const dirName = dirname(contract.file);
-    const importPath = `'./${join(dirName || '.', contractName)}'`;
+    const importPath = `'./${contractName}'`;
 
     const _import = `import { ${contractInfo} } from ${importPath};`;
     imports.push(_import);

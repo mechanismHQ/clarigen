@@ -66,7 +66,11 @@ export class Generate extends Command {
         void cb();
       });
     } else {
-      await generateProject(cwd);
+      try {
+        await generateProject(cwd);
+      } catch (error) {
+        console.log(error);
+      }
     }
   }
 }

@@ -19,6 +19,8 @@ import { writeFile } from './writer';
 import { getVariables, TypedAbiVariable } from './generate/vars';
 import { ClarityAbiVariable } from 'micro-stacks/clarity';
 import { generateDeployments } from './generate/deployment';
+import { getClarinetSession } from './deno-run';
+import { generateFilesForContractWithSession } from './contract';
 
 export interface ContractMeta {
   abi: ClarityAbi;
@@ -101,18 +103,27 @@ export const generateProject = async (projectPath: string) => {
   const outputFolder = resolve(projectPath, outputDir);
   const provider = await createClarityBin();
   const metas: ContractMeta[] = [];
+  const session = await getClarinetSession(
+    resolve(projectPath, configFile.clarinet)
+  );
   // this needs to be serial
-  for (const contract of contracts) {
-    const contractFile = resolve(projectPath, contractsDir, contract.file);
-    const dirName = dirname(contract.file);
-    const meta = await generateFilesForContract({
-      contractFile,
-      outputFolder: outputFolder,
-      provider,
-      contractAddress: contract.address,
-      dirName,
-      contractName: contract.name,
+  for (const contract of session.contracts) {
+    const configContract = contracts.find(
+      (c) => c.name === contract.contract_id.split('.')[1]
+    );
+    if (typeof configContract === 'undefined') {
+      throw new Error(`No config contract found for ${contract.contract_id}`);
+    }
+    const contractFile = resolve(
+      projectPath,
+      configFile.clarinet,
+      configContract.file
+    );
+    const meta = await generateFilesForContractWithSession({
+      sessionContract: contract,
+      outputFolder,
       docsPath: configFile.docs,
+      contractFile,
     });
     metas.push(meta);
   }

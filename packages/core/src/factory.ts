@@ -1,7 +1,16 @@
 import { ClarityAbiFunction, ClarityValue } from 'micro-stacks/clarity';
 import { TypedAbi, TypedAbiFunction } from '../src/abi-types';
-import { DeploymentPlan, getIdentifier } from './deployment';
+import {
+  Batch,
+  DeploymentPlan,
+  flatBatch,
+  getDeploymentContract,
+  getDeploymentTxPath,
+  getIdentifier,
+  Transaction,
+} from './deployment';
 import { transformArguments } from './pure';
+import { toCamelCase } from './utils';
 
 export interface ContractCall<T> {
   function: ClarityAbiFunction;
@@ -37,7 +46,7 @@ export type FunctionsToContractCalls<T> = T extends ContractFunctions
   : never;
 
 export type FullContract<T> = T extends TypedAbi
-  ? T & FunctionsToContractCalls<T['functions']> & { identifier: string }
+  ? T & FunctionsToContractCalls<T['functions']> & { identifier: string } & { contractFile: string }
   : never;
 
 export type ContractFactory<T extends AllContracts> = {
@@ -52,12 +61,14 @@ export function contractFactory<T extends AllContracts>(
 ): ContractFactory<T> {
   const result = contracts as ContractFactory<T>;
   Object.keys(contracts).forEach(contractName => {
+    const contract = contracts[contractName];
     if (typeof deployer === 'string') {
       result[contractName].identifier = `${deployer}.${contractName}`;
     } else {
-      result[contractName].identifier = getIdentifier(contractName, deployer);
+      const tx = getDeploymentContract(contract.contractName, deployer);
+      result[contractName].contractFile = getDeploymentTxPath(tx);
+      result[contractName].identifier = getIdentifier(tx);
     }
-    const contract = contracts[contractName];
     Object.keys(contracts[contractName].functions).forEach(_fnName => {
       const fnName: keyof typeof contract['functions'] = _fnName;
       const fn = ((...args: any[]) => {
@@ -75,4 +86,38 @@ export function contractFactory<T extends AllContracts>(
     });
   });
   return result;
+}
+
+export function deploymentFactory<T extends AllContracts>(
+  contracts: T,
+  deployer: DeploymentPlan
+): ContractFactory<T> {
+  const result = {} as Partial<ContractFactory<T>>;
+  const txs = flatBatch(deployer.plan.batches as Batch<Transaction>[]);
+  txs.forEach(tx => {
+    const id = getIdentifier(tx);
+    const [contractAddress, contractFileName] = id.split('.');
+    const contractName = toCamelCase(contractFileName) as keyof T;
+    const def = contracts[contractName] as TypedAbi;
+    const final = contracts[contractName] as FullContract<T[keyof T]>;
+    result[contractName] = final;
+    final.contractFile = getDeploymentTxPath(tx);
+    final.identifier = id;
+    Object.keys(contracts[contractName].functions).forEach(_fnName => {
+      const fnName: keyof typeof def['functions'] = _fnName;
+      const fn = ((...args: any[]) => {
+        const foundFunction = def.functions[fnName];
+        const functionArgs = transformArguments(foundFunction, args);
+        return {
+          functionArgs: functionArgs,
+          contractAddress: contractAddress,
+          contractName: final.contractName,
+          function: foundFunction,
+          nativeArgs: args,
+        };
+      }) as FnToContractCall<typeof def['functions']>;
+      final[fnName as keyof typeof result[typeof contractName]] = fn;
+    });
+  });
+  return result as ContractFactory<T>;
 }

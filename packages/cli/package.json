@@ -24,7 +24,7 @@
     "lint": "eslint \"src/**/*.{ts,tsx}\" && prettier  --check src/**/*.ts",
     "typecheck": "tsc --noEmit -p tsconfig-test.json",
     "demo": "pnpm build && node bin/run",
-    "publish:dev": "yalc publish --push"
+    "publish:dev": "pnpm build && yalc publish --push"
   },
   "bin": {
     "clarigen": "./bin/run"

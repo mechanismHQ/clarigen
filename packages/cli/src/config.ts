@@ -3,9 +3,11 @@ import { readFile, access } from 'fs/promises';
 import { constants } from 'fs';
 import {
   ClarinetAccounts,
+  ClarinetConfig,
   getClarinetAccounts,
   getClarinetConfig,
   getContractsFromClarinet,
+  getContractsFromDeployment,
 } from './clarinet-config';
 
 export interface ConfigContract {
@@ -66,7 +68,12 @@ export async function getProjectConfig(rootPath: string): Promise<ConfigFile> {
   const clarinetPath = resolve(rootPath, configFile.clarinet);
   const clarinet = await getClarinetConfig(clarinetPath);
   const accounts = await getClarinetAccounts(clarinetPath);
-  const contracts = getContractsFromClarinet(clarinet, accounts);
+  let contracts: ConfigContract[];
+  try {
+    contracts = await getContractsFromDeployment(clarinetPath);
+  } catch (error) {
+    contracts = getContractsFromClarinet(clarinet, accounts);
+  }
   const contractsDir = relative(
     process.cwd(),
     join(configFile.clarinet, 'contracts')
