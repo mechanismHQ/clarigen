@@ -1,10 +1,19 @@
 import type { ContractInstances } from '@clarigen/core';
+import { ftTraitInfo } from './ft-trait';
+import { restrictedTokenTraitInfo } from './restricted-token-trait';
+import { wrappedBitcoinInfo } from './Wrapped-Bitcoin';
 import { testerInfo } from './tester';
+export type { FtTraitContract } from './ft-trait';
+export type { RestrictedTokenTraitContract } from './restricted-token-trait';
+export type { WrappedBitcoinContract } from './Wrapped-Bitcoin';
 export type { TesterContract } from './tester';
 
 export type Contracts = ContractInstances<typeof contracts>;
 
 export const contracts = {
+  ftTrait: ftTraitInfo,
+  restrictedTokenTrait: restrictedTokenTraitInfo,
+  wrappedBitcoin: wrappedBitcoinInfo,
   tester: testerInfo,
 };
 

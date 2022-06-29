@@ -4,32 +4,33 @@ import { ClarityAbi } from '@clarigen/core';
 export const TesterInterface: ClarityAbi = {
   "functions": [
     {
-      "access": "public",
-      "args": [],
       "name": "print-err",
-      "outputs": {
-        "type": {
-          "response": {
-            "error": "uint128",
-            "ok": "none"
-          }
-        }
-      }
-    },
-    {
       "access": "public",
       "args": [],
-      "name": "print-pub",
       "outputs": {
         "type": {
           "response": {
-            "error": "none",
-            "ok": "bool"
+            "ok": "none",
+            "error": "uint128"
           }
         }
       }
     },
     {
+      "name": "print-pub",
+      "access": "public",
+      "args": [],
+      "outputs": {
+        "type": {
+          "response": {
+            "ok": "bool",
+            "error": "none"
+          }
+        }
+      }
+    },
+    {
+      "name": "set-in-map",
       "access": "public",
       "args": [
         {
@@ -41,17 +42,17 @@ export const TesterInterface: ClarityAbi = {
           "type": "bool"
         }
       ],
-      "name": "set-in-map",
       "outputs": {
         "type": {
           "response": {
-            "error": "none",
-            "ok": "bool"
+            "ok": "bool",
+            "error": "none"
           }
         }
       }
     },
     {
+      "name": "set-num",
       "access": "public",
       "args": [
         {
@@ -59,38 +60,17 @@ export const TesterInterface: ClarityAbi = {
           "type": "uint128"
         }
       ],
-      "name": "set-num",
       "outputs": {
         "type": {
           "response": {
-            "error": "none",
-            "ok": "bool"
+            "ok": "bool",
+            "error": "none"
           }
         }
       }
     },
     {
-      "access": "read_only",
-      "args": [
-        {
-          "name": "val",
-          "type": {
-            "string-ascii": {
-              "length": 33
-            }
-          }
-        }
-      ],
       "name": "echo",
-      "outputs": {
-        "type": {
-          "string-ascii": {
-            "length": 33
-          }
-        }
-      }
-    },
-    {
       "access": "read_only",
       "args": [
         {
@@ -102,7 +82,6 @@ export const TesterInterface: ClarityAbi = {
           }
         }
       ],
-      "name": "echo-with-logs",
       "outputs": {
         "type": {
           "string-ascii": {
@@ -112,6 +91,28 @@ export const TesterInterface: ClarityAbi = {
       }
     },
     {
+      "name": "echo-with-logs",
+      "access": "read_only",
+      "args": [
+        {
+          "name": "val",
+          "type": {
+            "string-ascii": {
+              "length": 33
+            }
+          }
+        }
+      ],
+      "outputs": {
+        "type": {
+          "string-ascii": {
+            "length": 33
+          }
+        }
+      }
+    },
+    {
+      "name": "ro-resp",
       "access": "read_only",
       "args": [
         {
@@ -119,35 +120,34 @@ export const TesterInterface: ClarityAbi = {
           "type": "bool"
         }
       ],
-      "name": "ro-resp",
       "outputs": {
         "type": {
           "response": {
-            "error": "uint128",
             "ok": {
               "string-ascii": {
                 "length": 4
               }
-            }
+            },
+            "error": "uint128"
           }
         }
       }
     }
   ],
-  "fungible_tokens": [],
+  "variables": [
+    {
+      "name": "num-var",
+      "type": "uint128",
+      "access": "variable"
+    }
+  ],
   "maps": [
     {
-      "key": "uint128",
       "name": "simple-map",
+      "key": "uint128",
       "value": "bool"
     }
   ],
-  "non_fungible_tokens": [],
-  "variables": [
-    {
-      "access": "variable",
-      "name": "num-var",
-      "type": "uint128"
-    }
-  ]
+  "fungible_tokens": [],
+  "non_fungible_tokens": []
 };
