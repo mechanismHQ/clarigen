@@ -1,5 +1,15 @@
 # @clarigen/test
 
+## 1.0.0-next.25
+
+### Patch Changes
+
+- The CLI now uses `clarinet run` to get session info, which is much more consistent and handles requirements better. Factory and deployment code updated to handle this
+
+- Updated dependencies []:
+  - @clarigen/core@1.0.0-next.25
+  - @clarigen/native-bin@1.0.0-next.25
+
 ## 1.0.0-next.24
 
 ### Patch Changes
