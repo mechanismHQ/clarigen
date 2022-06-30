@@ -1,4 +1,4 @@
-interface EmulatedTransaction {
+interface EmulatedContractPublishTransaction {
   'emulated-contract-publish': {
     'contract-name': string;
     'emulated-sender': string;
@@ -6,7 +6,7 @@ interface EmulatedTransaction {
   };
 }
 
-interface RequirementTransaction {
+interface RequirementPublishTransaction {
   'requirement-publish': {
     'contract-id': string;
     'remap-sender': string;
@@ -23,9 +23,47 @@ interface ContractPublishTransaction {
   };
 }
 
+interface ContractCallTransaction {
+  'contract-call': {
+    'contract-id': string;
+    'expected-sender': string;
+    parameters: string[];
+    name: string;
+  };
+}
+
+interface EmulatedContractCallTransaction {
+  'emulated-contract-call': {
+    'contract-id': string;
+    'emulated-sender': string;
+    parameters: string[];
+    name: string;
+  };
+}
+
+interface BtcTransferTransaction {
+  'btc-transfer': {
+    'expected-sender': string;
+    recipient: string;
+    'sats-per-byte': string;
+    'sats-amount': string;
+  };
+}
+
 // <clarinet>/components/deployments/src/types.rs
 // <TransactionSpecification>
-export type Transaction = EmulatedTransaction | RequirementTransaction | ContractPublishTransaction;
+export type Transaction =
+  | EmulatedContractPublishTransaction
+  | RequirementPublishTransaction
+  | ContractPublishTransaction
+  | EmulatedContractCallTransaction
+  | BtcTransferTransaction
+  | ContractCallTransaction;
+
+export type ContractTransaction =
+  | EmulatedContractPublishTransaction
+  | RequirementPublishTransaction
+  | ContractPublishTransaction;
 
 // type Batch = Transaction[];
 export interface Batch<T extends Transaction> {
@@ -50,18 +88,44 @@ export interface SimnetDeploymentPlan {
     contracts: Readonly<string[]>;
   };
   plan: {
-    batches: Readonly<Batch<EmulatedTransaction>[]>;
+    batches: Readonly<
+      Batch<EmulatedContractPublishTransaction | EmulatedContractCallTransaction>[]
+    >;
   };
 }
 
 export interface DevnetDeploymentPlan {
   network: 'devnet';
   plan: {
-    batches: Readonly<Batch<RequirementTransaction | ContractPublishTransaction>[]>;
+    batches: Readonly<
+      Batch<
+        | RequirementPublishTransaction
+        | ContractPublishTransaction
+        | ContractCallTransaction
+        | BtcTransferTransaction
+      >[]
+    >;
   };
 }
 
-export type DeploymentPlan = SimnetDeploymentPlan | DevnetDeploymentPlan;
+export type TestnetDeploymentPlan = Omit<DevnetDeploymentPlan, 'network'> & {
+  network: 'testnet';
+};
+
+export interface MainnetDeploymentPlan {
+  network: 'mainnet';
+  plan: {
+    batches: Readonly<
+      Batch<ContractPublishTransaction | ContractCallTransaction | BtcTransferTransaction>[]
+    >;
+  };
+}
+
+export type DeploymentPlan =
+  | SimnetDeploymentPlan
+  | DevnetDeploymentPlan
+  | TestnetDeploymentPlan
+  | MainnetDeploymentPlan;
 
 export function flatBatch<T extends Transaction>(batches: Batch<T>[]) {
   // const start: T[][] = [];
@@ -70,12 +134,18 @@ export function flatBatch<T extends Transaction>(batches: Batch<T>[]) {
   return txs;
 }
 
+export function getContractTxs(batches: Batch<Transaction>[]): ContractTransaction[] {
+  const txs = flatBatch(batches);
+  return txs.filter(isContractTx);
+}
+
 export function getDeploymentContract(
   contractName: string,
   deployment: DeploymentPlan
-): Transaction {
+): ContractTransaction {
   const txs: Transaction[] = flatBatch(deployment.plan.batches as Batch<Transaction>[]);
   for (const tx of txs) {
+    if (!isContractTx(tx)) continue;
     if ('requirement-publish' in tx) {
       const [_, name] = tx['requirement-publish']['contract-id'].split('.');
       if (name === contractName) {
@@ -95,7 +165,10 @@ export function getDeploymentContract(
   throw new Error(`Unable to find deployment tx for contract '${contractName}'`);
 }
 
-export function getDeploymentTxPath(tx: Transaction): string {
+export function getDeploymentTxPath(tx: ContractTransaction): string {
+  if (!isContractTx(tx)) {
+    throw new Error('Unable to get path for tx type.');
+  }
   if ('requirement-publish' in tx) {
     return tx['requirement-publish'].path;
   } else if ('emulated-contract-publish' in tx) {
@@ -108,7 +181,10 @@ export function getDeploymentTxPath(tx: Transaction): string {
   throw new Error('Couldnt get path for deployment tx.');
 }
 
-export function getIdentifier(tx: Transaction): string {
+export function getIdentifier(tx: ContractTransaction): string {
+  if (!isContractTx(tx)) {
+    throw new Error('Unable to get ID for tx type.');
+  }
   if ('requirement-publish' in tx) {
     const [_, name] = tx['requirement-publish']['contract-id'].split('.');
     return tx['requirement-publish']['contract-id'];
@@ -119,6 +195,12 @@ export function getIdentifier(tx: Transaction): string {
     const contract = tx['contract-publish'];
     return `${contract['expected-sender']}.${contract['contract-name']}`;
   }
-  console.log(tx);
   throw new Error(`Unable to find ID for contract.`);
+}
+
+export function isContractTx(tx: Transaction): tx is ContractTransaction {
+  if ('contract-call' in tx) return false;
+  if ('btc-transfer' in tx) return false;
+  if ('emulated-contract-call' in tx) return false;
+  return true;
 }

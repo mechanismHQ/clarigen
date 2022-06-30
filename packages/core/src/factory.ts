@@ -4,6 +4,7 @@ import {
   Batch,
   DeploymentPlan,
   flatBatch,
+  getContractTxs,
   getDeploymentContract,
   getDeploymentTxPath,
   getIdentifier,
@@ -93,7 +94,7 @@ export function deploymentFactory<T extends AllContracts>(
   deployer: DeploymentPlan
 ): ContractFactory<T> {
   const result = {} as Partial<ContractFactory<T>>;
-  const txs = flatBatch(deployer.plan.batches as Batch<Transaction>[]);
+  const txs = getContractTxs(deployer.plan.batches as Batch<Transaction>[]);
   txs.forEach(tx => {
     const id = getIdentifier(tx);
     const [contractAddress, contractFileName] = id.split('.');
