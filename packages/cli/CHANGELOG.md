@@ -1,5 +1,14 @@
 # @clarigen/cli
 
+## 1.0.0-next.26
+
+### Patch Changes
+
+- [#30](https://github.com/mechanismHQ/clarigen/pull/30) [`d415cab`](https://github.com/mechanismHQ/clarigen/commit/d415cabfa80f32eee6adb2027d6073011f5cc53f) Thanks [@hstove](https://github.com/hstove)! - Adds a 'legacy' flag to generate the old, non-single-file structure
+
+- Updated dependencies [[`d415cab`](https://github.com/mechanismHQ/clarigen/commit/d415cabfa80f32eee6adb2027d6073011f5cc53f)]:
+  - @clarigen/core@1.0.0-next.26
+
 ## 1.0.0-next.25
 
 ### Patch Changes

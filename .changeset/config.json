@@ -5,7 +5,7 @@
     { "repo": "mechanismHQ/clarigen" }
   ],
   "commit": false,
-  "linked": [["@clarigen/*"]],
+  "fixed": [["@clarigen/*"]],
   "access": "public",
   "baseBranch": "main",
   "updateInternalDependencies": "patch",
