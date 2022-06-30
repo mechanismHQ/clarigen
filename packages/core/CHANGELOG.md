@@ -1,5 +1,11 @@
 # @clarigen/core
 
+## 1.0.0-next.27
+
+### Patch Changes
+
+- [#30](https://github.com/mechanismHQ/clarigen/pull/30) [`514ca19`](https://github.com/mechanismHQ/clarigen/commit/514ca1949f4c9905a67f4462dd3a189baad393dc) Thanks [@hstove](https://github.com/hstove)! - Fixed an issue with `deploymentFactory` with requirement publish txs
+
 ## 1.0.0-next.26
 
 ### Patch Changes
