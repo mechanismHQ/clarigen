@@ -20,6 +20,7 @@ export interface ConfigFileContents {
   outputDir: string;
   clarinet: string;
   docs?: string;
+  legacy?: boolean;
 }
 
 export interface ConfigFile extends ConfigFileContents {
@@ -32,6 +33,7 @@ export interface ConfigFile extends ConfigFileContents {
 export const defaultConfigFile: ConfigFileContents = {
   outputDir: 'src/clarigen',
   clarinet: '.',
+  legacy: false,
 };
 
 export function configFilePath(rootPath: string) {

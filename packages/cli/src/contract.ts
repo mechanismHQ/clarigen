@@ -16,12 +16,14 @@ export const generateFilesForContractWithSession = async ({
   dirName,
   docsPath,
   contractFile,
+  legacy = false,
 }: {
   outputFolder: string;
   sessionContract: SessionContract;
   dirName?: string;
   docsPath?: string;
   contractFile: string;
+  legacy?: boolean;
 }): Promise<ContractMeta> => {
   const contractIdentifier = sessionContract.contract_id;
   const [contractAddress, contractName] = contractIdentifier.split('.');
@@ -47,12 +49,14 @@ export const generateFilesForContractWithSession = async ({
     });
   }
 
-  const outputPath = resolve(outputFolder, dirName || '.', contractName);
-  await mkdir(outputPath, { recursive: true });
+  if (legacy) {
+    const outputPath = resolve(outputFolder, dirName || '.', contractName);
+    await mkdir(outputPath, { recursive: true });
 
-  await writeFile(resolve(outputPath, 'abi.ts'), abiFile);
-  await writeFile(resolve(outputPath, 'index.ts'), indexFile);
-  await writeFile(resolve(outputPath, 'types.ts'), typesFile);
+    await writeFile(resolve(outputPath, 'abi.ts'), abiFile);
+    await writeFile(resolve(outputPath, 'index.ts'), indexFile);
+    await writeFile(resolve(outputPath, 'types.ts'), typesFile);
+  }
 
   return {
     abi,

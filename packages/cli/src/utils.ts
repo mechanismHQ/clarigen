@@ -124,15 +124,18 @@ export const generateProject = async (projectPath: string) => {
       outputFolder,
       docsPath: configFile.docs,
       contractFile,
+      legacy: configFile.legacy,
     });
     metas.push(meta);
   }
 
-  const indexFile = generateProjectIndexFile(configFile);
   await generateDocsIndex(configFile);
 
-  const indexPath = resolve(outputFolder, 'index.ts');
-  await writeFile(indexPath, indexFile);
+  if (configFile.legacy) {
+    const indexFile = generateProjectIndexFile(configFile);
+    const indexPath = resolve(outputFolder, 'index.ts');
+    await writeFile(indexPath, indexFile);
+  }
 
   const singleFile = await generateSingleFile(configFile, metas);
   const singlePath = resolve(outputFolder, 'single.ts');
