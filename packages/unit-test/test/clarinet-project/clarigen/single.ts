@@ -119,28 +119,6 @@ export interface ResponseErr<T, E> {
 export type Response<Ok, Err> = ResponseOk<Ok, Err> | ResponseErr<Ok, Err>;
 
 export const contracts = {
-  restrictedTokenTrait: {
-    functions: {},
-    variables: {},
-    maps: {},
-    constants: {},
-    fungible_tokens: [],
-    non_fungible_tokens: [],
-    contractName: 'restricted-token-trait',
-    contractFile:
-      'test/clarinet-project/.requirements/SP3DX3H4FEYZJZ586MFBS25ZW3HZDMEW92260R2PR.restricted-token-trait.clar',
-  },
-  ftTrait: {
-    functions: {},
-    variables: {},
-    maps: {},
-    constants: {},
-    fungible_tokens: [],
-    non_fungible_tokens: [],
-    contractName: 'ft-trait',
-    contractFile:
-      'test/clarinet-project/.requirements/SP3DX3H4FEYZJZ586MFBS25ZW3HZDMEW92260R2PR.ft-trait.clar',
-  },
   tester: {
     functions: {
       printErr: {
@@ -203,6 +181,28 @@ export const contracts = {
     non_fungible_tokens: [],
     contractName: 'tester',
     contractFile: 'test/clarinet-project/contracts/tester.clar',
+  },
+  restrictedTokenTrait: {
+    functions: {},
+    variables: {},
+    maps: {},
+    constants: {},
+    fungible_tokens: [],
+    non_fungible_tokens: [],
+    contractName: 'restricted-token-trait',
+    contractFile:
+      'test/clarinet-project/.requirements/SP3DX3H4FEYZJZ586MFBS25ZW3HZDMEW92260R2PR.restricted-token-trait.clar',
+  },
+  ftTrait: {
+    functions: {},
+    variables: {},
+    maps: {},
+    constants: {},
+    fungible_tokens: [],
+    non_fungible_tokens: [],
+    contractName: 'ft-trait',
+    contractFile:
+      'test/clarinet-project/.requirements/SP3DX3H4FEYZJZ586MFBS25ZW3HZDMEW92260R2PR.ft-trait.clar',
   },
   wrappedBitcoin: {
     functions: {

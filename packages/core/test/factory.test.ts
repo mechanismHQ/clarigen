@@ -1,5 +1,6 @@
 import { contracts } from '../../unit-test/test/clarinet-project/clarigen/single';
 import { simnetDeployment } from '../../unit-test/test/clarinet-project/clarigen/deployments/simnet';
+import { devnetDeployment } from '../../unit-test/test/clarinet-project/clarigen/deployments/devnet';
 
 import { contractFactory } from '../src';
 
@@ -18,4 +19,6 @@ test('can work with deployment', () => {
   const { tester } = contractFactory(contracts, simnetDeployment);
   expect(tester.contractFile).toEqual('myPath');
   expect(tester.identifier).toEqual('ST1HTBVD3JG9C05J7HBJTHGR0GGW7KXW28M5JS8QE.tester');
+
+  const devnet = contractFactory(contracts, devnetDeployment);
 });

@@ -27,8 +27,8 @@ interface ContractCallTransaction {
   'contract-call': {
     'contract-id': string;
     'expected-sender': string;
-    parameters: string[];
-    name: string;
+    parameters: Readonly<string[]>;
+    method: string;
   };
 }
 
@@ -36,8 +36,8 @@ interface EmulatedContractCallTransaction {
   'emulated-contract-call': {
     'contract-id': string;
     'emulated-sender': string;
-    parameters: string[];
-    name: string;
+    parameters: Readonly<string[]>;
+    method: string;
   };
 }
 

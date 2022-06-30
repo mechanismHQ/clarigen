@@ -137,8 +137,9 @@ export const generateProject = async (projectPath: string) => {
     await writeFile(indexPath, indexFile);
   }
 
-  const singleFile = await generateSingleFile(configFile, metas);
-  const singlePath = resolve(outputFolder, 'single.ts');
-  await writeFile(singlePath, singleFile);
+  const singleFileContents = await generateSingleFile(configFile, metas);
+  const singleFile = configFile.legacy ? 'single.ts' : 'index.ts';
+  const singlePath = resolve(outputFolder, singleFile);
+  await writeFile(singlePath, singleFileContents);
   await generateDeployments(configFile);
 };
