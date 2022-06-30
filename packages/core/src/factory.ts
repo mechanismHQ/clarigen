@@ -101,6 +101,9 @@ export function deploymentFactory<T extends AllContracts>(
     const contractName = toCamelCase(contractFileName) as keyof T;
     const def = contracts[contractName] as TypedAbi;
     const final = contracts[contractName] as FullContract<T[keyof T]>;
+    if (typeof final === 'undefined') {
+      throw new Error(`Clarigen error: mismatch for contract '${contractName as string}'`);
+    }
     result[contractName] = final;
     final.contractFile = getDeploymentTxPath(tx);
     final.identifier = id;

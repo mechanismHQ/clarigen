@@ -186,8 +186,9 @@ export function getIdentifier(tx: ContractTransaction): string {
     throw new Error('Unable to get ID for tx type.');
   }
   if ('requirement-publish' in tx) {
-    const [_, name] = tx['requirement-publish']['contract-id'].split('.');
-    return tx['requirement-publish']['contract-id'];
+    const spec = tx['requirement-publish'];
+    const [_, name] = spec['contract-id'].split('.');
+    return `${spec['remap-sender']}.${name}`;
   } else if ('emulated-contract-publish' in tx) {
     const contract = tx['emulated-contract-publish'];
     return `${contract['emulated-sender']}.${contract['contract-name']}`;
