@@ -1,5 +1,11 @@
 # @clarigen/core
 
+## 1.0.0-next.28
+
+### Patch Changes
+
+- [#30](https://github.com/mechanismHQ/clarigen/pull/30) [`5a1f20b`](https://github.com/mechanismHQ/clarigen/commit/5a1f20b442ce8d498c2b49abb8dc6680f90fec01) Thanks [@hstove](https://github.com/hstove)! - Slight change to `factory` apis
+
 ## 1.0.0-next.27
 
 ### Patch Changes
