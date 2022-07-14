@@ -134,98 +134,6 @@ export type OkType<R> = R extends ResponseOk<infer V, unknown> ? V : never;
 export type ErrType<R> = R extends ResponseErr<unknown, infer V> ? V : never;
 
 export const contracts = {
-  ftTrait: {
-    functions: {},
-    maps: {},
-    variables: {},
-    constants: {},
-    fungible_tokens: [],
-    non_fungible_tokens: [],
-    contractName: 'ft-trait',
-  },
-  restrictedTokenTrait: {
-    functions: {},
-    maps: {},
-    variables: {},
-    constants: {},
-    fungible_tokens: [],
-    non_fungible_tokens: [],
-    contractName: 'restricted-token-trait',
-  },
-  tester: {
-    functions: {
-      printErr: {
-        name: 'print-err',
-        access: 'public',
-        args: [],
-        outputs: { type: { response: { ok: 'none', error: 'uint128' } } },
-      } as TypedAbiFunction<[], Response<null, bigint>>,
-      printPub: {
-        name: 'print-pub',
-        access: 'public',
-        args: [],
-        outputs: { type: { response: { ok: 'bool', error: 'none' } } },
-      } as TypedAbiFunction<[], Response<boolean, null>>,
-      setInMap: {
-        name: 'set-in-map',
-        access: 'public',
-        args: [
-          { name: 'key', type: 'uint128' },
-          { name: 'val', type: 'bool' },
-        ],
-        outputs: { type: { response: { ok: 'bool', error: 'none' } } },
-      } as TypedAbiFunction<
-        [key: TypedAbiArg<number | bigint, 'key'>, val: TypedAbiArg<boolean, 'val'>],
-        Response<boolean, null>
-      >,
-      setNum: {
-        name: 'set-num',
-        access: 'public',
-        args: [{ name: 'num', type: 'uint128' }],
-        outputs: { type: { response: { ok: 'bool', error: 'none' } } },
-      } as TypedAbiFunction<[num: TypedAbiArg<number | bigint, 'num'>], Response<boolean, null>>,
-      echo: {
-        name: 'echo',
-        access: 'read_only',
-        args: [{ name: 'val', type: { 'string-ascii': { length: 33 } } }],
-        outputs: { type: { 'string-ascii': { length: 33 } } },
-      } as TypedAbiFunction<[val: TypedAbiArg<string, 'val'>], string>,
-      echoWithLogs: {
-        name: 'echo-with-logs',
-        access: 'read_only',
-        args: [{ name: 'val', type: { 'string-ascii': { length: 33 } } }],
-        outputs: { type: { 'string-ascii': { length: 33 } } },
-      } as TypedAbiFunction<[val: TypedAbiArg<string, 'val'>], string>,
-      roResp: {
-        name: 'ro-resp',
-        access: 'read_only',
-        args: [{ name: 'return-err', type: 'bool' }],
-        outputs: {
-          type: { response: { ok: { 'string-ascii': { length: 4 } }, error: 'uint128' } },
-        },
-      } as TypedAbiFunction<
-        [returnErr: TypedAbiArg<boolean, 'returnErr'>],
-        Response<string, bigint>
-      >,
-    },
-    maps: {
-      simpleMap: { name: 'simple-map', key: 'uint128', value: 'bool' } as TypedAbiMap<
-        number | bigint,
-        boolean
-      >,
-    },
-    variables: {
-      numVar: {
-        name: 'num-var',
-        type: 'uint128',
-        access: 'variable',
-      } as TypedAbiVariable<bigint>,
-    },
-    constants: {},
-    fungible_tokens: [],
-    non_fungible_tokens: [],
-    contractName: 'tester',
-  },
   wrappedBitcoin: {
     functions: {
       addPrincipalToRole: {
@@ -576,12 +484,110 @@ export const contracts = {
     non_fungible_tokens: [],
     contractName: 'Wrapped-Bitcoin',
   },
+  tester: {
+    functions: {
+      printErr: {
+        name: 'print-err',
+        access: 'public',
+        args: [],
+        outputs: { type: { response: { ok: 'none', error: 'uint128' } } },
+      } as TypedAbiFunction<[], Response<null, bigint>>,
+      printPub: {
+        name: 'print-pub',
+        access: 'public',
+        args: [],
+        outputs: { type: { response: { ok: 'bool', error: 'none' } } },
+      } as TypedAbiFunction<[], Response<boolean, null>>,
+      setInMap: {
+        name: 'set-in-map',
+        access: 'public',
+        args: [
+          { name: 'key', type: 'uint128' },
+          { name: 'val', type: 'bool' },
+        ],
+        outputs: { type: { response: { ok: 'bool', error: 'none' } } },
+      } as TypedAbiFunction<
+        [key: TypedAbiArg<number | bigint, 'key'>, val: TypedAbiArg<boolean, 'val'>],
+        Response<boolean, null>
+      >,
+      setNum: {
+        name: 'set-num',
+        access: 'public',
+        args: [{ name: 'num', type: 'uint128' }],
+        outputs: { type: { response: { ok: 'bool', error: 'none' } } },
+      } as TypedAbiFunction<[num: TypedAbiArg<number | bigint, 'num'>], Response<boolean, null>>,
+      echo: {
+        name: 'echo',
+        access: 'read_only',
+        args: [{ name: 'val', type: { 'string-ascii': { length: 33 } } }],
+        outputs: { type: { 'string-ascii': { length: 33 } } },
+      } as TypedAbiFunction<[val: TypedAbiArg<string, 'val'>], string>,
+      echoWithLogs: {
+        name: 'echo-with-logs',
+        access: 'read_only',
+        args: [{ name: 'val', type: { 'string-ascii': { length: 33 } } }],
+        outputs: { type: { 'string-ascii': { length: 33 } } },
+      } as TypedAbiFunction<[val: TypedAbiArg<string, 'val'>], string>,
+      roResp: {
+        name: 'ro-resp',
+        access: 'read_only',
+        args: [{ name: 'return-err', type: 'bool' }],
+        outputs: {
+          type: { response: { ok: { 'string-ascii': { length: 4 } }, error: 'uint128' } },
+        },
+      } as TypedAbiFunction<
+        [returnErr: TypedAbiArg<boolean, 'returnErr'>],
+        Response<string, bigint>
+      >,
+    },
+    maps: {
+      simpleMap: { name: 'simple-map', key: 'uint128', value: 'bool' } as TypedAbiMap<
+        number | bigint,
+        boolean
+      >,
+    },
+    variables: {
+      numVar: {
+        name: 'num-var',
+        type: 'uint128',
+        access: 'variable',
+      } as TypedAbiVariable<bigint>,
+    },
+    constants: {},
+    fungible_tokens: [],
+    non_fungible_tokens: [],
+    contractName: 'tester',
+  },
+  restrictedTokenTrait: {
+    functions: {},
+    maps: {},
+    variables: {},
+    constants: {},
+    fungible_tokens: [],
+    non_fungible_tokens: [],
+    contractName: 'restricted-token-trait',
+  },
+  ftTrait: {
+    functions: {},
+    maps: {},
+    variables: {},
+    constants: {},
+    fungible_tokens: [],
+    non_fungible_tokens: [],
+    contractName: 'ft-trait',
+  },
 } as const;
 
 export const deployments = {
-  ftTrait: {
-    devnet: 'SP3DX3H4FEYZJZ586MFBS25ZW3HZDMEW92260R2PR.ft-trait',
-    simnet: 'SP3DX3H4FEYZJZ586MFBS25ZW3HZDMEW92260R2PR.ft-trait',
+  wrappedBitcoin: {
+    devnet: 'ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM.Wrapped-Bitcoin',
+    simnet: 'SP3DX3H4FEYZJZ586MFBS25ZW3HZDMEW92260R2PR.Wrapped-Bitcoin',
+    testnet: null,
+    mainnet: 'SP3DX3H4FEYZJZ586MFBS25ZW3HZDMEW92260R2PR.Wrapped-Bitcoin',
+  },
+  tester: {
+    devnet: 'ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM.tester',
+    simnet: 'ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM.tester',
     testnet: null,
     mainnet: null,
   },
@@ -591,19 +597,32 @@ export const deployments = {
     testnet: null,
     mainnet: null,
   },
-  tester: {
-    devnet: 'ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM.tester',
-    simnet: 'ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM.tester',
+  ftTrait: {
+    devnet: 'SP3DX3H4FEYZJZ586MFBS25ZW3HZDMEW92260R2PR.ft-trait',
+    simnet: 'SP3DX3H4FEYZJZ586MFBS25ZW3HZDMEW92260R2PR.ft-trait',
     testnet: null,
     mainnet: null,
   },
-  wrappedBitcoin: {
-    devnet: 'ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM.Wrapped-Bitcoin',
-    simnet: 'SP3DX3H4FEYZJZ586MFBS25ZW3HZDMEW92260R2PR.Wrapped-Bitcoin',
-    testnet: null,
-    mainnet: 'SP3DX3H4FEYZJZ586MFBS25ZW3HZDMEW92260R2PR.Wrapped-Bitcoin',
-  },
 } as const;
+
+export const simnetDeployment = [
+  {
+    identifier: 'SP3DX3H4FEYZJZ586MFBS25ZW3HZDMEW92260R2PR.restricted-token-trait',
+    file: 'demo-project/.requirements/SP3DX3H4FEYZJZ586MFBS25ZW3HZDMEW92260R2PR.restricted-token-trait.clar',
+  },
+  {
+    identifier: 'SP3DX3H4FEYZJZ586MFBS25ZW3HZDMEW92260R2PR.ft-trait',
+    file: 'demo-project/.requirements/SP3DX3H4FEYZJZ586MFBS25ZW3HZDMEW92260R2PR.ft-trait.clar',
+  },
+  {
+    identifier: 'SP3DX3H4FEYZJZ586MFBS25ZW3HZDMEW92260R2PR.Wrapped-Bitcoin',
+    file: 'demo-project/.requirements/SP3DX3H4FEYZJZ586MFBS25ZW3HZDMEW92260R2PR.Wrapped-Bitcoin.clar',
+  },
+  {
+    identifier: 'ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM.tester',
+    file: 'demo-project/contracts/tester.clar',
+  },
+];
 
 export const accounts = {
   deployer: { address: 'ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM', balance: 100000000000000 },
@@ -617,6 +636,11 @@ export const accounts = {
   wallet_7: { address: 'ST3PF13W7Z0RRM42A8VZRVFQ75SV1K26RXEP8YGKJ', balance: 100000000000000 },
   wallet_8: { address: 'ST3NBRSFKX28FQ2ZJ1MAKX58HKHSDGNV5N7R21XCP', balance: 100000000000000 },
 } as const;
+
+export const simnet = {
+  deployment: simnetDeployment,
+  accounts,
+};
 
 export const project = {
   contracts,

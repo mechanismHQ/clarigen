@@ -4,7 +4,6 @@
     "module": "esnext",
     "lib": ["dom", "esnext"],
     "outDir": "./dist",
-    "rootDir": ".",
     "resolveJsonModule": true,
     "moduleResolution": "node",
     "noUnusedLocals": false,

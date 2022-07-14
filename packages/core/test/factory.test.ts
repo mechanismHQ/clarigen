@@ -1,9 +1,5 @@
-import { contracts } from '../../unit-test/test/clarinet-project/clarigen/single';
-import { simnetDeployment } from '../../unit-test/test/clarinet-project/clarigen/deployments/simnet';
-import { devnetDeployment } from '../../unit-test/test/clarinet-project/clarigen/deployments/devnet';
-import { project } from '../../../demo-project/esm';
-
-import { contractsFactory, deploymentFactory, projectFactory } from '../src';
+import { project, contracts } from '../../../demo-project/esm';
+import { contractsFactory, projectFactory } from '../src';
 import { stringAsciiCV } from 'micro-stacks/clarity';
 
 test('can make the factory', () => {
@@ -15,20 +11,15 @@ test('can make the factory', () => {
 });
 
 test('works with option-style args', () => {
-  const { tester } = contractsFactory(contracts, 'addr');
+  const { tester } = projectFactory(project, 'devnet');
   const tx = tester.echo({ val: 'hello' });
   expect(tx.functionArgs).toEqual([stringAsciiCV('hello')]);
 });
 
-test('can work with deployment', () => {
-  const dep = simnetDeployment;
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-  (dep.plan.batches[0].transactions[3]['emulated-contract-publish'] as any).path = 'myPath';
-  const { tester } = deploymentFactory(contracts, simnetDeployment);
-  expect(tester.contractFile).toEqual('myPath');
-  expect(tester.identifier).toEqual('ST1HTBVD3JG9C05J7HBJTHGR0GGW7KXW28M5JS8QE.tester');
-
-  const devnet = deploymentFactory(contracts, devnetDeployment);
+test('works with spread args', () => {
+  const { tester } = projectFactory(project, 'devnet');
+  const tx = tester.echo('hello');
+  expect(tx.functionArgs).toEqual([stringAsciiCV('hello')]);
 });
 
 test('uses contract name from abi def', () => {

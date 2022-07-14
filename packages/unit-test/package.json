@@ -19,7 +19,7 @@
     "test": "pnpm build-test-types && jest",
     "lint": "eslint \"src/**/*.{ts,tsx}\" && prettier  --check src/**/*.ts",
     "typecheck": "tsc --noEmit",
-    "build-test-types": "cd test/clarinet-project && pnpm clarigen && cd ../..",
+    "build-test-types": "sh build-types.sh",
     "publish:dev": "pnpm build && yalc publish --push"
   },
   "prettier": "@stacks/prettier-config",

@@ -24,7 +24,7 @@ import {
 export const DEPLOYMENT_NETWORKS = ['devnet', 'simnet', 'testnet', 'mainnet'] as const;
 export type DeploymentNetwork = typeof DEPLOYMENT_NETWORKS[number];
 
-type DeploymentsForContracts<C extends AllContracts> = {
+export type DeploymentsForContracts<C extends AllContracts> = {
   [K in keyof C]: ContractDeployments;
 };
 

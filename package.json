@@ -9,7 +9,8 @@
     "typecheck": "turbo run typecheck --continue",
     "publish-packages": "pnpm build && pnpm publish -r",
     "publish-local": "pnpm build && pnpm publish -r --tag beta",
-    "preinstall": "npx only-allow pnpm"
+    "preinstall": "npx only-allow pnpm",
+    "demo-types": "clarigen"
   },
   "prettier": "@stacks/prettier-config",
   "devDependencies": {

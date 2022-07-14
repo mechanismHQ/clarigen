@@ -1,9 +1,9 @@
 {
   "extends": "./tsconfig.json",
   "compilerOptions": {
-    "rootDir": ".",
     "types": ["node", "./types/"],
     "typeRoots": ["./types/", "./node_modules/@types/"]  
   },
-  "include": ["./test/**/*", "./src/**/*", "./types/*"]
+  "include": ["./test/**/*", "./src/**/*", "./types/*"],
+  "exclude": ["./test/clarinet-project/artifacts/**/*"]
 }

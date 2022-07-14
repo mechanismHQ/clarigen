@@ -17,6 +17,8 @@ import {
   ContractFactory,
   ResponseErr,
   ResponseOk,
+  Project,
+  DeploymentsForContracts,
 } from '@clarigen/core';
 import { deployUtilContract, UTIL_CONTRACT_ID } from './utils';
 import {
@@ -29,6 +31,7 @@ import {
   tx as _tx,
 } from './utils/pure';
 import { resolve } from 'path';
+import { Simnet } from './utils/test-factory';
 export type { PublicResultErr, PublicResultOk, ReadOnlyResult } from './utils/pure';
 export {
   getBlockHeight,
@@ -38,6 +41,7 @@ export {
   setupCoverage,
   finishCoverage,
 } from './utils';
+export * from './utils/test-factory';
 export { Allocation, createClarityBin, executeJson, evalJson } from '@clarigen/native-bin';
 
 interface FromContractsOptions {
@@ -101,6 +105,39 @@ export class TestProvider {
       deployed: instances,
       provider,
     };
+  }
+
+  public static async fromProject(simnet: Simnet, options: FromContractsOptions = {}) {
+    const allocations = Object.fromEntries(
+      Object.entries(simnet.accounts).map(([name, account]) => {
+        return [name, { ...account, balance: BigInt(account.balance) }];
+      })
+    ) as ClarinetAccounts;
+    const clarityBin =
+      options.clarityBin ||
+      (await createClarityBin({
+        allocations,
+      }));
+    let coverageFolder = options.coverageFolder;
+    if (process.env.CLARIGEN_COVERAGE) {
+      coverageFolder = resolve(process.cwd(), 'coverage');
+    }
+    await deployUtilContract(clarityBin);
+    for (const contract of simnet.deployment) {
+      let contractFilePath = contract.file;
+      if (options.clarinetPath) {
+        contractFilePath = resolve(process.cwd(), options.clarinetPath, contractFilePath);
+      }
+      await deployContract({
+        contractIdentifier: contract.identifier,
+        contractFilePath,
+        provider: clarityBin,
+        coverageFolder,
+      });
+    }
+    const provider = new this(clarityBin);
+    provider.coverageFolder = coverageFolder;
+    return provider;
   }
 
   public static async fromFactory(

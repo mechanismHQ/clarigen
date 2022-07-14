@@ -37,5 +37,5 @@ test('can create markdown', async () => {
     contractName: 'doc-test-contract',
   });
 
-  console.log('markdown', markdown);
+  // console.log('markdown', markdown);
 });
