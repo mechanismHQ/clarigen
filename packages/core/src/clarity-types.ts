@@ -49,6 +49,7 @@ import {
   ClarityAbiTypeTraitReference,
   ClarityAbiMap,
 } from './abi-types';
+import { toKebabCase } from './utils';
 
 export function ok<T, Err = never>(value: T): ResponseOk<T, Err> {
   return {
@@ -244,8 +245,45 @@ export function cvToString(val: ClarityValue, encoding: 'tryAscii' | 'hex' = 'he
   }
 }
 
-export function transformArgsToCV(func: ClarityAbiFunction, args: any[]): ClarityValue[] {
+export function transformObjectArgs(func: ClarityAbiFunction, args: Record<string, any>) {
+  return func.args.map(abiArg => {
+    const key = findJsTupleKey(abiArg.name, args);
+    const val = args[key];
+    return parseToCV(val, abiArg.type);
+  });
+}
+
+export function transformArgsArray(func: ClarityAbiFunction, args: any[]) {
   return args.map((arg, index) => parseToCV(arg, func.args[index].type));
+}
+
+export function transformArgsToCV(func: ClarityAbiFunction, args: any[] | [Record<string, any>]) {
+  if (args.length === 0) return [];
+  const [firstArg] = args;
+  if (args.length === 1 && func.args.length !== 1) {
+    return transformObjectArgs(func, firstArg);
+  }
+  if (typeof firstArg === 'object' && !Array.isArray(firstArg) && firstArg !== null) {
+    try {
+      const _doesFirstArgHaveArgNames = func.args.map(a => findJsTupleKey(a.name, firstArg));
+      return transformObjectArgs(func, firstArg);
+    } catch (_error) {
+      //
+    }
+  }
+  return transformArgsArray(func, args);
+}
+
+export function findJsTupleKey(key: string, input: Record<string, any>) {
+  const found = Object.keys(input).find(k => {
+    const camelEq = key === k;
+    const kebabEq = key === toKebabCase(k);
+    return camelEq || kebabEq;
+  });
+  if (!found) {
+    throw new Error(`Error encoding JS tuple: ${key} not found in input.`);
+  }
+  return found;
 }
 
 export function expectOk<Ok>(response: Response<Ok, any>): Ok {
@@ -286,7 +324,7 @@ type TupleTypeUnion<T> = T extends Readonly<ClarityAbiTypeTuple['tuple'][number]
 type UnionToIntersection<U> = (U extends any ? (k: U) => void : never) extends (k: infer I) => void
   ? I
   : never;
-export type Compact<T> = { [K in keyof T]: T[K] };
+type Compact<T> = { [K in keyof T]: T[K] };
 
 export type AbiTupleTo<T extends ReadonlyTuple> = Compact<
   UnionToIntersection<TupleTypeUnion<T['tuple'][number]>>

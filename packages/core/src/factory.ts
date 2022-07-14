@@ -10,51 +10,16 @@ import {
   getIdentifier,
   Transaction,
 } from './deployment';
-import { transformArguments } from './pure';
+import { transformArgsToCV } from './clarity-types';
 import { toCamelCase } from './utils';
-
-export interface ContractCall<T> {
-  function: ClarityAbiFunction;
-  nativeArgs: any[];
-  functionArgs: ClarityValue[];
-  contractAddress: string;
-  contractName: string;
-  _r?: T;
-}
-
-export interface ContractCallTyped<Args, R> extends Omit<ContractCall<R>, 'nativeArgs'> {
-  nativeArgs: Args;
-}
-
-export type ContractFunctions = {
-  [key: string]: TypedAbiFunction<unknown[], unknown>;
-};
-
-export type AllContracts = Record<string, TypedAbi>;
-
-export type ContractCallFunction<Args extends any[], R> = (
-  ...args: Args
-) => ContractCallTyped<Args, R>;
-
-export type FnToContractCall<T> = T extends TypedAbiFunction<infer Arg, infer R>
-  ? ContractCallFunction<Arg, R>
-  : never;
-
-export type FunctionsToContractCalls<T> = T extends ContractFunctions
-  ? {
-      [key in keyof T]: FnToContractCall<T[key]>;
-    }
-  : never;
-
-export type FullContract<T> = T extends TypedAbi
-  ? FunctionsToContractCalls<T['functions']> & T & { identifier: string } & { contractFile: string }
-  : never;
-
-export type ContractFactory<T extends AllContracts> = {
-  [key in keyof T]: FullContract<T[key]>;
-};
-
-type UnknownContractCallFunction = ContractCallFunction<unknown[], unknown>;
+import {
+  AllContracts,
+  ContractFactory,
+  ContractFunctions,
+  FunctionsToContractCalls,
+  FnToContractCall,
+  FullContract,
+} from './factory-types';
 
 export function contractsFactory<T extends AllContracts>(
   contracts: T,
@@ -74,8 +39,10 @@ export function functionsFactory<T extends ContractFunctions>(
 ): FunctionsToContractCalls<T> {
   return Object.fromEntries(
     Object.entries(functions).map(([fnName, foundFunction]) => {
-      const fn: FnToContractCall<typeof foundFunction> = (...args: unknown[]) => {
-        const functionArgs = transformArguments(foundFunction, args);
+      const fn: FnToContractCall<typeof foundFunction> = (
+        ...args: unknown[] | [Record<string, unknown>]
+      ) => {
+        const functionArgs = transformArgsToCV(foundFunction, args);
         const [contractAddress, contractName] = identifier.split('.');
         return {
           functionArgs: functionArgs,
@@ -121,7 +88,7 @@ export function deploymentFactory<T extends AllContracts>(
       const fnName: keyof typeof def['functions'] = _fnName;
       const fn = ((...args: any[]) => {
         const foundFunction = def.functions[fnName];
-        const functionArgs = transformArguments(foundFunction, args);
+        const functionArgs = transformArgsToCV(foundFunction, args);
         return {
           functionArgs: functionArgs,
           contractAddress: contractAddress,

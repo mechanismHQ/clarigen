@@ -18,4 +18,5 @@ export * from './clarity-types';
 export * from './api';
 export * from './abi-types';
 export * from './factory';
+export * from './factory-types';
 export type { DeploymentPlan, SimnetDeploymentPlan } from './deployment';

@@ -3,6 +3,7 @@ import { simnetDeployment } from '../../unit-test/test/clarinet-project/clarigen
 import { devnetDeployment } from '../../unit-test/test/clarinet-project/clarigen/deployments/devnet';
 
 import { contractsFactory, deploymentFactory } from '../src';
+import { stringAsciiCV } from 'micro-stacks/clarity';
 
 test('can make the factory', () => {
   const { tester } = contractsFactory(contracts, 'addr');
@@ -10,6 +11,12 @@ test('can make the factory', () => {
   expect(tx.nativeArgs).toEqual(['asdf']);
   expect(tester.maps.simpleMap.name).toEqual('simple-map');
   expect(tester.identifier).toEqual('addr.tester');
+});
+
+test('works with option-style args', () => {
+  const { tester } = contractsFactory(contracts, 'addr');
+  const tx = tester.echo({ val: 'hello' });
+  expect(tx.functionArgs).toEqual([stringAsciiCV('hello')]);
 });
 
 test('can work with deployment', () => {

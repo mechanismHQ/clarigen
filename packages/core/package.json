@@ -14,11 +14,12 @@
   "scripts": {
     "start": "tsup --watch",
     "dev": "tsup --watch",
-    "build": "shx rm -rf ./dist && tsup && node make-deno.js",
+    "build": "shx rm -rf ./dist && tsup",
     "test": "jest",
     "lint": "eslint \"src/**/*.{ts,tsx}\" && prettier  --check src/**/*.ts",
     "typecheck": "tsc --noEmit",
-    "publish:dev": "pnpm build && yalc publish --push"
+    "publish:dev": "pnpm build && yalc publish --push",
+    "copy-types": "node copy-types.js"
   },
   "prettier": "@stacks/prettier-config",
   "name": "@clarigen/core",

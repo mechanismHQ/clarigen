@@ -3,7 +3,7 @@ import { ClarityAbiFunction, ClarityValue } from 'micro-stacks/clarity';
 import { ClarityAbi, parseToCV, transformArgsToCV } from '../clarity-types';
 import { Response, ClarityAbiMap } from '../abi-types';
 import { toCamelCase } from '../utils';
-import type { ContractCall } from '../factory';
+import type { ContractCall } from '../factory-types';
 
 export interface PureContractInfo {
   abi: ClarityAbi;
@@ -40,10 +40,6 @@ export namespace ContractCalls {
   export type Map<Key, Val> = MapGet<Key, Val>;
 }
 
-export function transformArguments(func: ClarityAbiFunction, args: any[]): ClarityValue[] {
-  return transformArgsToCV(func, args);
-}
-
 function getter<T>(
   contract: PureContractInfo,
   property: string | symbol
@@ -51,7 +47,7 @@ function getter<T>(
   const foundFunction = contract.abi.functions.find(func => toCamelCase(func.name) === property);
   if (foundFunction) {
     return function (...args: any[]) {
-      const functionArgs = transformArguments(foundFunction, args);
+      const functionArgs = transformArgsToCV(foundFunction, args);
       return {
         functionArgs: functionArgs,
         contractAddress: contract.contractAddress,

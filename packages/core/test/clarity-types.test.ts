@@ -1,5 +1,11 @@
-import { cvToValue, parseToCV, ok } from '../src/clarity-types';
-import { contractPrincipalCV, intCV, responseOkCV, uintCV } from 'micro-stacks/clarity';
+import { cvToValue, parseToCV, ok, transformArgsToCV } from '../src/clarity-types';
+import {
+  contractPrincipalCV,
+  intCV,
+  responseOkCV,
+  stringAsciiCV,
+  uintCV,
+} from 'micro-stacks/clarity';
 
 describe('cvToValue', () => {
   test('can turn clarity negative integer into bignum', () => {
@@ -26,4 +32,30 @@ describe('parseToCV', () => {
     const cv = parseToCV('ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM.asdf', 'trait_reference');
     expect(cv).toEqual(contractPrincipalCV('ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM.asdf'));
   });
+});
+
+test('transforming args array to CV', () => {
+  const args = transformArgsToCV(
+    {
+      name: 'echo',
+      access: 'public',
+      outputs: { type: 'bool' },
+      args: [{ name: 'val', type: { 'string-ascii': { length: 10 } } }],
+    },
+    ['hello']
+  );
+  expect(args).toEqual([stringAsciiCV('hello')]);
+});
+
+test('transforming args object to CV', () => {
+  const args = transformArgsToCV(
+    {
+      name: 'echo',
+      access: 'public',
+      outputs: { type: 'bool' },
+      args: [{ name: 'val', type: { 'string-ascii': { length: 10 } } }],
+    },
+    [{ val: 'hello' }]
+  );
+  expect(args).toEqual([stringAsciiCV('hello')]);
 });

@@ -10,7 +10,7 @@ import { broadcastTransaction, StacksTransaction } from 'micro-stacks/transactio
 import { cvToValue, expectErr, expectOk } from './clarity-types';
 import { ContractCalls } from './pure';
 import { Response } from './abi-types';
-import { ContractCall } from './factory';
+import { ContractCall } from './factory-types';
 
 interface ApiOptions {
   network: StacksNetwork;
