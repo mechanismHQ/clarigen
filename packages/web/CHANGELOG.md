@@ -1,5 +1,14 @@
 # @clarigen/web
 
+## 1.0.0-next.27
+
+### Patch Changes
+
+- [#30](https://github.com/mechanismHQ/clarigen/pull/30) [`b4ee542`](https://github.com/mechanismHQ/clarigen/commit/b4ee5428e1e5f7606824648bba5c9d389a05d2e3) Thanks [@hstove](https://github.com/hstove)! - Fixed handling of tuples with kebab-keys
+
+- Updated dependencies [[`b4ee542`](https://github.com/mechanismHQ/clarigen/commit/b4ee5428e1e5f7606824648bba5c9d389a05d2e3)]:
+  - @clarigen/core@1.0.0-next.30
+
 ## 1.0.0-next.26
 
 ### Minor Changes
