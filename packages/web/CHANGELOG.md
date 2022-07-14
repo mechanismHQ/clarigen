@@ -1,5 +1,16 @@
 # @clarigen/web
 
+## 1.0.0-next.26
+
+### Minor Changes
+
+- [#30](https://github.com/mechanismHQ/clarigen/pull/30) [`b2f0d85`](https://github.com/mechanismHQ/clarigen/commit/b2f0d85e7385e83f6e3649b0b8bb2ff6005bd429) Thanks [@hstove](https://github.com/hstove)! - Updated all packages to better work with the new type exports
+
+### Patch Changes
+
+- Updated dependencies [[`b2f0d85`](https://github.com/mechanismHQ/clarigen/commit/b2f0d85e7385e83f6e3649b0b8bb2ff6005bd429)]:
+  - @clarigen/core@1.0.0-next.29
+
 ## 1.0.0-next.25
 
 ### Patch Changes
