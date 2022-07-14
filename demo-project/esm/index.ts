@@ -134,24 +134,6 @@ export type OkType<R> = R extends ResponseOk<infer V, unknown> ? V : never;
 export type ErrType<R> = R extends ResponseErr<unknown, infer V> ? V : never;
 
 export const contracts = {
-  ftTrait: {
-    functions: {},
-    maps: {},
-    variables: {},
-    constants: {},
-    fungible_tokens: [],
-    non_fungible_tokens: [],
-    contractName: 'ft-trait',
-  },
-  restrictedTokenTrait: {
-    functions: {},
-    maps: {},
-    variables: {},
-    constants: {},
-    fungible_tokens: [],
-    non_fungible_tokens: [],
-    contractName: 'restricted-token-trait',
-  },
   wrappedBitcoin: {
     functions: {
       addPrincipalToRole: {
@@ -502,6 +484,15 @@ export const contracts = {
     non_fungible_tokens: [],
     contractName: 'Wrapped-Bitcoin',
   },
+  ftTrait: {
+    functions: {},
+    maps: {},
+    variables: {},
+    constants: {},
+    fungible_tokens: [],
+    non_fungible_tokens: [],
+    contractName: 'ft-trait',
+  },
   tester: {
     functions: {
       printErr: {
@@ -546,6 +537,58 @@ export const contracts = {
         args: [{ name: 'val', type: { 'string-ascii': { length: 33 } } }],
         outputs: { type: { 'string-ascii': { length: 33 } } },
       } as TypedAbiFunction<[val: TypedAbiArg<string, 'val'>], string>,
+      getTup: {
+        name: 'get-tup',
+        access: 'read_only',
+        args: [],
+        outputs: {
+          type: {
+            tuple: [
+              { name: 'a', type: 'uint128' },
+              { name: 'bool-prop', type: 'bool' },
+              {
+                name: 'tuple-prop',
+                type: { tuple: [{ name: 'sub-prop', type: { 'string-ascii': { length: 4 } } }] },
+              },
+            ],
+          },
+        },
+      } as TypedAbiFunction<
+        [],
+        {
+          a: bigint;
+          boolProp: boolean;
+          tupleProp: {
+            subProp: string;
+          };
+        }
+      >,
+      mergeTuple: {
+        name: 'merge-tuple',
+        access: 'read_only',
+        args: [{ name: 'i', type: { tuple: [{ name: 'min-height', type: 'uint128' }] } }],
+        outputs: {
+          type: {
+            tuple: [
+              { name: 'max-height', type: 'uint128' },
+              { name: 'min-height', type: 'uint128' },
+            ],
+          },
+        },
+      } as TypedAbiFunction<
+        [
+          i: TypedAbiArg<
+            {
+              minHeight: number | bigint;
+            },
+            'i'
+          >
+        ],
+        {
+          maxHeight: bigint;
+          minHeight: bigint;
+        }
+      >,
       roResp: {
         name: 'ro-resp',
         access: 'read_only',
@@ -576,30 +619,39 @@ export const contracts = {
     non_fungible_tokens: [],
     contractName: 'tester',
   },
+  restrictedTokenTrait: {
+    functions: {},
+    maps: {},
+    variables: {},
+    constants: {},
+    fungible_tokens: [],
+    non_fungible_tokens: [],
+    contractName: 'restricted-token-trait',
+  },
 } as const;
 
 export const deployments = {
-  ftTrait: {
-    devnet: 'SP3DX3H4FEYZJZ586MFBS25ZW3HZDMEW92260R2PR.ft-trait',
-    simnet: 'SP3DX3H4FEYZJZ586MFBS25ZW3HZDMEW92260R2PR.ft-trait',
-    testnet: null,
-    mainnet: null,
-  },
-  restrictedTokenTrait: {
-    devnet: 'SP3DX3H4FEYZJZ586MFBS25ZW3HZDMEW92260R2PR.restricted-token-trait',
-    simnet: 'SP3DX3H4FEYZJZ586MFBS25ZW3HZDMEW92260R2PR.restricted-token-trait',
-    testnet: null,
-    mainnet: null,
-  },
   wrappedBitcoin: {
     devnet: 'ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM.Wrapped-Bitcoin',
     simnet: 'SP3DX3H4FEYZJZ586MFBS25ZW3HZDMEW92260R2PR.Wrapped-Bitcoin',
     testnet: null,
     mainnet: 'SP3DX3H4FEYZJZ586MFBS25ZW3HZDMEW92260R2PR.Wrapped-Bitcoin',
   },
+  ftTrait: {
+    devnet: 'SP3DX3H4FEYZJZ586MFBS25ZW3HZDMEW92260R2PR.ft-trait',
+    simnet: 'SP3DX3H4FEYZJZ586MFBS25ZW3HZDMEW92260R2PR.ft-trait',
+    testnet: null,
+    mainnet: null,
+  },
   tester: {
     devnet: 'ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM.tester',
     simnet: 'ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM.tester',
+    testnet: null,
+    mainnet: null,
+  },
+  restrictedTokenTrait: {
+    devnet: 'SP3DX3H4FEYZJZ586MFBS25ZW3HZDMEW92260R2PR.restricted-token-trait',
+    simnet: 'SP3DX3H4FEYZJZ586MFBS25ZW3HZDMEW92260R2PR.restricted-token-trait',
     testnet: null,
     mainnet: null,
   },

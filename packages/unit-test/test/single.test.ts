@@ -46,3 +46,17 @@ test('handles err types', async () => {
   const result = await t.txErr(contract.roResp(true), alice);
   expect(result.value > 0n).toEqual(true);
 });
+
+test('handling tuple keys', async () => {
+  const merged = await t.rov(contract.mergeTuple({ minHeight: 1n }));
+  expect(merged).toEqual({ minHeight: 1n, maxHeight: 100000n });
+
+  const tup = await t.rov(contract.getTup());
+  expect(tup).toEqual({
+    a: 1n,
+    boolProp: true,
+    tupleProp: {
+      subProp: 'asdf',
+    },
+  });
+});

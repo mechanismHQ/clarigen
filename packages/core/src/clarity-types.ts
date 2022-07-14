@@ -49,7 +49,7 @@ import {
   ClarityAbiTypeTraitReference,
   ClarityAbiMap,
 } from './abi-types';
-import { toKebabCase } from './utils';
+import { toCamelCase, toKebabCase } from './utils';
 
 export function ok<T, Err = never>(value: T): ResponseOk<T, Err> {
   return {
@@ -115,14 +115,27 @@ export function cvToValue<T = any>(val: ClarityValue, returnResponse = false): T
       return val.list.map(v => cvToValue(v)) as unknown as T;
     case ClarityType.Tuple:
       const result: { [key: string]: any } = {};
-      const arr = Object.keys(val.data).map(key => {
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-        return [key, cvToValue(val.data[key])];
-      });
-      arr.forEach(([key, value]) => {
-        result[key as string] = value;
-      });
-      return result as T;
+      const tuple: Record<string, any> = {};
+      const tupleReduced = Object.entries(val.data).reduce((acc, [key, val]) => {
+        const keyFixed = toCamelCase(key);
+        return {
+          ...acc,
+          [keyFixed]: cvToValue(val),
+        };
+      }, {} as Record<string, any>);
+      return tupleReduced as unknown as T;
+    // type.tuple.forEach(({ name, type: _type }) => {
+    //   const camelName = toCamelCase(name);
+    //   tuple[camelName] = cvToValue(tupleReduced[name], _type);
+    // });
+    // const arr = Object.keys(val.data).map(key => {
+    //   // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+    //   return [key, cvToValue(val.data[key])];
+    // });
+    // arr.forEach(([key, value]) => {
+    //   result[key as string] = value;
+    // });
+    // return result as T;
     case ClarityType.StringASCII:
       return val.data as unknown as T;
     case ClarityType.StringUTF8:
@@ -161,7 +174,8 @@ export function parseToCV(input: CVInput, type: ClarityAbiType): ClarityValue {
     }
     const tuple: Record<string, ClarityValue> = {};
     type.tuple.forEach(key => {
-      const val = input[key.name];
+      const jsKey = findJsTupleKey(key.name, input);
+      const val = input[jsKey];
       tuple[key.name] = parseToCV(val, key.type);
     });
     return tupleCV(tuple);
@@ -265,9 +279,20 @@ export function transformArgsToCV(func: ClarityAbiFunction, args: any[] | [Recor
   }
   if (typeof firstArg === 'object' && !Array.isArray(firstArg) && firstArg !== null) {
     try {
-      const _doesFirstArgHaveArgNames = func.args.map(a => findJsTupleKey(a.name, firstArg));
-      return transformObjectArgs(func, firstArg);
+      let hasAllArgs = true;
+      func.args.forEach(a => {
+        try {
+          findJsTupleKey(a.name, firstArg);
+        } catch (error) {
+          hasAllArgs = false;
+        }
+      });
+      console.log('first arg is object', hasAllArgs);
+      if (hasAllArgs) {
+        return transformObjectArgs(func, firstArg);
+      }
     } catch (_error) {
+      console.log('error transforming args:', _error);
       //
     }
   }
