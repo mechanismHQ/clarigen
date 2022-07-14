@@ -21,6 +21,49 @@ import {
   FullContract,
 } from './factory-types';
 
+export const DEPLOYMENT_NETWORKS = ['devnet', 'simnet', 'testnet', 'mainnet'] as const;
+export type DeploymentNetwork = typeof DEPLOYMENT_NETWORKS[number];
+
+type DeploymentsForContracts<C extends AllContracts> = {
+  [K in keyof C]: ContractDeployments;
+};
+
+export type ContractDeployments = {
+  [key in DeploymentNetwork]: string | null;
+};
+
+export type Project<C extends AllContracts, D extends DeploymentsForContracts<C>> = {
+  contracts: C;
+  deployments: D;
+};
+
+export type FullContractWithIdentifier<C extends TypedAbi, Id extends string> = FullContract<C> & {
+  identifier: Id;
+};
+
+export type ProjectFactory<P extends Project<any, any>, N extends DeploymentNetwork> = {
+  [ContractName in keyof P['contracts']]: P['deployments'][ContractName][N] extends string
+    ? FullContractWithIdentifier<P['contracts'][ContractName], P['deployments'][ContractName][N]>
+    : undefined;
+};
+
+export function projectFactory<
+  P extends Project<C, D>,
+  N extends DeploymentNetwork,
+  C extends AllContracts,
+  D extends DeploymentsForContracts<C>
+>(project: P, network: N): ProjectFactory<P, N> {
+  const e: [keyof C, FullContract<TypedAbi>][] = [];
+  Object.entries(project.contracts).forEach(([contractName, contract]) => {
+    const id = project.deployments[contractName][network];
+    if (id) {
+      e.push([contractName, contractFactory(contract, id)]);
+    }
+    return false;
+  });
+  return Object.fromEntries(e) as ProjectFactory<P, N>;
+}
+
 export function contractsFactory<T extends AllContracts>(
   contracts: T,
   deployer: string
@@ -57,12 +100,15 @@ export function functionsFactory<T extends ContractFunctions>(
   ) as FunctionsToContractCalls<T>;
 }
 
-export function contractFactory<T extends TypedAbi>(abi: T, identifier: string) {
+export function contractFactory<T extends TypedAbi, Id extends string>(
+  abi: T,
+  identifier: Id
+): FullContractWithIdentifier<T, Id> {
   const full = { ...abi } as FullContract<T>;
-  full.identifier = identifier;
   return {
     ...functionsFactory(abi.functions, identifier),
     ...full,
+    identifier: identifier,
   };
 }
 

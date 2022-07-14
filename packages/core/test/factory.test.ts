@@ -1,8 +1,9 @@
 import { contracts } from '../../unit-test/test/clarinet-project/clarigen/single';
 import { simnetDeployment } from '../../unit-test/test/clarinet-project/clarigen/deployments/simnet';
 import { devnetDeployment } from '../../unit-test/test/clarinet-project/clarigen/deployments/devnet';
+import { project } from '../../../demo-project/esm';
 
-import { contractsFactory, deploymentFactory } from '../src';
+import { contractsFactory, deploymentFactory, projectFactory } from '../src';
 import { stringAsciiCV } from 'micro-stacks/clarity';
 
 test('can make the factory', () => {
@@ -36,4 +37,15 @@ test('uses contract name from abi def', () => {
   };
   const factory = contractsFactory(demo, 'addr');
   expect(factory['Weird-Name'].identifier).toEqual('addr.tester');
+});
+
+test('project factory', () => {
+  const devnet = projectFactory(project, 'devnet');
+  const { wrappedBitcoin } = devnet;
+  expect(wrappedBitcoin.identifier).toEqual(
+    'ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM.Wrapped-Bitcoin'
+  );
+  expect(projectFactory(project, 'mainnet').wrappedBitcoin.identifier).toEqual(
+    'SP3DX3H4FEYZJZ586MFBS25ZW3HZDMEW92260R2PR.Wrapped-Bitcoin'
+  );
 });
