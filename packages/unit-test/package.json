@@ -26,8 +26,7 @@
   "name": "@clarigen/test",
   "author": "Hank Stoever",
   "devDependencies": {
-    "jest-environment-node": "28.1.1",
-    "@clarigen/cli": "workspace:*"
+    "jest-environment-node": "28.1.1"
   },
   "dependencies": {
     "@clarigen/core": "workspace:*",
