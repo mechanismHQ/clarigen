@@ -1,6 +1,9 @@
 module.exports = {
   root: true,
   reportUnusedDisableDirectives: true,
+  env: {
+    es6: true,
+  },
   overrides: [
     {
       files: ['*.ts', '*.tsx'], // Your TypeScript files extension
