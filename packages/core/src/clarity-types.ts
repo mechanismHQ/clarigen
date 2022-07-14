@@ -114,8 +114,6 @@ export function cvToValue<T = any>(val: ClarityValue, returnResponse = false): T
       // eslint-disable-next-line @typescript-eslint/no-unsafe-return
       return val.list.map(v => cvToValue(v)) as unknown as T;
     case ClarityType.Tuple:
-      const result: { [key: string]: any } = {};
-      const tuple: Record<string, any> = {};
       const tupleReduced = Object.entries(val.data).reduce((acc, [key, val]) => {
         const keyFixed = toCamelCase(key);
         return {
@@ -124,18 +122,6 @@ export function cvToValue<T = any>(val: ClarityValue, returnResponse = false): T
         };
       }, {} as Record<string, any>);
       return tupleReduced as unknown as T;
-    // type.tuple.forEach(({ name, type: _type }) => {
-    //   const camelName = toCamelCase(name);
-    //   tuple[camelName] = cvToValue(tupleReduced[name], _type);
-    // });
-    // const arr = Object.keys(val.data).map(key => {
-    //   // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-    //   return [key, cvToValue(val.data[key])];
-    // });
-    // arr.forEach(([key, value]) => {
-    //   result[key as string] = value;
-    // });
-    // return result as T;
     case ClarityType.StringASCII:
       return val.data as unknown as T;
     case ClarityType.StringUTF8:
@@ -287,12 +273,11 @@ export function transformArgsToCV(func: ClarityAbiFunction, args: any[] | [Recor
           hasAllArgs = false;
         }
       });
-      console.log('first arg is object', hasAllArgs);
       if (hasAllArgs) {
         return transformObjectArgs(func, firstArg);
       }
     } catch (_error) {
-      console.log('error transforming args:', _error);
+      // console.log('error transforming args:', _error);
       //
     }
   }
