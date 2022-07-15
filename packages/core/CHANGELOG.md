@@ -1,5 +1,11 @@
 # @clarigen/core
 
+## 1.0.0-next.31
+
+### Patch Changes
+
+- [#30](https://github.com/mechanismHQ/clarigen/pull/30) [`3ee7d9a`](https://github.com/mechanismHQ/clarigen/commit/3ee7d9a28eabfaced6ee073b42f9c48910819e7d) Thanks [@hstove](https://github.com/hstove)! - Exposed some helper types
+
 ## 1.0.0-next.30
 
 ### Patch Changes
