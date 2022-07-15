@@ -28,7 +28,7 @@ export type AllContracts = Record<string, TypedAbi>;
 type UnknownArg = TypedAbiArg<unknown, string>;
 type UnknownArgs = UnknownArg[];
 
-type ArgsTuple<T extends UnknownArgs> = {
+export type ArgsTuple<T extends UnknownArgs> = {
   [K in keyof T]: T[K] extends TypedAbiArg<infer A, string> ? A : never;
 };
 
@@ -49,7 +49,7 @@ type Compact<T> = { [K in keyof T]: T[K] };
 
 export type UnionToIntersection<T> = Compact<InnerUnionToIntersection<T>>;
 
-type ArgsRecord<T extends UnknownArgs> = UnionToIntersection<ArgsRecordUnion<T[number]>>;
+export type ArgsRecord<T extends UnknownArgs> = UnionToIntersection<ArgsRecordUnion<T[number]>>;
 
 export type ArgsType<T extends UnknownArgs> = [ArgsRecord<T>] | ArgsTuple<T>;
 

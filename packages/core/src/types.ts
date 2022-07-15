@@ -1,4 +1,26 @@
 import { ClarityAbi } from './clarity-types';
+import { TypedAbiArg, TypedAbiFunction } from './abi-types';
+import { ArgsRecord, ArgsTuple } from './factory-types';
+
+export type Kebab<T extends string, A extends string = ''> = T extends `${infer F}${infer R}`
+  ? Kebab<R, `${A}${F extends Lowercase<F> ? '' : '-'}${Lowercase<F>}`>
+  : A;
+
+export type KebabObject<T> = T extends Uint8Array
+  ? T
+  : T extends Record<string, unknown>
+  ? {
+      [K in keyof T as K extends string ? Kebab<K> : K]: KebabObject<T[K]>;
+    }
+  : T;
+
+export type ExtractArgs<F> = F extends TypedAbiFunction<infer Args, unknown>
+  ? ArgsTuple<Args>
+  : never;
+
+export type ExtractArgsRecord<F> = F extends TypedAbiFunction<infer Args, unknown>
+  ? ArgsRecord<Args>
+  : never;
 
 export type ContractBuilder<T> = (contractAddress: string, contractName: string) => T;
 
