@@ -1,0 +1,8 @@
+import { Response, ContractCalls } from '@clarigen/core';
+
+// prettier-ignore
+export interface SimpleContract {
+  getName: () => ContractCalls.Public<string, null>;
+  getBuff: () => ContractCalls.ReadOnly<Uint8Array>;
+  getNumber: () => ContractCalls.ReadOnly<bigint>;
+}

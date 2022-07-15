@@ -1,0 +1,34 @@
+{
+  "baseBranch": "origin/main",
+  "pipeline": {
+    "build": {
+      "dependsOn": [
+        "^build"
+      ],
+      "outputs": [
+        "dist/**",
+        "installer/**"
+      ]
+    },
+    "test": {
+      "dependsOn": [
+        "^build"
+      ],
+      "outputs": []
+    },
+    "lint": {
+      "outputs": [],
+      "parallel": true
+    },
+    "dev": {
+      "cache": false
+    },
+    "typecheck": {
+      "dependsOk": ["^build"],
+      "outputs": []
+    },
+    "publish:dev": {
+      "outputs": []
+    }
+  }
+}

@@ -2,10 +2,10 @@
   "$schema": "https://unpkg.com/@changesets/config@1.6.1/schema.json",
   "changelog": [
     "@changesets/changelog-github",
-    { "repo": "obylabs/clarigen" }
+    { "repo": "mechanismHQ/clarigen" }
   ],
   "commit": false,
-  "linked": [["@clarigen/*"]],
+  "fixed": [["@clarigen/*"]],
   "access": "public",
   "baseBranch": "main",
   "updateInternalDependencies": "patch",

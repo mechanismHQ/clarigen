@@ -1,8 +1,10 @@
 {
-  "version": "0.3.5",
+  "version": "1.0.0-next.27",
   "license": "MIT",
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
+  "types": "./dist/index.d.ts",
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "import": "./dist/index.mjs",
   "files": [
     "dist"
   ],
@@ -10,31 +12,21 @@
     "node": ">=10"
   },
   "scripts": {
-    "start": "tsdx watch",
-    "dev": "tsdx watch",
-    "build": "tsdx build",
-    "test": "tsdx test --passWithNoTests",
-    "lint": "tsdx lint",
-    "prepublishOnly": "tsdx build",
+    "start": "tsup --watch",
+    "dev": "tsup --watch",
+    "build": "shx rm -rf ./dist && tsup",
+    "test": "jest --passWithNoTests",
+    "lint": "eslint \"src/**/*.{ts,tsx}\" && prettier  --check src/**/*.ts",
     "typecheck": "tsc --noEmit"
   },
-  "prettier": "@blockstack/prettier-config",
+  "prettier": "@stacks/prettier-config",
   "name": "@clarigen/web",
   "author": "Hank Stoever",
-  "module": "dist/web.esm.js",
-  "devDependencies": {
-    "@stacks/connect": "5.0.5"
-  },
   "dependencies": {
-    "@clarigen/core": "0.3.4",
-    "@stacks/blockchain-api-client": "^0.55.2",
-    "@stacks/network": "1.2.2",
-    "@stacks/transactions": "^2.0.1",
-    "cross-fetch": "3.2.0-alpha.2",
-    "stacks-crypto": "1.0.0-beta.3"
+    "@clarigen/core": "workspace:*",
+    "micro-stacks": "^0.5.2"
   },
   "publishConfig": {
     "access": "public"
-  },
-  "gitHead": "d3825e8cae60fc7a00bbd88a6abb84d1a5a7dfa6"
+  }
 }

@@ -25,6 +25,10 @@ export function detectArch(logger: Logger = ConsoleLogger): string {
       return 'x64';
     }
 
+    if (process.arch === 'arm64') {
+      return 'arm64';
+    }
+
     /**
      * On Windows, the most reliable way to detect a 64-bit OS from within a 32-bit
      * app is based on the presence of a WOW64 file: %SystemRoot%\SysNative.
@@ -63,7 +67,7 @@ export function detectArch(logger: Logger = ConsoleLogger): string {
       }
     }
   } catch (error) {
-    logger.error(`Unexpected error trying to detect system architecture: ${error}`);
+    logger.error(`Unexpected error trying to detect system architecture: ${String(error)}`);
   }
 
   /**

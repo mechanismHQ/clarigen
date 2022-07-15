@@ -1,28 +1,27 @@
 {
-  "version": "0.3.4",
+  "version": "1.0.0-next.27",
   "license": "MIT",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "files": [
     "dist",
-    "installer",
     "post-install.js"
   ],
   "engines": {
     "node": ">=10"
   },
   "scripts": {
-    "start": "tsdx watch",
-    "dev": "tsdx watch",
-    "build": "tsdx build && yarn build-installer",
-    "build-installer": "yarn tsc --esModuleInterop --outDir ./installer src/direct-install.ts",
-    "test": "tsdx test --passWithNoTests",
-    "lint": "tsdx lint",
-    "prepublishOnly": "yarn build",
+    "start": "tsup-node --watch",
+    "dev": "tsup-node --watch",
+    "build": "shx rm -rf ./dist && tsup-node",
+    "test": "jest --passWithNoTests",
+    "lint": "eslint \"src/**/*.{ts,tsx}\" && prettier  --check src/**/*.ts",
     "typecheck": "tsc --noEmit",
-    "postinstall": "node post-install.js"
+    "postinstall": "node dist/direct-install.js",
+    "publish:dev": "yalc publish --push",
+    "demo": "pnpm build && pnpm postinstall"
   },
-  "prettier": "@blockstack/prettier-config",
+  "prettier": "@stacks/prettier-config",
   "name": "@clarigen/native-bin",
   "author": "Hank Stoever",
   "module": "dist/native-bin.esm.js",
@@ -32,7 +31,7 @@
     "@types/unzipper": "^0.10.3"
   },
   "dependencies": {
-    "@clarigen/core": "0.3.4",
+    "@clarigen/core": "workspace:*",
     "fs-extra": "^10.0.0",
     "node-fetch": "^2.6.0",
     "unzipper": "^0.10.11"

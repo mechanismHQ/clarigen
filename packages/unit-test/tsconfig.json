@@ -1,0 +1,16 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "module": "esnext",
+    "lib": ["dom", "esnext"],
+    "outDir": "./dist",
+    "resolveJsonModule": true,
+    "moduleResolution": "node",
+    "noUnusedLocals": false,
+    "noUnusedParameters": false,
+    "skipLibCheck": true,
+    "types": ["node", "./types/", "@types/jest"],
+    "typeRoots": ["./types/", "./node_modules/@types/"]  
+  },
+  "include": ["./src/**/*", "./types/*", "./test/**/*"]
+}

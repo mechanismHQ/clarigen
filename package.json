@@ -2,40 +2,43 @@
   "name": "root",
   "private": true,
   "scripts": {
-    "build": "lerna run build",
-    "lint": "eslint packages/**/*.{ts,js}",
+    "build": "turbo run build",
+    "lint": "turbo run lint --continue",
     "lint:fix": "eslint --fix packages/**/*.{ts,js}",
-    "test": "lerna run test --no-bail --parallel",
-    "typecheck": "lerna run typecheck --no-bail --parallel",
-    "publish-packages": "yarn build && yarn lerna publish from-package --yes"
+    "test": "turbo run test --continue",
+    "typecheck": "turbo run typecheck --continue",
+    "publish-packages": "pnpm build && pnpm publish -r",
+    "publish-local": "pnpm build && pnpm publish -r --tag beta",
+    "preinstall": "npx only-allow pnpm",
+    "demo-types": "clarigen"
   },
-  "prettier": "@blockstack/prettier-config",
+  "prettier": "@stacks/prettier-config",
   "devDependencies": {
-    "@blockstack/eslint-config": "^1.0.5",
-    "@blockstack/prettier-config": "^0.0.6",
-    "@changesets/changelog-github": "0.4.1",
-    "@stacks/stacks-blockchain-api-types": "^0.66.1",
+    "@changesets/changelog-github": "0.4.5",
+    "@jest/environment": "28.1.1",
+    "@stacks/eslint-config": "1.0.9",
+    "@stacks/prettier-config": "0.0.9",
     "@strictsoftware/typedoc-plugin-monorepo": "^0.4.2",
+    "@swc-node/jest": "1.3.3",
+    "@types/jest": "28.1.2",
     "@types/node": "16.11.7",
-    "eslint": "^7.0.0",
+    "eslint": "^7.27.0",
     "eslint-plugin-jest": "^23.16.0",
     "eslint-plugin-prettier": "^3.1.4",
     "husky": "^4.2.5",
-    "jest": "^26.0.1",
-    "jest-cli": "^26.6.3",
+    "jest": "^28.0.1",
+    "jest-cli": "^28.0.1",
     "lerna": "^4.0.0",
     "prettier": "^2.0.5",
-    "ts-jest": "^26.1.0",
-    "tsdx": "^0.14.1",
+    "shx": "^0.3.4",
     "tslib": "^2.1.0",
-    "typedoc": "0.20.36",
-    "typescript": "4.1.3"
+    "tsup": "^6.1.2",
+    "turbo": "1.2.5",
+    "typedoc": "0.23.7",
+    "typescript": "4.7.4"
   },
-  "workspaces": [
-    "packages/*"
-  ],
   "dependencies": {
-    "@changesets/cli": "^2.17.0",
+    "@changesets/cli": "^2.23.2",
     "jsonfile": "^6.1.0"
   }
 }

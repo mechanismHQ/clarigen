@@ -1,4 +1,3 @@
-import type * as Clarity from '@stacks/transactions';
 import {
   addressToString,
   ClarityAbi as _ClarityAbi,
@@ -7,77 +6,68 @@ import {
   ClarityType,
   ClarityValue,
   PrincipalCV,
-  getTypeString,
   uintCV,
-  standardPrincipalCV,
   contractPrincipalCV,
   intCV,
-  trueCV,
-  falseCV,
-  isClarityAbiPrimitive,
-  isClarityAbiBuffer,
-  isClarityAbiList,
-  isClarityAbiOptional,
-  isClarityAbiResponse,
-  isClarityAbiStringAscii,
-  isClarityAbiStringUtf8,
-  isClarityAbiTuple,
-  bufferCVFromString,
   stringAsciiCV,
   stringUtf8CV,
   noneCV,
   someCV,
   tupleCV,
   listCV,
+  cvToJSON,
+  hexToCV,
+  ClarityAbiFunction,
+  bufferCV,
+} from 'micro-stacks/clarity';
+import {
+  isClarityAbiList,
+  isClarityAbiOptional,
+  isClarityAbiStringAscii,
+  isClarityAbiStringUtf8,
+  isClarityAbiTuple,
+  isClarityAbiBuffer,
   parseToCV as _parseToCV,
-} from '@stacks/transactions';
-import { Result } from 'neverthrow';
+} from 'micro-stacks/transactions';
+import { bytesToAscii, bytesToHex } from 'micro-stacks/common';
+import {
+  Response,
+  ResponseOk,
+  ResponseErr,
+  ClarityAbiTypeUInt128,
+  ClarityAbiTypeBool,
+  ClarityAbiTypeBuffer,
+  ClarityAbiTypeInt128,
+  ClarityAbiTypeList,
+  ClarityAbiTypeNone,
+  ClarityAbiTypeOptional,
+  ClarityAbiTypePrimitive,
+  ClarityAbiTypePrincipal,
+  ClarityAbiTypeResponse,
+  ClarityAbiTypeStringAscii,
+  ClarityAbiTypeStringUtf8,
+  ClarityAbiTypeTraitReference,
+  ClarityAbiMap,
+} from './abi-types';
+import { toCamelCase, toKebabCase } from './utils';
 
-export interface ClarityAbiMap {
-  name: string;
-  key:
-    | {
-        name: string;
-        type: ClarityAbiType;
-      }[]
-    | ClarityAbiTypeTuple
-    | ClarityAbiType;
-  value:
-    | {
-        name: string;
-        type: ClarityAbiType;
-      }[]
-    | ClarityAbiTypeTuple
-    | ClarityAbiType;
+export function ok<T, Err = never>(value: T): ResponseOk<T, Err> {
+  return {
+    isOk: true,
+    value,
+  };
+}
+
+export function err<Ok = never, T = unknown>(value: T): ResponseErr<Ok, T> {
+  return {
+    isOk: false,
+    value,
+  };
 }
 
 export interface ClarityAbi extends Omit<_ClarityAbi, 'maps'> {
   maps: ClarityAbiMap[];
   clarity_version?: string;
-}
-
-// eslint-disable-next-line @typescript-eslint/no-namespace
-export namespace ClarityTypes {
-  export type BooleanCV = Clarity.BooleanCV;
-  export type TrueCV = Clarity.TrueCV;
-  export type FalseCV = Clarity.FalseCV;
-  export type IntCV = Clarity.IntCV;
-  export type UIntCV = Clarity.UIntCV;
-  export type BufferCV = Clarity.BufferCV;
-  export type OptionalCV = Clarity.OptionalCV;
-  export type NoneCV = Clarity.NoneCV;
-  export type SomeCV = Clarity.SomeCV;
-  export type ResponseCV = Clarity.ResponseCV;
-  export type ResponseOkCV = Clarity.ResponseOkCV;
-  export type ResponseErrorCV = Clarity.ResponseErrorCV;
-  export type PrincipalCV = Clarity.PrincipalCV;
-  export type StandardPrincipalCV = Clarity.StandardPrincipalCV;
-  export type ContractPrincipalCV = Clarity.ContractPrincipalCV;
-  export type ListCV = Clarity.ListCV;
-  export type TupleCV = Clarity.TupleCV;
-  export type StringAsciiCV = Clarity.StringAsciiCV;
-  export type StringUtf8CV = Clarity.StringUtf8CV;
-  export type Response<Ok, Err> = Result<Ok, Err>;
 }
 
 function principalToString(principal: PrincipalCV): string {
@@ -91,42 +81,62 @@ function principalToString(principal: PrincipalCV): string {
   }
 }
 
-export function cvToValue(val: ClarityValue): any {
+/**
+ * @param val - ClarityValue
+ * @param returnResponse - if true, this will return a "response" object.
+ * Otherwise, it returns the inner value of the response (whether ok or err)
+ */
+export function cvToValue<T = any>(val: ClarityValue, returnResponse = false): T {
   switch (val.type) {
     case ClarityType.BoolTrue:
-      return true;
+      return true as unknown as T;
     case ClarityType.BoolFalse:
-      return false;
+      return false as unknown as T;
     case ClarityType.Int:
-      return val.value;
     case ClarityType.UInt:
-      return val.value;
+      return val.value as unknown as T;
     case ClarityType.Buffer:
-      return val.buffer;
+      return val.buffer as unknown as T;
     case ClarityType.OptionalNone:
-      return null;
+      return null as unknown as T;
     case ClarityType.OptionalSome:
       return cvToValue(val.value);
     case ClarityType.ResponseErr:
+      if (returnResponse) return err(cvToValue(val.value)) as unknown as T;
       return cvToValue(val.value);
     case ClarityType.ResponseOk:
+      if (returnResponse) return ok(cvToValue(val.value)) as unknown as T;
       return cvToValue(val.value);
     case ClarityType.PrincipalStandard:
     case ClarityType.PrincipalContract:
-      return principalToString(val);
+      return principalToString(val) as unknown as T;
     case ClarityType.List:
-      return val.list.map(v => cvToValue(v));
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+      return val.list.map(v => cvToValue(v)) as unknown as T;
     case ClarityType.Tuple:
-      const result: { [key: string]: any } = {};
-      Object.keys(val.data).forEach(key => {
-        result[key] = cvToValue(val.data[key]);
-      });
-      return result;
+      const tupleReduced = Object.entries(val.data).reduce((acc, [key, val]) => {
+        const keyFixed = toCamelCase(key);
+        return {
+          ...acc,
+          [keyFixed]: cvToValue(val),
+        };
+      }, {} as Record<string, any>);
+      return tupleReduced as unknown as T;
     case ClarityType.StringASCII:
-      return val.data;
+      return val.data as unknown as T;
     case ClarityType.StringUTF8:
-      return val.data;
+      return val.data as unknown as T;
   }
+}
+
+/**
+ * Converts a hex encoded string to the javascript clarity value object {type: string; value: any}
+ * @param hex - the hex encoded string with or without `0x` prefix
+ * @param jsonCompat - enable to serialize bigints to strings
+ */
+export function hexToCvValue<T>(hex: string, jsonCompat = false) {
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+  return cvToValue(hexToCV(hex), jsonCompat);
 }
 
 type TupleInput = Record<string, any>;
@@ -150,7 +160,8 @@ export function parseToCV(input: CVInput, type: ClarityAbiType): ClarityValue {
     }
     const tuple: Record<string, ClarityValue> = {};
     type.tuple.forEach(key => {
-      const val = input[key.name];
+      const jsKey = findJsTupleKey(key.name, input);
+      const val = input[jsKey];
       tuple[key.name] = parseToCV(val, key.type);
     });
     return tupleCV(tuple);
@@ -186,6 +197,8 @@ export function parseToCV(input: CVInput, type: ClarityAbiType): ClarityValue {
     if (typeof input !== 'string') throw new Error('Invalid input for trait_reference');
     const [addr, name] = input.split('.');
     return contractPrincipalCV(addr, name);
+  } else if (isClarityAbiBuffer(type)) {
+    return bufferCV(input as Uint8Array);
   }
   return _parseToCV(input as string, type);
 }
@@ -202,12 +215,12 @@ export function cvToString(val: ClarityValue, encoding: 'tryAscii' | 'hex' = 'he
       return `u${val.value.toString()}`;
     case ClarityType.Buffer:
       if (encoding === 'tryAscii') {
-        const str = val.buffer.toString('ascii');
+        const str = bytesToAscii(val.buffer);
         if (/[ -~]/.test(str)) {
           return JSON.stringify(str);
         }
       }
-      return `0x${val.buffer.toString('hex')}`;
+      return `0x${bytesToHex(val.buffer)}`;
     case ClarityType.OptionalNone:
       return 'none';
     case ClarityType.OptionalSome:
@@ -231,3 +244,116 @@ export function cvToString(val: ClarityValue, encoding: 'tryAscii' | 'hex' = 'he
       return `u"${val.data}"`;
   }
 }
+
+export function transformObjectArgs(func: ClarityAbiFunction, args: Record<string, any>) {
+  return func.args.map(abiArg => {
+    const key = findJsTupleKey(abiArg.name, args);
+    const val = args[key];
+    return parseToCV(val, abiArg.type);
+  });
+}
+
+export function transformArgsArray(func: ClarityAbiFunction, args: any[]) {
+  return args.map((arg, index) => parseToCV(arg, func.args[index].type));
+}
+
+export function transformArgsToCV(func: ClarityAbiFunction, args: any[] | [Record<string, any>]) {
+  if (args.length === 0) return [];
+  const [firstArg] = args;
+  if (args.length === 1 && func.args.length !== 1) {
+    return transformObjectArgs(func, firstArg);
+  }
+  if (typeof firstArg === 'object' && !Array.isArray(firstArg) && firstArg !== null) {
+    try {
+      let hasAllArgs = true;
+      func.args.forEach(a => {
+        try {
+          findJsTupleKey(a.name, firstArg);
+        } catch (error) {
+          hasAllArgs = false;
+        }
+      });
+      if (hasAllArgs) {
+        return transformObjectArgs(func, firstArg);
+      }
+    } catch (_error) {
+      // console.log('error transforming args:', _error);
+      //
+    }
+  }
+  return transformArgsArray(func, args);
+}
+
+export function findJsTupleKey(key: string, input: Record<string, any>) {
+  const found = Object.keys(input).find(k => {
+    const camelEq = key === k;
+    const kebabEq = key === toKebabCase(k);
+    return camelEq || kebabEq;
+  });
+  if (!found) {
+    throw new Error(`Error encoding JS tuple: ${key} not found in input.`);
+  }
+  return found;
+}
+
+export function expectOk<Ok>(response: Response<Ok, any>): Ok {
+  if (response.isOk) {
+    return response.value;
+  }
+  throw new Error(`Expected OK, received error: ${String(response.value)}`);
+}
+
+export function expectErr<Err>(response: Response<any, Err>): Err {
+  if (!response.isOk) {
+    return response.value;
+  }
+  throw new Error(`Expected Err, received ok: ${String(response.value)}`);
+}
+
+export type AbiPrimitiveTo<T extends ClarityAbiTypePrimitive> = T extends ClarityAbiTypeInt128
+  ? bigint
+  : T extends ClarityAbiTypeUInt128
+  ? bigint
+  : T extends ClarityAbiTypeBool
+  ? boolean
+  : T extends ClarityAbiTypePrincipal
+  ? string
+  : T extends ClarityAbiTypeTraitReference
+  ? string
+  : T extends ClarityAbiTypeNone
+  ? never
+  : T;
+
+type ReadonlyTuple = {
+  readonly tuple: Readonly<ClarityAbiTypeTuple['tuple']>;
+};
+
+type TupleTypeUnion<T> = T extends Readonly<ClarityAbiTypeTuple['tuple'][number]>
+  ? { -readonly [Z in T['name']]: AbiTypeTo<T['type']> }
+  : never;
+type UnionToIntersection<U> = (U extends any ? (k: U) => void : never) extends (k: infer I) => void
+  ? I
+  : never;
+type Compact<T> = { [K in keyof T]: T[K] };
+
+export type AbiTupleTo<T extends ReadonlyTuple> = Compact<
+  UnionToIntersection<TupleTypeUnion<T['tuple'][number]>>
+>;
+
+export type AbiTypeTo<T extends ClarityAbiType | ReadonlyTuple> = T extends ClarityAbiTypePrimitive
+  ? AbiPrimitiveTo<T>
+  : T extends ClarityAbiTypeBuffer
+  ? Uint8Array
+  : T extends ClarityAbiTypeStringAscii
+  ? string
+  : T extends ClarityAbiTypeStringUtf8
+  ? string
+  : T extends ClarityAbiTypeList
+  ? AbiTypeTo<T['list']['type']>[]
+  : T extends ClarityAbiTypeOptional
+  ? AbiTypeTo<T['optional']> | null
+  : T extends ClarityAbiTypeResponse
+  ? Response<AbiTypeTo<T['response']['ok']>, AbiTypeTo<T['response']['error']>>
+  : T extends ReadonlyTuple
+  ? AbiTupleTo<T>
+  : T;

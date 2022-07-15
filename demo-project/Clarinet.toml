@@ -1,0 +1,25 @@
+[project]
+name = "clarinet"
+authors = []
+description = ""
+telemetry = false
+boot_contracts = ["pox", "costs-v2", "bns"]
+cache_dir = ".requirements"
+
+[[project.requirements]]
+contract_id = "SP3DX3H4FEYZJZ586MFBS25ZW3HZDMEW92260R2PR.Wrapped-Bitcoin"
+
+[contracts.tester]
+path = "contracts/tester.clar"
+
+[repl.analysis]
+passes = []
+check_checker = { trusted_sender = false, trusted_caller = false, callee_filter = false }
+
+# Check-checker settings:
+# trusted_sender: if true, inputs are trusted after tx_sender has been checked.
+# trusted_caller: if true, inputs are trusted after contract-caller has been checked.
+# callee_filter: if true, untrusted data may be passed into a private function without a
+# warning, if it gets checked inside. This check will also propagate up to the
+# caller.
+# More informations: https://www.hiro.so/blog/new-safety-checks-in-clarinet

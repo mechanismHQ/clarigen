@@ -22,3 +22,5 @@ lerna-debug.log
 *.native-bin
 installer/
 .yalc
+.turbo
+packages/cli/test/clarinet-project/clarigen

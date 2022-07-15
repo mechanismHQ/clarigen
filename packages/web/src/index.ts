@@ -1,126 +1,65 @@
-import { Configuration, SmartContractsApi } from '@stacks/blockchain-api-client';
-import { ClarityAbiFunction, ClarityType, deserializeCV, serializeCV } from '@stacks/transactions';
-import { ok, err } from 'neverthrow';
-import {
-  BaseProvider,
-  Transaction,
-  getContractIdentifier,
-  Contracts,
-  ContractInstances,
-  cvToValue,
-  parseToCV,
-} from '@clarigen/core';
-import { AppDetails, makeTx } from './utils';
-import { StacksNetwork } from '@stacks/network';
-import { fetch } from 'cross-fetch';
+import { ContractCall, ro, roOk, roErr, fetchMapGet } from '@clarigen/core';
+import { ContractCallTxOptions, makeContractCallToken } from 'micro-stacks/connect';
+import { StacksNetwork } from 'micro-stacks/network';
+import { deserializeTransaction } from 'micro-stacks/transactions';
 
-export interface WebConfig {
-  stxAddress: string;
-  privateKey: string;
+export interface WebOptions {
   network: StacksNetwork;
-  appDetails: AppDetails;
-  deployerAddress?: string;
 }
 
-export class WebProvider implements BaseProvider {
-  apiClient: SmartContractsApi;
-  identifier: string;
-  stxAddress: string;
-  privateKey: string;
-  network: StacksNetwork;
-  appDetails: AppDetails;
-
-  constructor({
-    network,
-    identifier,
-    stxAddress,
-    privateKey,
-    appDetails,
-  }: WebConfig & { identifier: string }) {
-    const _fetch = typeof window !== 'undefined' ? window.fetch.bind(window) : fetch;
-    const apiConfig = new Configuration({
-      fetchApi: _fetch,
-      basePath: network.coreApiUrl,
-    });
-
-    const apiClient = new SmartContractsApi(apiConfig);
-    this.apiClient = apiClient;
-    this.identifier = identifier;
-    this.privateKey = privateKey;
-    this.stxAddress = stxAddress;
-    this.network = network;
-    this.appDetails = appDetails;
+export async function tx(
+  tx: ContractCall<any>,
+  txOptions: Omit<
+    ContractCallTxOptions,
+    'contractName' | 'contractAddress' | 'functionName' | 'functionArgs'
+  >,
+  options?: WebOptions
+) {
+  const token = await makeContractCallToken({
+    functionArgs: tx.functionArgs,
+    functionName: tx.function.name,
+    contractAddress: tx.contractAddress,
+    contractName: tx.contractName,
+    network: options?.network,
+    ...txOptions,
+  });
+  if (!window.StacksProvider) {
+    throw new Error('Stacks wallet not installed.');
   }
-
-  static fromContracts<T extends Contracts<M>, M>(
-    contracts: T,
-    config: WebConfig
-  ): ContractInstances<T, M> {
-    const instances = {} as ContractInstances<T, M>;
-    for (const k in contracts) {
-      const contract = contracts[k];
-      contract.address = config.deployerAddress || contract.address;
-      const identifier = getContractIdentifier(contract);
-      const provider = new this({ ...config, identifier });
-      // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
-      const instance = contract.contract(provider) as ReturnType<T[typeof k]['contract']>;
-      instances[k] = {
-        identifier,
-        contract: instance,
-      };
-    }
-    return instances;
-  }
-
-  async callReadOnly(func: ClarityAbiFunction, args: any[]) {
-    const argumentsFormatted = args.map((arg, index) => {
-      const { type } = func.args[index];
-      const valueCV = parseToCV(arg, type);
-      return serializeCV(valueCV).toString('hex');
-    });
-    const [contractAddress, contractName] = this.identifier.split('.');
-    const response = await this.apiClient.callReadOnlyFunction({
-      contractAddress,
-      contractName,
-      functionName: func.name,
-      readOnlyFunctionArgs: {
-        sender: 'STB44HYPYAT2BB2QE513NSP81HTMYWBJP02HPGK6',
-        arguments: argumentsFormatted,
-      },
-    });
-    if (!response.okay || !response.result) {
-      console.log(response);
-      throw new Error('Error calling read-only function');
-    }
-    const resultCV = deserializeCV(Buffer.from(response.result.replace(/^0x/, ''), 'hex'));
-    const value = cvToValue(resultCV);
-    switch (resultCV.type) {
-      case ClarityType.ResponseOk:
-        return ok(value);
-      case ClarityType.ResponseErr:
-        return err(value);
-      default:
-        return value;
-    }
-  }
-
-  callPublic(func: ClarityAbiFunction, args: any[]): Transaction<any, any> {
-    const argumentsFormatted = args.map((arg, index) => {
-      const { type } = func.args[index];
-      const valueCV = parseToCV(arg, type);
-      return serializeCV(valueCV).toString('hex');
-    });
-    const [contractAddress, contractName] = this.identifier.split('.');
-    return makeTx({
-      contractAddress,
-      contractName,
-      functionName: func.name,
-      functionArgs: argumentsFormatted,
-      network: this.network,
-      stxAddress: this.stxAddress,
-      privateKey: this.privateKey,
-      appDetails: this.appDetails,
-    });
-    // throw new Error('Not implemented');
-  }
+  const request = await window.StacksProvider.transactionRequest(token);
+  const { txRaw } = request;
+  const stacksTransaction = deserializeTransaction(txRaw);
+  return {
+    txId: request.txId,
+    stacksTransaction,
+  };
 }
+
+type Fn<A, R> = (arg: A, options: WebOptions) => R;
+
+function curry<A, R>(f: Fn<A, R>, options: WebOptions) {
+  return (arg: A) => f(arg, options);
+}
+
+export function WebProvider(options: WebOptions) {
+  return {
+    ro: curry(ro, options),
+    roOk: curry(roOk, options),
+    roErr: curry(roErr, options),
+    tx: async (
+      _tx: ContractCall<any>,
+      txOptions: Omit<
+        ContractCallTxOptions,
+        'contractName' | 'contractAddress' | 'functionName' | 'functionArgs'
+      >
+    ) => {
+      await tx(_tx, txOptions, options);
+    },
+    mapGet: curry(fetchMapGet, options),
+    // tx: curry(tx, options),
+  };
+}
+
+export { ro, roOk, roErr };
+
+export const mapGet = fetchMapGet;

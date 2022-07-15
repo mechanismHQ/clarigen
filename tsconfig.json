@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "composite": true,
+    // "composite": true,
     "outDir": "./dist",
     "rootDir": ".",
     "declaration": true,
@@ -19,7 +19,8 @@
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,
     "moduleResolution": "node",
-    "types": ["jest"]
+    "types": ["jest"],
+    "skipLibCheck": true
   },
   "exclude": ["node_modules", "dist"]
 }

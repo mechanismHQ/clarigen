@@ -152,3 +152,51 @@ export type CoreNodeEvent =
   | NftTransferEvent
   | NftMintEvent
   | NftBurnEvent;
+
+export function filterEvents(
+  events: CoreNodeEvent[],
+  type: CoreNodeEventType.ContractEvent
+): SmartContractEvent[];
+export function filterEvents(
+  events: CoreNodeEvent[],
+  type: CoreNodeEventType.StxTransferEvent
+): StxTransferEvent[];
+export function filterEvents(
+  events: CoreNodeEvent[],
+  type: CoreNodeEventType.StxMintEvent
+): StxMintEvent[];
+export function filterEvents(
+  events: CoreNodeEvent[],
+  type: CoreNodeEventType.StxBurnEvent
+): StxBurnEvent[];
+export function filterEvents(
+  events: CoreNodeEvent[],
+  type: CoreNodeEventType.StxLockEvent
+): StxLockEvent[];
+export function filterEvents(
+  events: CoreNodeEvent[],
+  type: CoreNodeEventType.NftTransferEvent
+): NftTransferEvent[];
+export function filterEvents(
+  events: CoreNodeEvent[],
+  type: CoreNodeEventType.NftMintEvent
+): NftMintEvent[];
+export function filterEvents(
+  events: CoreNodeEvent[],
+  type: CoreNodeEventType.NftBurnEvent
+): NftBurnEvent[];
+export function filterEvents(
+  events: CoreNodeEvent[],
+  type: CoreNodeEventType.FtTransferEvent
+): FtTransferEvent[];
+export function filterEvents(
+  events: CoreNodeEvent[],
+  type: CoreNodeEventType.FtMintEvent
+): FtMintEvent[];
+export function filterEvents(
+  events: CoreNodeEvent[],
+  type: CoreNodeEventType.FtBurnEvent
+): FtBurnEvent[];
+export function filterEvents(events: CoreNodeEvent[], type: CoreNodeEventType): CoreNodeEvent[] {
+  return events.filter(event => event.type === type);
+}
