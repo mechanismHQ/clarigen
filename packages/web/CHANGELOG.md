@@ -1,5 +1,14 @@
 # @clarigen/web
 
+## 1.0.0-next.32
+
+### Patch Changes
+
+- [#30](https://github.com/mechanismHQ/clarigen/pull/30) [`512ef53`](https://github.com/mechanismHQ/clarigen/commit/512ef53c5256acb3fdaf7e836e009d7af5571189) Thanks [@hstove](https://github.com/hstove)! - Fixed error logging when broadcasting a stacks tx
+
+- Updated dependencies [[`512ef53`](https://github.com/mechanismHQ/clarigen/commit/512ef53c5256acb3fdaf7e836e009d7af5571189)]:
+  - @clarigen/core@1.0.0-next.32
+
 ## 1.0.0-next.27
 
 ### Patch Changes
