@@ -86,7 +86,9 @@ export async function broadcast(transaction: StacksTransaction, options: ApiOpti
   const result = await broadcastTransaction(transaction, options.network);
   if ('error' in result) {
     throw new Error(
-      `Error broadcasting tx: ${result.error} - ${result.reason} - ${result.reason_data as string}`
+      `Error broadcasting tx: ${result.error} - ${result.reason} - ${JSON.stringify(
+        result.reason_data
+      )}`
     );
   } else {
     return {

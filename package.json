@@ -14,7 +14,7 @@
   },
   "prettier": "@stacks/prettier-config",
   "devDependencies": {
-    "@changesets/changelog-github": "0.4.1",
+    "@changesets/changelog-github": "0.4.5",
     "@jest/environment": "28.1.1",
     "@stacks/eslint-config": "1.0.9",
     "@stacks/prettier-config": "0.0.9",
@@ -38,7 +38,7 @@
     "typescript": "4.7.4"
   },
   "dependencies": {
-    "@changesets/cli": "^2.17.0",
+    "@changesets/cli": "^2.23.2",
     "jsonfile": "^6.1.0"
   }
 }
