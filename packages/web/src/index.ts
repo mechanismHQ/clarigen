@@ -1,11 +1,14 @@
-import { ContractCall, ro, roOk, roErr, fetchMapGet } from '@clarigen/core';
+import { ContractCall, ro, roOk, roErr, fetchMapGet, ApiOptions, Response } from '@clarigen/core';
 import { ContractCallTxOptions, makeContractCallToken } from 'micro-stacks/connect';
-import { StacksNetwork } from 'micro-stacks/network';
 import { deserializeTransaction } from 'micro-stacks/transactions';
+import { ContractCallParams, MicroStacksClient, TxType } from '@micro-stacks/client';
 
-export interface WebOptions {
-  network: StacksNetwork;
-}
+export type WebOptions = ApiOptions;
+
+export type ContractCallExtra = Omit<
+  ContractCallParams,
+  'contractName' | 'contractAddress' | 'functionName' | 'functionArgs'
+>;
 
 export async function tx(
   tx: ContractCall<any>,
@@ -58,6 +61,65 @@ export function WebProvider(options: WebOptions) {
     mapGet: curry(fetchMapGet, options),
     // tx: curry(tx, options),
   };
+}
+
+export function transformTx(tx: ContractCall<any>, options: ContractCallExtra): ContractCallParams {
+  return {
+    functionArgs: tx.functionArgs,
+    functionName: tx.function.name,
+    contractAddress: tx.contractAddress,
+    contractName: tx.contractName,
+    ...options,
+  };
+}
+
+type ClientRoOptions = Omit<ApiOptions, 'network'>;
+
+export class ClarigenClient {
+  public microStacks: MicroStacksClient;
+
+  constructor(client: MicroStacksClient) {
+    this.microStacks = client;
+  }
+
+  public get network() {
+    return this.microStacks.getState().network;
+  }
+
+  async openContractCall(
+    tx: ContractCall<any>,
+    txOptions?: Omit<
+      ContractCallTxOptions,
+      'contractName' | 'contractAddress' | 'functionName' | 'functionArgs'
+    >
+  ) {
+    return this.microStacks.signTransaction(TxType.ContractCall, {
+      functionArgs: tx.functionArgs,
+      functionName: tx.function.name,
+      contractAddress: tx.contractAddress,
+      contractName: tx.contractName,
+      ...txOptions,
+    });
+  }
+
+  private roOptions(options: ClientRoOptions): ApiOptions {
+    return {
+      network: this.network,
+      ...options,
+    };
+  }
+
+  async ro<T>(tx: ContractCall<T>, options: ClientRoOptions) {
+    return ro(tx, this.roOptions(options));
+  }
+
+  async roOk<T>(tx: ContractCall<Response<T, any>>, options: ClientRoOptions) {
+    return roOk(tx, this.roOptions(options));
+  }
+
+  async roErr<T>(tx: ContractCall<Response<any, T>>, options: ClientRoOptions) {
+    return roErr(tx, this.roOptions(options));
+  }
 }
 
 export { ro, roOk, roErr };

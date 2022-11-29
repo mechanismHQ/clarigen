@@ -1,10 +1,5 @@
-import {
-  parseReadOnlyResponse,
-  ReadOnlyFunctionResponse,
-  fetchContractDataMapEntry,
-} from 'micro-stacks/api';
+import { fetchContractDataMapEntry, callReadOnlyFunction } from 'micro-stacks/api';
 import { cvToHex, hexToCV } from 'micro-stacks/clarity';
-import { fetchPrivate } from 'micro-stacks/common';
 import { StacksNetwork } from 'micro-stacks/network';
 import { broadcastTransaction, StacksTransaction } from 'micro-stacks/transactions';
 import { cvToValue, expectErr, expectOk } from './clarity-types';
@@ -12,39 +7,28 @@ import { ContractCalls } from './pure';
 import { Response } from './abi-types';
 import { ContractCall } from './factory-types';
 
-interface ApiOptions {
+export interface ApiOptions {
   network: StacksNetwork;
+  tip?: string;
+  latest?: boolean;
+}
+
+function getTip(options: ApiOptions): string | undefined {
+  if (options.latest === false) return undefined;
+  if (options.latest) return 'latest';
+  return options.tip;
 }
 
 export async function ro<T>(tx: ContractCall<T>, options: ApiOptions): Promise<T> {
-  const urlBase = options.network.getReadOnlyFunctionCallApiUrl(
-    tx.contractAddress,
-    tx.contractName,
-    tx.function.name
-  );
-  const url = `${urlBase}?tip=latest`;
-  const body = JSON.stringify({
-    sender: tx.contractAddress,
-    arguments: tx.functionArgs.map(arg => (typeof arg === 'string' ? arg : cvToHex(arg))),
+  const tip = getTip(options);
+  const cv = await callReadOnlyFunction({
+    contractAddress: tx.contractAddress,
+    contractName: tx.contractName,
+    functionName: tx.function.name,
+    functionArgs: tx.functionArgs,
+    tip,
   });
-  const response = await fetchPrivate(url, {
-    method: 'POST',
-    body,
-    headers: {
-      'Content-Type': 'application/json',
-    },
-  });
-  if (!response.ok) {
-    let msg = '';
-    try {
-      msg = await response.text();
-    } catch (error) {}
-    throw new Error(
-      `Error calling read-only function. Response ${response.status}: ${response.statusText}. Attempted to fetch ${url} and failed with the message: "${msg}"`
-    );
-  }
-  const parsed = parseReadOnlyResponse((await response.json()) as ReadOnlyFunctionResponse);
-  return cvToValue(parsed, true);
+  return cvToValue(cv, true);
 }
 
 export async function roOk<Ok>(

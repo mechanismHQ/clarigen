@@ -57,9 +57,9 @@ importers:
 
   packages/core:
     specifiers:
-      micro-stacks: ^0.5.2
+      micro-stacks: ^1.1.4
     dependencies:
-      micro-stacks: 0.5.2
+      micro-stacks: 1.1.4
 
   packages/native-bin:
     specifiers:
@@ -83,31 +83,33 @@ importers:
   packages/node:
     specifiers:
       '@clarigen/core': workspace:*
-      micro-stacks: ^0.5.2
+      micro-stacks: ^1.1.4
     dependencies:
       '@clarigen/core': link:../core
-      micro-stacks: 0.5.2
+      micro-stacks: 1.1.4
 
   packages/unit-test:
     specifiers:
       '@clarigen/core': workspace:*
       '@clarigen/native-bin': workspace:*
       jest-environment-node: 28.1.1
-      micro-stacks: ^0.5.2
+      micro-stacks: ^1.1.4
     dependencies:
       '@clarigen/core': link:../core
       '@clarigen/native-bin': link:../native-bin
-      micro-stacks: 0.5.2
+      micro-stacks: 1.1.4
     devDependencies:
       jest-environment-node: 28.1.1
 
   packages/web:
     specifiers:
       '@clarigen/core': workspace:*
-      micro-stacks: ^0.5.2
+      '@micro-stacks/client': ^1.1.2
+      micro-stacks: ^1.1.4
     dependencies:
       '@clarigen/core': link:../core
-      micro-stacks: 0.5.2
+      '@micro-stacks/client': 1.1.2
+      micro-stacks: 1.1.4
 
 packages:
 
@@ -1648,16 +1650,31 @@ packages:
       read-yaml-file: 1.1.0
     dev: false
 
+  /@micro-stacks/client/1.1.2:
+    resolution: {integrity: sha512-2RwX4OSfk9+jK9GNm13POO3hE7htMCbynLdDldY0mM7CK7QLddaTQcyt1WMwUmx5Sn8oXA9tE/RdZL1QkC1vXw==}
+    engines: {node: '>=14'}
+    dependencies:
+      fast-deep-equal: 3.1.3
+      micro-stacks: 1.1.4
+      tiny-invariant: 1.3.1
+      zustand: 4.1.1
+    transitivePeerDependencies:
+      - '@scure/bip32'
+      - '@scure/bip39'
+      - immer
+      - react
+    dev: false
+
   /@napi-rs/triples/1.1.0:
     resolution: {integrity: sha512-XQr74QaLeMiqhStEhLn1im9EOMnkypp7MZOwQhGzqp2Weu5eQJbpPxWxixxlYRKWPOmJjsk6qYfYH9kq43yc2w==}
     dev: true
 
-  /@noble/hashes/1.0.0:
-    resolution: {integrity: sha512-DZVbtY62kc3kkBtMHqwCOfXrT/hnoORy5BJ4+HU1IR59X0KWAOqsfzQPcUl/lQLlG7qXbe/fZ3r/emxtAl+sqg==}
+  /@noble/hashes/1.1.2:
+    resolution: {integrity: sha512-KYRCASVTv6aeUi1tsF8/vpyR7zpfs3FUzy2Jqm+MU+LmUKhQ0y2FpfwqkCcxSg2ua4GALJd8k2R76WxwZGbQpA==}
     dev: false
 
-  /@noble/secp256k1/1.5.5:
-    resolution: {integrity: sha512-sZ1W6gQzYnu45wPrWx8D3kwI2/U29VYTx9OjbDAd7jwRItJ0cSTMPRL/C8AWZFn9kWFLQGqEXVEE86w4Z8LpIQ==}
+  /@noble/secp256k1/1.6.3:
+    resolution: {integrity: sha512-T04e4iTurVy7I8Sw4+c5OSN9/RkPlo1uKxAomtxQNLq8j1uPAqnsqG1bqvY3Jv7c13gyr6dui0zmh/I3+f/JaQ==}
     dev: false
 
   /@node-rs/helper/1.3.0:
@@ -3968,7 +3985,6 @@ packages:
 
   /fast-deep-equal/3.1.3:
     resolution: {integrity: sha512-f3qQ9oQy9j2AhBe/H9VC91wLmKBCCU/gDOnKNAYG5hswO7BLKj09Hc5HYNz9cGI++xlpDCIgDaitVs03ATR84Q==}
-    dev: true
 
   /fast-diff/1.2.0:
     resolution: {integrity: sha512-xJuoT5+L99XlZ8twedaRf6Ax2TgQVxvgZOYoPKqZufmJib0tL2tegPBOZb1pVNgIhlqDlA0eO0c3wBvQcmzx4w==}
@@ -5685,20 +5701,20 @@ packages:
     resolution: {integrity: sha512-8q7VEgMJW4J8tcfVPy8g09NcQwZdbwFEqhe/WZkoIzjn/3TGDwtOCYtXGxA3O8tPzpczCCDgv+P2P5y00ZJOOg==}
     engines: {node: '>= 8'}
 
-  /micro-stacks/0.5.2:
-    resolution: {integrity: sha512-JAfnjTw8B71LqeF77kSPNxV/eDwgtii653AjBtPstKOM6fmKOMTiKXc4IOCq6qEXLyS08aNnnQ+U9VutTB8tNw==}
-    engines: {node: '>=12'}
+  /micro-stacks/1.1.4:
+    resolution: {integrity: sha512-roWyLX2LZxYDIYcmFadfb5uRmRye+UA3m2efhg9I3I4AoOT3X4THOo3zekLhFvjFbhFUs+uoXMjGnQhOFBnpAw==}
+    engines: {node: '>=14'}
     peerDependencies:
-      '@scure/bip32': 1.0.1
-      '@scure/bip39': 1.0.0
+      '@scure/bip32': 1.1.0
+      '@scure/bip39': 1.1.0
     peerDependenciesMeta:
       '@scure/bip32':
         optional: true
       '@scure/bip39':
         optional: true
     dependencies:
-      '@noble/hashes': 1.0.0
-      '@noble/secp256k1': 1.5.5
+      '@noble/hashes': 1.1.2
+      '@noble/secp256k1': 1.6.3
     dev: false
 
   /micromatch/4.0.4:
@@ -7437,6 +7453,10 @@ packages:
       readable-stream: 3.6.0
     dev: true
 
+  /tiny-invariant/1.3.1:
+    resolution: {integrity: sha512-AD5ih2NlSssTCwsMznbvwMZpJ1cbhkGd2uueNxzv2jDlEeZdU04JQfRnggJQ8DrcVBGjAsCKwFBbDlVNtEMlzw==}
+    dev: false
+
   /tmp/0.0.33:
     resolution: {integrity: sha512-jRCJlojKnZ3addtTOjdIqoRuPEKBvNXcGYqzO6zWZX8KfKEpnGY5jfggJQ3EjKuu8D4bJRr0y+cYJFmYbImXGw==}
     engines: {node: '>=0.6.0'}
@@ -7848,6 +7868,12 @@ packages:
       punycode: 2.1.1
     dev: true
 
+  /use-sync-external-store/1.2.0:
+    resolution: {integrity: sha512-eEgnFxGQ1Ife9bzYs6VLi8/4X6CObHMw9Qr9tPY43iKwsPw8xE8+EFsf/2cFZ5S3esXgpWgtSCtLNS41F+sKPA==}
+    peerDependencies:
+      react: ^16.8.0 || ^17.0.0 || ^18.0.0
+    dev: false
+
   /util-deprecate/1.0.2:
     resolution: {integrity: sha512-EPD5q1uXyFxJpCrLnCc1nHnq3gOa6DZBocAIiI2TaSCA7VCJ1UJDMagCzIkXNsUYfD1daK//LTEQ8xiIbrHtcw==}
 
@@ -8171,3 +8197,18 @@ packages:
   /yocto-queue/0.1.0:
     resolution: {integrity: sha512-rVksvsnNCdJ/ohGc6xgPwyN8eheCxsiLM8mxuE/t/mOVqJewPuO1miLpTHQiRgTKCLexL4MeAFVagts7HmNZ2Q==}
     engines: {node: '>=10'}
+
+  /zustand/4.1.1:
+    resolution: {integrity: sha512-h4F3WMqsZgvvaE0n3lThx4MM81Ls9xebjvrABNzf5+jb3/03YjNTSgZXeyrvXDArMeV9untvWXRw1tY+ntPYbA==}
+    engines: {node: '>=12.7.0'}
+    peerDependencies:
+      immer: '>=9.0'
+      react: '>=16.8'
+    peerDependenciesMeta:
+      immer:
+        optional: true
+      react:
+        optional: true
+    dependencies:
+      use-sync-external-store: 1.2.0
+    dev: false

@@ -43,3 +43,5 @@ export function NodeProvider(options: NodeOptions) {
       tx(_tx, txOptions, options),
   };
 }
+
+export const ClarigenNodeClient = NodeProvider;
