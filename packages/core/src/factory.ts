@@ -82,19 +82,20 @@ export function functionsFactory<T extends ContractFunctions>(
 ): FunctionsToContractCalls<T> {
   return Object.fromEntries(
     Object.entries(functions).map(([fnName, foundFunction]) => {
-      const fn: FnToContractCall<typeof foundFunction> = (
-        ...args: unknown[] | [Record<string, unknown>]
-      ) => {
-        const functionArgs = transformArgsToCV(foundFunction, args);
-        const [contractAddress, contractName] = identifier.split('.');
-        return {
-          functionArgs: functionArgs,
-          contractAddress,
-          contractName,
-          function: foundFunction,
-          nativeArgs: args,
-        };
-      };
+      const fn: FnToContractCall<typeof foundFunction> = Object.assign(
+        (...args: unknown[] | [Record<string, unknown>]) => {
+          const functionArgs = transformArgsToCV(foundFunction, args);
+          const [contractAddress, contractName] = identifier.split('.');
+          return {
+            functionArgs: functionArgs,
+            contractAddress,
+            contractName,
+            function: foundFunction,
+            nativeArgs: args,
+          };
+        },
+        { abi: foundFunction }
+      );
       return [fnName, fn];
     })
   ) as FunctionsToContractCalls<T>;

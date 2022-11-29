@@ -87,7 +87,7 @@ export interface ClarityAbiTypeFungibleToken {
 
 export interface ClarityAbiTypeNonFungibleToken {
   name: string;
-  type: ClarityAbiType;
+  type: ClarityAbiType | Readonly<ClarityAbiType>;
 }
 
 export interface ClarityAbi {

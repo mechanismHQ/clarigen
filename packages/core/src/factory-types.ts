@@ -55,9 +55,10 @@ export type ArgsType<T extends UnknownArgs> = [ArgsRecord<T>] | ArgsTuple<T>;
 
 // // Contract calls
 
-export type ContractCallFunction<Args extends UnknownArgs, R> = (
-  ...args: ArgsType<Args>
-) => ContractCallTyped<Args, R>;
+export type ContractCallFunction<Args extends UnknownArgs, R> = {
+  (...args: ArgsType<Args>): ContractCallTyped<Args, R>;
+  abi: TypedAbiFunction<Args, R>;
+};
 
 export type FnToContractCall<T> = T extends TypedAbiFunction<infer Arg, infer R>
   ? ContractCallFunction<Arg, R>
