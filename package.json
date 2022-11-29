@@ -8,7 +8,7 @@
     "test": "turbo run test --continue",
     "typecheck": "turbo run typecheck --continue",
     "publish-packages": "pnpm build && pnpm publish -r",
-    "publish-local": "pnpm build && pnpm publish -r --tag beta",
+    "publish-local": "pnpm build && pnpm publish -r",
     "preinstall": "npx only-allow pnpm",
     "demo-types": "clarigen"
   },
