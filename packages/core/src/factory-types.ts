@@ -7,6 +7,7 @@ export interface ContractCall<T> {
   functionArgs: ClarityValue[];
   contractAddress: string;
   contractName: string;
+  functionName: string;
   _r?: T;
 }
 

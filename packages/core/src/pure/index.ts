@@ -53,6 +53,7 @@ function getter<T>(
         contractAddress: contract.contractAddress,
         contractName: contract.contractName,
         function: foundFunction,
+        functionName: foundFunction.name,
         nativeArgs: args,
       };
     };

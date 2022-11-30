@@ -91,6 +91,7 @@ export function functionsFactory<T extends ContractFunctions>(
             contractAddress,
             contractName,
             function: foundFunction,
+            functionName: foundFunction.name,
             nativeArgs: args,
           };
         },
