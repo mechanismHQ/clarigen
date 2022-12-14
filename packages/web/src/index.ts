@@ -112,7 +112,7 @@ export class ClarigenClient {
   }
 
   async ro<T>(tx: ContractCall<T>, options?: ClientRoOptions) {
-    return ro(tx, this.roOptions(options || {})));
+    return ro(tx, this.roOptions(options || {}));
   }
 
   async roOk<T>(tx: ContractCall<Response<T, any>>, options?: ClientRoOptions) {
