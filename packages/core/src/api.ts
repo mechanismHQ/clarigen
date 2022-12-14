@@ -16,6 +16,7 @@ export interface ApiOptions {
 function getTip(options: ApiOptions): string | undefined {
   if (options.latest === false) return undefined;
   if (options.latest) return 'latest';
+  if (typeof options.tip === 'undefined') return 'latest';
   return options.tip;
 }
 
@@ -24,9 +25,10 @@ export async function ro<T>(tx: ContractCall<T>, options: ApiOptions): Promise<T
   const cv = await callReadOnlyFunction({
     contractAddress: tx.contractAddress,
     contractName: tx.contractName,
-    functionName: tx.function.name,
+    functionName: tx.functionName,
     functionArgs: tx.functionArgs,
     tip,
+    network: options.network,
   });
   return cvToValue(cv, true);
 }

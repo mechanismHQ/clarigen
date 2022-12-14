@@ -63,6 +63,8 @@ export function WebProvider(options: WebOptions) {
   };
 }
 
+// export const Clarigen = WebProvider;
+
 export function transformTx(tx: ContractCall<any>, options: ContractCallExtra): ContractCallParams {
   return {
     functionArgs: tx.functionArgs,
@@ -109,16 +111,16 @@ export class ClarigenClient {
     };
   }
 
-  async ro<T>(tx: ContractCall<T>, options: ClientRoOptions) {
-    return ro(tx, this.roOptions(options));
+  async ro<T>(tx: ContractCall<T>, options?: ClientRoOptions) {
+    return ro(tx, this.roOptions(options || {})));
   }
 
-  async roOk<T>(tx: ContractCall<Response<T, any>>, options: ClientRoOptions) {
-    return roOk(tx, this.roOptions(options));
+  async roOk<T>(tx: ContractCall<Response<T, any>>, options?: ClientRoOptions) {
+    return roOk(tx, this.roOptions(options || {}));
   }
 
-  async roErr<T>(tx: ContractCall<Response<any, T>>, options: ClientRoOptions) {
-    return roErr(tx, this.roOptions(options));
+  async roErr<T>(tx: ContractCall<Response<any, T>>, options?: ClientRoOptions) {
+    return roErr(tx, this.roOptions(options || {}));
   }
 }
 
