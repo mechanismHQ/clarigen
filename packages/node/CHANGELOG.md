@@ -1,5 +1,14 @@
 # @clarigen/node
 
+## 1.0.2
+
+### Patch Changes
+
+- [`5d11043`](https://github.com/mechanismHQ/clarigen/commit/5d110431363ba3a41460a7eb63ea503ef4306120) Thanks [@hstove](https://github.com/hstove)! - Fixed an issue of not correctly passing network through ClarigenClient
+
+- Updated dependencies [[`5d11043`](https://github.com/mechanismHQ/clarigen/commit/5d110431363ba3a41460a7eb63ea503ef4306120)]:
+  - @clarigen/core@1.0.2
+
 ## 1.0.1
 
 ### Patch Changes
