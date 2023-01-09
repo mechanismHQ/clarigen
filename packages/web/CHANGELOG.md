@@ -1,5 +1,14 @@
 # @clarigen/web
 
+## 1.0.4
+
+### Patch Changes
+
+- [`77b53f9`](https://github.com/mechanismHQ/clarigen/commit/77b53f96de3b784868a8f899e343f183ebd7f628) Thanks [@hstove](https://github.com/hstove)! - Fixes a bug with `cvToJSON`
+
+- Updated dependencies [[`77b53f9`](https://github.com/mechanismHQ/clarigen/commit/77b53f96de3b784868a8f899e343f183ebd7f628)]:
+  - @clarigen/core@1.0.4
+
 ## 1.0.3
 
 ### Patch Changes
