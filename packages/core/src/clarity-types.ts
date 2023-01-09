@@ -15,7 +15,6 @@ import {
   someCV,
   tupleCV,
   listCV,
-  cvToJSON,
   hexToCV,
   ClarityAbiFunction,
   bufferCV,
@@ -70,7 +69,7 @@ export interface ClarityAbi extends Omit<_ClarityAbi, 'maps'> {
   clarity_version?: string;
 }
 
-function principalToString(principal: PrincipalCV): string {
+export function principalToString(principal: PrincipalCV): string {
   if (principal.type === ClarityType.PrincipalStandard) {
     return addressToString(principal.address);
   } else if (principal.type === ClarityType.PrincipalContract) {
@@ -242,6 +241,54 @@ export function cvToString(val: ClarityValue, encoding: 'tryAscii' | 'hex' = 'he
       return `"${val.data}"`;
     case ClarityType.StringUTF8:
       return `u"${val.data}"`;
+  }
+}
+
+/**
+ * Convert a Clarity value to valid JSON. This does this same thing as
+ * `cvToValue`, except that integers are returned as strings, and buffers
+ * are returned as hex-encoded strings.
+ *
+ * @param val - ClarityValue
+ */
+export function cvToJSON<T = any>(val: ClarityValue): T {
+  switch (val.type) {
+    case ClarityType.BoolTrue:
+      return true as unknown as T;
+    case ClarityType.BoolFalse:
+      return false as unknown as T;
+    case ClarityType.Int:
+    case ClarityType.UInt:
+      return val.value as unknown as T;
+    case ClarityType.Buffer:
+      return val.buffer as unknown as T;
+    case ClarityType.OptionalNone:
+      return null as unknown as T;
+    case ClarityType.OptionalSome:
+      return cvToJSON(val.value);
+    case ClarityType.ResponseErr:
+      return cvToJSON(val.value);
+    case ClarityType.ResponseOk:
+      return cvToJSON(val.value);
+    case ClarityType.PrincipalStandard:
+    case ClarityType.PrincipalContract:
+      return principalToString(val) as unknown as T;
+    case ClarityType.List:
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+      return val.list.map(v => cvToJSON(v)) as unknown as T;
+    case ClarityType.Tuple:
+      const tupleReduced = Object.entries(val.data).reduce((acc, [key, val]) => {
+        const keyFixed = toCamelCase(key);
+        return {
+          ...acc,
+          [keyFixed]: cvToJSON(val),
+        };
+      }, {} as Record<string, any>);
+      return tupleReduced as unknown as T;
+    case ClarityType.StringASCII:
+      return val.data as unknown as T;
+    case ClarityType.StringUTF8:
+      return val.data as unknown as T;
   }
 }
 
