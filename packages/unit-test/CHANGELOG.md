@@ -1,5 +1,13 @@
 # @clarigen/test
 
+## 1.0.3
+
+### Patch Changes
+
+- Updated dependencies [[`3e32f24`](https://github.com/mechanismHQ/clarigen/commit/3e32f2409df85c5adb6d2bf784f9ed7cb6ffaf2b)]:
+  - @clarigen/core@1.0.3
+  - @clarigen/native-bin@1.0.3
+
 ## 1.0.2
 
 ### Patch Changes
