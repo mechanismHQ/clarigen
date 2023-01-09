@@ -259,9 +259,9 @@ export function cvToJSON<T = any>(val: ClarityValue): T {
       return false as unknown as T;
     case ClarityType.Int:
     case ClarityType.UInt:
-      return val.value as unknown as T;
+      return `${val.value}` as unknown as T;
     case ClarityType.Buffer:
-      return val.buffer as unknown as T;
+      return bytesToHex(val.buffer) as unknown as T;
     case ClarityType.OptionalNone:
       return null as unknown as T;
     case ClarityType.OptionalSome:

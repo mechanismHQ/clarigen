@@ -1,9 +1,11 @@
-import { cvToValue, parseToCV, ok, transformArgsToCV } from '../src/clarity-types';
+import { cvToValue, parseToCV, ok, transformArgsToCV, cvToJSON } from '../src/clarity-types';
 import {
+  bufferCV,
   contractPrincipalCV,
   intCV,
   responseOkCV,
   stringAsciiCV,
+  tupleCV,
   uintCV,
 } from 'micro-stacks/clarity';
 
@@ -58,4 +60,21 @@ test('transforming args object to CV', () => {
     [{ val: 'hello' }]
   );
   expect(args).toEqual([stringAsciiCV('hello')]);
+});
+
+describe('cvToJSON', () => {
+  const cv = tupleCV({
+    numA: uintCV(2n),
+    numB: intCV(3n),
+    buff: bufferCV(new Uint8Array([0])),
+  });
+
+  it('converts to json properly', () => {
+    const json = cvToJSON(cv);
+    expect(json).toEqual({
+      numA: '2',
+      numB: '3',
+      buff: '00',
+    });
+  });
 });
