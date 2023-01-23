@@ -11,7 +11,7 @@ jobs:
       - name: Set Node Version
         uses: actions/setup-node@v3
         with:
-          node-version: 16.9.1
+          node-version: 18.13.0
           cache: 'pnpm'
       - name: Lerna bootstrap
         run: npx lerna bootstrap
