@@ -16,8 +16,8 @@ jobs:
         with:
           node-version: 18.13.0
           cache: 'pnpm'
-      - name: Lerna bootstrap
-        run: npx lerna bootstrap
+      - name: Install dependencies
+        run: pnpm install
       - name: Yarn --force
         run: pnpm install
       - name: Build packages
