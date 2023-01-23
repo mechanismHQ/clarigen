@@ -8,6 +8,9 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
+      - uses: pnpm/action-setup@v2
+        with:
+          version: 7.25.1
       - name: Set Node Version
         uses: actions/setup-node@v3
         with:
