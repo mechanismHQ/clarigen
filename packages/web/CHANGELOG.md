@@ -1,5 +1,14 @@
 # @clarigen/web
 
+## 1.0.5
+
+### Patch Changes
+
+- [`6936994`](https://github.com/mechanismHQ/clarigen/commit/6936994f866baa852ce5add15db60f8e57b70ea6) Thanks [@hstove](https://github.com/hstove)! - Updated all read-only API functions to support a `json` option property. If provided and set as `true`, the values returned will be JSON compatible.
+
+- Updated dependencies [[`6936994`](https://github.com/mechanismHQ/clarigen/commit/6936994f866baa852ce5add15db60f8e57b70ea6)]:
+  - @clarigen/core@1.0.5
+
 ## 1.0.4
 
 ### Patch Changes
