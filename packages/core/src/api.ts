@@ -2,16 +2,33 @@ import { fetchContractDataMapEntry, callReadOnlyFunction } from 'micro-stacks/ap
 import { cvToHex, hexToCV } from 'micro-stacks/clarity';
 import { StacksNetwork } from 'micro-stacks/network';
 import { broadcastTransaction, StacksTransaction } from 'micro-stacks/transactions';
-import { cvToValue, expectErr, expectOk } from './clarity-types';
+import { cvToJSON, cvToValue, expectErr, expectOk, Jsonize } from './clarity-types';
 import { ContractCalls } from './pure';
 import { Response } from './abi-types';
 import { ContractCall } from './factory-types';
 
-export interface ApiOptions {
+export interface ApiOptionsBase {
   network: StacksNetwork;
   tip?: string;
   latest?: boolean;
+  // json?: boolean;
 }
+
+export interface ApiOptionsJsonize extends ApiOptionsBase {
+  json: true;
+}
+
+export interface ApiOptionsNoJson extends ApiOptionsBase {
+  json?: false | undefined;
+}
+
+export interface ApiOptions extends ApiOptionsBase {
+  json?: boolean;
+}
+
+export type JsonIfOption<O extends ApiOptions, R> = O extends ApiOptionsJsonize ? Jsonize<R> : R;
+
+// export type ApiOptions = ApiOptionsJsonize | ApiOptionsNoJson;
 
 function getTip(options: ApiOptions): string | undefined {
   if (options.latest === false) return undefined;
@@ -20,7 +37,12 @@ function getTip(options: ApiOptions): string | undefined {
   return options.tip;
 }
 
-export async function ro<T>(tx: ContractCall<T>, options: ApiOptions): Promise<T> {
+// export async function ro<O, T>(tx: ContractCall<T>, options: ApiOptionsJsonize): Promise<Jsonize<T>>;
+// export async function ro<O, T>(tx: ContractCall<T>, options: ApiOptionsNoJson): Promise<T>;
+export async function ro<O extends ApiOptions, T>(
+  tx: ContractCall<T>,
+  options: O
+): Promise<JsonIfOption<O, T>> {
   const tip = getTip(options);
   const cv = await callReadOnlyFunction({
     contractAddress: tx.contractAddress,
@@ -30,23 +52,26 @@ export async function ro<T>(tx: ContractCall<T>, options: ApiOptions): Promise<T
     tip,
     network: options.network,
   });
+  if (options.json) {
+    return cvToJSON(cv);
+  }
   return cvToValue(cv, true);
 }
 
-export async function roOk<Ok>(
+export async function roOk<O extends ApiOptions, Ok>(
   tx: ContractCall<Response<Ok, any>>,
-  options: ApiOptions
-): Promise<Ok> {
+  options: O
+): Promise<JsonIfOption<O, Ok>> {
   const result = await ro(tx, options);
-  return expectOk(result);
+  return expectOk(result) as JsonIfOption<O, Ok>;
 }
 
-export async function roErr<Err>(
+export async function roErr<O extends ApiOptions, Err>(
   tx: ContractCall<Response<any, Err>>,
-  options: ApiOptions
-): Promise<Err> {
+  options: O
+): Promise<JsonIfOption<O, Err>> {
   const result = await ro(tx, options);
-  return expectErr(result);
+  return expectErr(result) as JsonIfOption<O, Err>;
 }
 
 export async function fetchMapGet<T extends ContractCalls.Map<any, Val>, Val>(

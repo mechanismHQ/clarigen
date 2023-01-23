@@ -1,4 +1,4 @@
-import { ContractCall, broadcast, ro, roOk, roErr, fetchMapGet } from '@clarigen/core';
+import { ContractCall, broadcast, ro, roOk, roErr, ApiOptions, Response } from '@clarigen/core';
 import { StacksNetwork } from 'micro-stacks/network';
 import { AnchorMode, makeContractCall, ContractCallOptions } from 'micro-stacks/transactions';
 
@@ -9,7 +9,10 @@ export interface NodeOptions {
 
 export async function tx(
   tx: ContractCall<any>,
-  txOptions: Partial<ContractCallOptions>,
+  txOptions: Omit<
+    ContractCallOptions,
+    'contractName' | 'contractAddress' | 'functionName' | 'functionArgs'
+  >,
   options: NodeOptions
 ) {
   if (typeof options.privateKey === 'undefined')
@@ -21,27 +24,68 @@ export async function tx(
     functionName: tx.function.name,
     network: options.network,
     senderKey: options.privateKey,
-    anchorMode: AnchorMode.Any,
+    // anchorMode: AnchorMode.Any,
     ...txOptions,
   });
   return broadcast(transaction, options);
 }
 
-type Fn<A, R> = (arg: A, options: NodeOptions) => R;
+// type Fn<A, R> = (arg: A, options: NodeOptions) => R;
 
-function curry<A, R>(f: Fn<A, R>, options: NodeOptions) {
-  return (arg: A) => f(arg, options);
+// function curry<A, R>(f: Fn<A, R>, options: NodeOptions) {
+//   return (arg: A) => f(arg, options);
+// }
+
+// export function NodeProvider(options: NodeOptions) {
+//   return {
+//     ro: curry(ro, options),
+//     roOk: curry(roOk, options),
+//     roErr: curry(roErr, options),
+//     mapGet: curry(fetchMapGet, options),
+//     tx: (_tx: ContractCall<any>, txOptions: Partial<ContractCallOptions>) =>
+//       tx(_tx, txOptions, options),
+//   };
+// }
+
+// // export const ClarigenNodeClient = NodeProvider;
+
+type ClientRoOptions = Omit<ApiOptions, 'network'>;
+
+export class ClarigenNodeClient {
+  public network: StacksNetwork;
+
+  constructor(network: StacksNetwork) {
+    this.network = network;
+  }
+
+  async signContractCall(
+    _tx: ContractCall<any>,
+    txOptions: Omit<
+      ContractCallOptions,
+      'contractName' | 'contractAddress' | 'functionName' | 'functionArgs'
+    >
+  ) {
+    return tx(_tx, txOptions, {
+      network: this.network,
+    });
+  }
+
+  private roOptions(options: ClientRoOptions): ApiOptions {
+    return {
+      network: this.network,
+      ...options,
+    };
+  }
+
+  async ro<T>(tx: ContractCall<T>, options?: ClientRoOptions) {
+    return ro(tx, this.roOptions(options || {}));
+  }
+
+  async roOk<T>(tx: ContractCall<Response<T, any>>, options?: ClientRoOptions) {
+    return roOk(tx, this.roOptions(options || {}));
+  }
+
+  async roErr<T>(tx: ContractCall<Response<any, T>>, options?: ClientRoOptions) {
+    return roErr(tx, this.roOptions(options || {}));
+  }
 }
-
-export function NodeProvider(options: NodeOptions) {
-  return {
-    ro: curry(ro, options),
-    roOk: curry(roOk, options),
-    roErr: curry(roErr, options),
-    mapGet: curry(fetchMapGet, options),
-    tx: (_tx: ContractCall<any>, txOptions: Partial<ContractCallOptions>) =>
-      tx(_tx, txOptions, options),
-  };
-}
-
-export const ClarigenNodeClient = NodeProvider;

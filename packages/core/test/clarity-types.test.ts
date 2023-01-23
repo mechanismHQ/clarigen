@@ -1,4 +1,12 @@
-import { cvToValue, parseToCV, ok, transformArgsToCV, cvToJSON } from '../src/clarity-types';
+import {
+  cvToValue,
+  parseToCV,
+  ok,
+  transformArgsToCV,
+  cvToJSON,
+  Jsonize,
+} from '../src/clarity-types';
+import { projectFactory, ro, roOk, roErr, JsonIfOption, ApiOptionsJsonize, Response } from '../src';
 import {
   bufferCV,
   contractPrincipalCV,
@@ -8,6 +16,10 @@ import {
   tupleCV,
   uintCV,
 } from 'micro-stacks/clarity';
+import { project, contracts } from '../../../demo-project/esm';
+import { StacksMocknet } from 'micro-stacks/network';
+
+const devnet = projectFactory(project, 'devnet');
 
 describe('cvToValue', () => {
   test('can turn clarity negative integer into bignum', () => {
@@ -78,3 +90,64 @@ describe('cvToJSON', () => {
     });
   });
 });
+
+// Jsonize
+type Tup = {
+  a: Uint8Array;
+  b: bigint;
+  c: {
+    d: bigint;
+    e: Uint8Array;
+    i: boolean;
+  };
+  f: number;
+  g: boolean;
+  h: string;
+};
+type TupJson = Jsonize<Tup>;
+
+const tupJson: TupJson = {
+  a: '',
+  b: '',
+  c: {
+    d: '',
+    e: '',
+    i: true,
+  },
+  f: 1,
+  g: false,
+  h: '',
+};
+
+type Fn = typeof devnet['tester']['mergeTuple'];
+
+// type RoResp = ReturnType<typeof ro
+
+async function fakeRoApiJson() {
+  const res = await ro(devnet.tester.mergeTuple({ i: { minHeight: 1n } }), {
+    json: true,
+    network: new StacksMocknet(),
+  });
+  return res;
+}
+async function fakeRoApi(json: boolean) {
+  const res = await ro(devnet.tester.mergeTuple({ i: { minHeight: 1n } }), {
+    network: new StacksMocknet(),
+    json,
+  });
+  return res;
+}
+
+type ErrRes = JsonIfOption<ApiOptionsJsonize, bigint>;
+const e: ErrRes = '1';
+
+type ApiJson = Awaited<ReturnType<typeof fakeRoApiJson>>;
+const mergeJson: ApiJson = {
+  minHeight: '',
+  maxHeight: '',
+};
+type ApiNorm = Awaited<ReturnType<typeof fakeRoApi>>;
+const mergeNorm: ApiNorm = {
+  minHeight: 1n,
+  maxHeight: 1n,
+};

@@ -47,6 +47,8 @@ import {
   ClarityAbiTypeStringUtf8,
   ClarityAbiTypeTraitReference,
   ClarityAbiMap,
+  TypedAbiFunction,
+  TypedAbiArg,
 } from './abi-types';
 import { toCamelCase, toKebabCase } from './utils';
 
@@ -251,7 +253,7 @@ export function cvToString(val: ClarityValue, encoding: 'tryAscii' | 'hex' = 'he
  *
  * @param val - ClarityValue
  */
-export function cvToJSON<T = any>(val: ClarityValue): T {
+export function cvToJSON<T = any>(val: ClarityValue, returnResponse = false): T {
   switch (val.type) {
     case ClarityType.BoolTrue:
       return true as unknown as T;
@@ -267,8 +269,10 @@ export function cvToJSON<T = any>(val: ClarityValue): T {
     case ClarityType.OptionalSome:
       return cvToJSON(val.value);
     case ClarityType.ResponseErr:
+      if (returnResponse) return err(cvToJSON(val.value)) as unknown as T;
       return cvToJSON(val.value);
     case ClarityType.ResponseOk:
+      if (returnResponse) return ok(cvToJSON(val.value)) as unknown as T;
       return cvToJSON(val.value);
     case ClarityType.PrincipalStandard:
     case ClarityType.PrincipalContract:
@@ -403,4 +407,23 @@ export type AbiTypeTo<T extends ClarityAbiType | ReadonlyTuple> = T extends Clar
   ? Response<AbiTypeTo<T['response']['ok']>, AbiTypeTo<T['response']['error']>>
   : T extends ReadonlyTuple
   ? AbiTupleTo<T>
+  : T;
+
+// Helper type for inferring the return type of a function. Like `ReturnType`,
+// but for Clarigen types
+export type FunctionReturnType<T> = T extends TypedAbiFunction<
+  TypedAbiArg<unknown, string>[],
+  infer R
+>
+  ? R
+  : never;
+
+export type Jsonize<T> = T extends BigInt
+  ? string
+  : T extends Uint8Array
+  ? string
+  : T extends Record<keyof T, unknown>
+  ? {
+      [K in keyof T as K]: Jsonize<T[K]>;
+    }
   : T;

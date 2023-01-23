@@ -38,30 +38,31 @@ export async function tx(
   };
 }
 
-type Fn<A, R> = (arg: A, options: WebOptions) => R;
+// type Fn<A, R, O> = (arg: A, options: O) => R;
 
-function curry<A, R>(f: Fn<A, R>, options: WebOptions) {
-  return (arg: A) => f(arg, options);
-}
+// function curry<A, R, O>(f: Fn<A, R, O>, options: O) {
+//   return (arg: A) => f(arg, options);
+// }
 
-export function WebProvider(options: WebOptions) {
-  return {
-    ro: curry(ro, options),
-    roOk: curry(roOk, options),
-    roErr: curry(roErr, options),
-    tx: async (
-      _tx: ContractCall<any>,
-      txOptions: Omit<
-        ContractCallTxOptions,
-        'contractName' | 'contractAddress' | 'functionName' | 'functionArgs'
-      >
-    ) => {
-      await tx(_tx, txOptions, options);
-    },
-    mapGet: curry(fetchMapGet, options),
-    // tx: curry(tx, options),
-  };
-}
+// export function WebProvider(options: WebOptions) {
+//   return {
+//     // ro:
+//     ro: curry(ro, options),
+//     roOk: curry(roOk, options),
+//     roErr: curry(roErr, options),
+//     tx: async (
+//       _tx: ContractCall<any>,
+//       txOptions: Omit<
+//         ContractCallTxOptions,
+//         'contractName' | 'contractAddress' | 'functionName' | 'functionArgs'
+//       >
+//     ) => {
+//       await tx(_tx, txOptions, options);
+//     },
+//     // mapGet: curry(fetchMapGet, options),
+//     // tx: curry(tx, options),
+//   };
+// }
 
 // export const Clarigen = WebProvider;
 
