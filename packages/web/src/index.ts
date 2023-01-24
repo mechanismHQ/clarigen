@@ -124,22 +124,22 @@ export class ClarigenClient {
     };
   }
 
-  async ro<T, O extends ClientRoOptions>(tx: ContractCall<T>, options?: O): Promise<JsonIf<O, T>> {
-    return ro(tx, this.roOptions(options || {})) as JsonIf<O, T>;
+  ro<T, O extends ClientRoOptions>(tx: ContractCall<T>, options?: O): Promise<JsonIf<O, T>> {
+    return ro(tx, this.roOptions(options || {})) as Promise<JsonIf<O, T>>;
   }
 
-  async roOk<T, O extends ClientRoOptions>(
+  roOk<T, O extends ClientRoOptions>(
     tx: ContractCall<Response<T, any>>,
     options?: O
   ): Promise<JsonIf<O, T>> {
-    return roOk(tx, this.roOptions(options || {})) as JsonIf<O, T>;
+    return roOk(tx, this.roOptions(options || {})) as Promise<JsonIf<O, T>>;
   }
 
-  async roErr<T, O extends ClientRoOptions>(
+  roErr<T, O extends ClientRoOptions>(
     tx: ContractCall<Response<any, T>>,
     options?: O
   ): Promise<JsonIf<O, T>> {
-    return roErr(tx, this.roOptions(options || {})) as JsonIf<O, T>;
+    return roErr(tx, this.roOptions(options || {})) as Promise<JsonIf<O, T>>;
   }
 }
 
