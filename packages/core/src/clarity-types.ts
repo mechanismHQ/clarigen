@@ -422,6 +422,8 @@ export type Jsonize<T> = T extends BigInt
   ? string
   : T extends Uint8Array
   ? string
+  : T extends Array<infer V>
+  ? Jsonize<V>[]
   : T extends Record<keyof T, unknown>
   ? {
       [K in keyof T as K]: Jsonize<T[K]>;

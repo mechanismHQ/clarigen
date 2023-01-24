@@ -119,6 +119,12 @@ const tupJson: TupJson = {
   h: '',
 };
 
+type Arr = { a: Uint8Array }[];
+type ArrJson = Jsonize<Arr>;
+
+const arrJson: ArrJson = [{ a: '' }];
+arrJson.forEach(v => v);
+
 type Fn = typeof devnet['tester']['mergeTuple'];
 
 // type RoResp = ReturnType<typeof ro
