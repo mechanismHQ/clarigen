@@ -1,5 +1,14 @@
 # @clarigen/node
 
+## 1.0.7
+
+### Patch Changes
+
+- [`e94e6e7`](https://github.com/mechanismHQ/clarigen/commit/e94e6e7d67d3a20272e0fce12e8ba63f68bbc039) Thanks [@hstove](https://github.com/hstove)! - Fixed an issue with `Jsonize` type relating to arrays
+
+- Updated dependencies [[`e94e6e7`](https://github.com/mechanismHQ/clarigen/commit/e94e6e7d67d3a20272e0fce12e8ba63f68bbc039)]:
+  - @clarigen/core@1.0.7
+
 ## 1.0.6
 
 ### Patch Changes
