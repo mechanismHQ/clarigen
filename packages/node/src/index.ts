@@ -1,4 +1,13 @@
-import { ContractCall, broadcast, ro, roOk, roErr, ApiOptions, Response } from '@clarigen/core';
+import {
+  ContractCall,
+  broadcast,
+  ro,
+  roOk,
+  roErr,
+  Response,
+  JsonIfOption,
+  ApiOptions,
+} from '@clarigen/core';
 import { StacksNetwork } from 'micro-stacks/network';
 import { AnchorMode, makeContractCall, ContractCallOptions } from 'micro-stacks/transactions';
 
@@ -51,6 +60,8 @@ export async function tx(
 
 type ClientRoOptions = Omit<ApiOptions, 'network'>;
 
+type JsonIf<O extends ClientRoOptions, T> = JsonIfOption<O & { network: StacksNetwork }, T>;
+
 export class ClarigenNodeClient {
   public network: StacksNetwork;
 
@@ -77,15 +88,21 @@ export class ClarigenNodeClient {
     };
   }
 
-  async ro<T>(tx: ContractCall<T>, options?: ClientRoOptions) {
-    return ro(tx, this.roOptions(options || {}));
+  async ro<T, O extends ClientRoOptions>(tx: ContractCall<T>, options?: O): Promise<JsonIf<O, T>> {
+    return ro(tx, this.roOptions(options || {})) as JsonIf<O, T>;
   }
 
-  async roOk<T>(tx: ContractCall<Response<T, any>>, options?: ClientRoOptions) {
-    return roOk(tx, this.roOptions(options || {}));
+  async roOk<T, O extends ClientRoOptions>(
+    tx: ContractCall<Response<T, any>>,
+    options?: O
+  ): Promise<JsonIf<O, T>> {
+    return roOk(tx, this.roOptions(options || {})) as JsonIf<O, T>;
   }
 
-  async roErr<T>(tx: ContractCall<Response<any, T>>, options?: ClientRoOptions) {
-    return roErr(tx, this.roOptions(options || {}));
+  async roErr<T, O extends ClientRoOptions>(
+    tx: ContractCall<Response<any, T>>,
+    options?: O
+  ): Promise<JsonIf<O, T>> {
+    return roErr(tx, this.roOptions(options || {})) as JsonIf<O, T>;
   }
 }

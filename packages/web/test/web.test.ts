@@ -1,11 +1,12 @@
 import { projectFactory } from '@clarigen/core';
 import { StacksMocknet } from 'micro-stacks/network';
-import { ClarigenNodeClient } from '../src';
+import { MicroStacksClient } from '@micro-stacks/client';
+import { ClarigenClient } from '../src';
 import { project } from '../../../demo-project/esm';
 
 const devnet = projectFactory(project, 'devnet');
 
-const client = new ClarigenNodeClient(new StacksMocknet());
+const client = new ClarigenClient(new MicroStacksClient({ network: new StacksMocknet() }));
 
 async function fakeRoApiJson() {
   const res = await client.ro(devnet.tester.mergeTuple({ i: { minHeight: 1n } }), {
