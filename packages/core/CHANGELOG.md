@@ -1,5 +1,11 @@
 # @clarigen/core
 
+## 1.0.6
+
+### Patch Changes
+
+- [`ed62d09`](https://github.com/mechanismHQ/clarigen/commit/ed62d098f45faead79521493a36c0b13723c5fc4) Thanks [@hstove](https://github.com/hstove)! - Fixes types when calling read-only functions with the `json` option
+
 ## 1.0.5
 
 ### Patch Changes
