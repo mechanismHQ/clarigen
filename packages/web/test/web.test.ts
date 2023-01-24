@@ -31,3 +31,14 @@ const mergeNorm: ApiNorm = {
   minHeight: 1n,
   maxHeight: 1n,
 };
+
+test('testing types are ok', () => {
+  const mergeJson: ApiJson = {
+    minHeight: '',
+    maxHeight: '',
+  };
+  const mergeNorm: ApiNorm = {
+    minHeight: 1n,
+    maxHeight: 1n,
+  };
+});

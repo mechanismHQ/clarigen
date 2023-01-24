@@ -17,7 +17,7 @@
     "build": "shx rm -rf ./dist && tsup",
     "test": "jest --passWithNoTests",
     "lint": "eslint \"src/**/*.{ts,tsx}\" && prettier  --check src/**/*.ts",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit -p tsconfig-test.json"
   },
   "prettier": "@stacks/prettier-config",
   "name": "@clarigen/web",

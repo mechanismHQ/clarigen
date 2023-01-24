@@ -17,7 +17,7 @@
     "build": "shx rm -rf ./dist && tsup",
     "test": "jest",
     "lint": "eslint \"src/**/*.{ts,tsx}\" && prettier  --check src/**/*.ts",
-    "typecheck": "tsc --noEmit",
+    "typecheck": "tsc --noEmit -p tsconfig-test.json",
     "publish:dev": "pnpm build && yalc publish --push",
     "copy-types": "node copy-types.js"
   },
