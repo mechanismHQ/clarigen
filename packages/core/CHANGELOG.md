@@ -1,5 +1,11 @@
 # @clarigen/core
 
+## 1.0.8
+
+### Patch Changes
+
+- [`ec4482c`](https://github.com/mechanismHQ/clarigen/commit/ec4482c7fb83d4ccbb69b08e222b560ab5b900e4) Thanks [@hstove](https://github.com/hstove)! - Adds a helper for fetching typed map entries
+
 ## 1.0.7
 
 ### Patch Changes
