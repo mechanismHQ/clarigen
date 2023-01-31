@@ -140,8 +140,8 @@ export function hexToCvValue<T>(hex: string, jsonCompat = false) {
   return cvToValue(hexToCV(hex), jsonCompat);
 }
 
-type TupleInput = Record<string, any>;
-type CVInput = string | boolean | TupleInput | number | bigint;
+export type TupleInput = Record<string, any>;
+export type CVInput = string | boolean | TupleInput | number | bigint;
 
 function inputToBigInt(input: CVInput) {
   const isBigInt = typeof input === 'bigint';
@@ -422,7 +422,7 @@ export type Jsonize<T> = T extends BigInt
   ? string
   : T extends Uint8Array
   ? string
-  : T extends Array<infer V>
+  : T extends (infer V)[]
   ? Jsonize<V>[]
   : T extends Record<keyof T, unknown>
   ? {

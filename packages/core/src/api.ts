@@ -3,9 +3,9 @@ import { cvToHex, hexToCV } from 'micro-stacks/clarity';
 import { StacksNetwork } from 'micro-stacks/network';
 import { broadcastTransaction, StacksTransaction } from 'micro-stacks/transactions';
 import { cvToJSON, cvToValue, expectErr, expectOk, Jsonize } from './clarity-types';
-import { ContractCalls } from './pure';
-import { Response } from './abi-types';
+import { Response, TypedAbiMap } from './abi-types';
 import { ContractCall } from './factory-types';
+import { mapFactory } from './factory';
 
 export interface ApiOptionsBase {
   network: StacksNetwork;
@@ -74,23 +74,27 @@ export async function roErr<O extends ApiOptions, Err>(
   return expectErr(result) as JsonIfOption<O, Err>;
 }
 
-export async function fetchMapGet<T extends ContractCalls.Map<any, Val>, Val>(
-  map: T,
+export async function fetchMapGet<Key, Val>(
+  contractId: string,
+  map: TypedAbiMap<Key, Val>,
+  key: Key,
   options: ApiOptions
 ): Promise<Val | null> {
-  const lookupKey = cvToHex(map.key);
+  const payload = mapFactory(map, key);
+  const lookupKey = cvToHex(payload.keyCV);
+  const [addr, id] = contractId.split('.');
   const response = await fetchContractDataMapEntry({
-    contract_address: map.contractAddress,
-    contract_name: map.contractName,
-    map_name: map.map.name,
+    contract_address: addr,
+    contract_name: id,
+    map_name: payload.map.name,
     lookup_key: lookupKey,
     tip: 'latest',
     url: options.network.getCoreApiUrl(),
     proof: 0,
   });
   // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-  const valueCV = hexToCV(response.data);
-  return cvToValue(valueCV, true);
+  const valueCV = hexToCV(response.data as string);
+  return cvToValue<Val | null>(valueCV, true);
 }
 
 export async function broadcast(transaction: StacksTransaction, options: ApiOptions) {

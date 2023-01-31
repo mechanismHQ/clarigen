@@ -1,5 +1,5 @@
 import { ClarityAbiFunction, ClarityValue } from 'micro-stacks/clarity';
-import { TypedAbi, TypedAbiFunction } from '../src/abi-types';
+import { TypedAbi, TypedAbiFunction, TypedAbiMap } from '../src/abi-types';
 import {
   Batch,
   DeploymentPlan,
@@ -10,7 +10,7 @@ import {
   getIdentifier,
   Transaction,
 } from './deployment';
-import { transformArgsToCV } from './clarity-types';
+import { CVInput, parseToCV, transformArgsToCV } from './clarity-types';
 import { toCamelCase } from './utils';
 import {
   AllContracts,
@@ -149,4 +149,21 @@ export function deploymentFactory<T extends AllContracts>(
     });
   });
   return result as ContractFactory<T>;
+}
+
+export type MapFactory<M extends TypedAbiMap<K, V>, K, V> = {
+  key: K;
+  _v?: V;
+  keyCV: ClarityValue;
+  map: M;
+};
+
+export function mapFactory<Key, Val>(map: TypedAbiMap<Key, Val>, key: Key) {
+  const keyCV = parseToCV(key as CVInput, map.key);
+  const mapFactory: MapFactory<typeof map, Key, Val> = {
+    key,
+    keyCV,
+    map,
+  };
+  return mapFactory;
 }

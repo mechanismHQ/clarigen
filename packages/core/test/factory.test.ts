@@ -1,6 +1,6 @@
 import { project, contracts } from '../../../demo-project/esm';
-import { contractsFactory, projectFactory } from '../src';
-import { stringAsciiCV } from 'micro-stacks/clarity';
+import { contractsFactory, mapFactory, projectFactory } from '../src';
+import { stringAsciiCV, uintCV } from 'micro-stacks/clarity';
 
 test('can make the factory', () => {
   const { tester } = contractsFactory(contracts, 'addr');
@@ -39,4 +39,13 @@ test('project factory', () => {
   expect(projectFactory(project, 'mainnet').wrappedBitcoin.identifier).toEqual(
     'SP3DX3H4FEYZJZ586MFBS25ZW3HZDMEW92260R2PR.Wrapped-Bitcoin'
   );
+});
+
+test('map factory', () => {
+  const { tester } = projectFactory(project, 'devnet');
+  const map = tester.maps.simpleMap;
+  const f = mapFactory(map, 1);
+  expect(f.key).toEqual(1);
+  expect(f.keyCV).toEqual(uintCV(1));
+  expect(f.map.name).toEqual('simple-map');
 });
