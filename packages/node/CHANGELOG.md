@@ -1,5 +1,14 @@
 # @clarigen/node
 
+## 1.0.10
+
+### Patch Changes
+
+- [`3567c41`](https://github.com/mechanismHQ/clarigen/commit/3567c4162a3b5e990e93051d9316c2582012111f) Thanks [@hstove](https://github.com/hstove)! - Fixes mechanism for generating payload to `map_entry` api
+
+- Updated dependencies [[`3567c41`](https://github.com/mechanismHQ/clarigen/commit/3567c4162a3b5e990e93051d9316c2582012111f)]:
+  - @clarigen/core@1.0.10
+
 ## 1.0.9
 
 ### Patch Changes
