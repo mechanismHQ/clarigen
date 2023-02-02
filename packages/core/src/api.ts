@@ -81,7 +81,7 @@ export async function fetchMapGet<Key, Val>(
   options: ApiOptions
 ): Promise<Val | null> {
   const payload = mapFactory(map, key);
-  const lookupKey = cvToHex(payload.keyCV);
+  const lookupKey = JSON.stringify(cvToHex(payload.keyCV));
   const [addr, id] = contractId.split('.');
   const response = await fetchContractDataMapEntry({
     contract_address: addr,
