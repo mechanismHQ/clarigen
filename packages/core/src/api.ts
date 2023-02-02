@@ -1,4 +1,4 @@
-import { fetchContractDataMapEntry, callReadOnlyFunction } from 'micro-stacks/api';
+import { callReadOnlyFunction, v2Endpoint, generateUrl } from 'micro-stacks/api';
 import { cvToHex, hexToCV } from 'micro-stacks/clarity';
 import { StacksNetwork } from 'micro-stacks/network';
 import { broadcastTransaction, StacksTransaction } from 'micro-stacks/transactions';
@@ -83,17 +83,23 @@ export async function fetchMapGet<Key, Val>(
   const payload = mapFactory(map, key);
   const lookupKey = JSON.stringify(cvToHex(payload.keyCV));
   const [addr, id] = contractId.split('.');
-  const response = await fetchContractDataMapEntry({
-    contract_address: addr,
-    contract_name: id,
-    map_name: payload.map.name,
-    lookup_key: lookupKey,
-    tip: 'latest',
-    url: options.network.getCoreApiUrl(),
-    proof: 0,
+  const path = generateUrl(
+    `${v2Endpoint(options.network.getCoreApiUrl())}/map_entry/${addr}/${id}/${payload.map.name}`,
+    {
+      proof: 0,
+      tip: getTip(options),
+    }
+  );
+  const res = await fetch(path, {
+    method: 'POST',
+    body: lookupKey,
+    headers: {
+      'Content-Type': 'application/json',
+      Accept: 'application/json',
+    },
   });
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-  const valueCV = hexToCV(response.data as string);
+  const data = (await res.json()) as { data: string };
+  const valueCV = hexToCV(data.data);
   return cvToValue<Val | null>(valueCV, true);
 }
 
