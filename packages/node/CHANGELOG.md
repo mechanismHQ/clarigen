@@ -1,5 +1,14 @@
 # @clarigen/node
 
+## 1.0.9
+
+### Patch Changes
+
+- [`a7f4bc5`](https://github.com/mechanismHQ/clarigen/commit/a7f4bc5b468dd9da73fc9e3094583bc1aba0b107) Thanks [@hstove](https://github.com/hstove)! - Fixes serialization during map entry lookup
+
+- Updated dependencies [[`a7f4bc5`](https://github.com/mechanismHQ/clarigen/commit/a7f4bc5b468dd9da73fc9e3094583bc1aba0b107)]:
+  - @clarigen/core@1.0.9
+
 ## 1.0.8
 
 ### Patch Changes
