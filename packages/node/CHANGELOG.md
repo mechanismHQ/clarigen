@@ -1,5 +1,14 @@
 # @clarigen/node
 
+## 1.0.12
+
+### Patch Changes
+
+- [`45cd949`](https://github.com/mechanismHQ/clarigen/commit/45cd9496d9c3c37cbc43a21bfe5a42d7dc76b1e3) Thanks [@hstove](https://github.com/hstove)! - Feat: `@clarigen/core` exposes simple read-only client
+
+- Updated dependencies [[`45cd949`](https://github.com/mechanismHQ/clarigen/commit/45cd9496d9c3c37cbc43a21bfe5a42d7dc76b1e3)]:
+  - @clarigen/core@1.0.12
+
 ## 1.0.11
 
 ### Patch Changes
