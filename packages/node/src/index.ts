@@ -9,81 +9,31 @@ import {
   ApiOptions,
 } from '@clarigen/core';
 import { StacksNetwork } from 'micro-stacks/network';
-import { AnchorMode, makeContractCall, ContractCallOptions } from 'micro-stacks/transactions';
+import { makeContractCall, ContractCallOptions } from 'micro-stacks/transactions';
 
 export interface NodeOptions {
-  network: StacksNetwork;
+  url: string;
   privateKey?: string;
 }
 
-export async function tx(
-  tx: ContractCall<any>,
-  txOptions: Omit<
-    ContractCallOptions,
-    'contractName' | 'contractAddress' | 'functionName' | 'functionArgs'
-  >,
-  options: NodeOptions
-) {
-  if (typeof options.privateKey === 'undefined')
-    throw new Error('Clarigen: `privateKey` is mandatory for making transactions');
-  const transaction = await makeContractCall({
-    contractAddress: tx.contractAddress,
-    contractName: tx.contractName,
-    functionArgs: tx.functionArgs,
-    functionName: tx.function.name,
-    network: options.network,
-    senderKey: options.privateKey,
-    // anchorMode: AnchorMode.Any,
-    ...txOptions,
-  });
-  return broadcast(transaction, options);
-}
+type ClientRoOptions = Omit<ApiOptions, 'url'>;
 
-// type Fn<A, R> = (arg: A, options: NodeOptions) => R;
-
-// function curry<A, R>(f: Fn<A, R>, options: NodeOptions) {
-//   return (arg: A) => f(arg, options);
-// }
-
-// export function NodeProvider(options: NodeOptions) {
-//   return {
-//     ro: curry(ro, options),
-//     roOk: curry(roOk, options),
-//     roErr: curry(roErr, options),
-//     mapGet: curry(fetchMapGet, options),
-//     tx: (_tx: ContractCall<any>, txOptions: Partial<ContractCallOptions>) =>
-//       tx(_tx, txOptions, options),
-//   };
-// }
-
-// // export const ClarigenNodeClient = NodeProvider;
-
-type ClientRoOptions = Omit<ApiOptions, 'network'>;
-
-type JsonIf<O extends ClientRoOptions, T> = JsonIfOption<O & { network: StacksNetwork }, T>;
+type JsonIf<O extends ClientRoOptions, T> = JsonIfOption<O & { url: string }, T>;
 
 export class ClarigenNodeClient {
-  public network: StacksNetwork;
+  public url: string;
 
-  constructor(network: StacksNetwork) {
-    this.network = network;
-  }
-
-  async signContractCall(
-    _tx: ContractCall<any>,
-    txOptions: Omit<
-      ContractCallOptions,
-      'contractName' | 'contractAddress' | 'functionName' | 'functionArgs'
-    >
-  ) {
-    return tx(_tx, txOptions, {
-      network: this.network,
-    });
+  constructor(networkOrUrl: StacksNetwork | string) {
+    if (typeof networkOrUrl === 'string') {
+      this.url = networkOrUrl;
+    } else {
+      this.url = networkOrUrl.getCoreApiUrl();
+    }
   }
 
   private roOptions(options: ClientRoOptions): ApiOptions {
     return {
-      network: this.network,
+      url: this.url,
       ...options,
     };
   }

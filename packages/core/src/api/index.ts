@@ -131,3 +131,44 @@ export async function broadcast(transaction: StacksTransaction, options: ApiOpti
     };
   }
 }
+
+type ClientOptions = Omit<ApiOptions, 'url'>;
+
+type JsonIf<O extends ClientOptions, T> = JsonIfOption<O & { url: string }, T>;
+
+export class ClarigenClient {
+  public url: string;
+
+  constructor(networkOrUrl: StacksNetwork | string) {
+    if (typeof networkOrUrl === 'string') {
+      this.url = networkOrUrl;
+    } else {
+      this.url = networkOrUrl.getCoreApiUrl();
+    }
+  }
+
+  private roOptions(options: ClientOptions): ApiOptions {
+    return {
+      url: this.url,
+      ...options,
+    };
+  }
+
+  ro<T, O extends ClientOptions>(tx: ContractCall<T>, options?: O): Promise<JsonIf<O, T>> {
+    return ro(tx, this.roOptions(options || {})) as Promise<JsonIf<O, T>>;
+  }
+
+  roOk<T, O extends ClientOptions>(
+    tx: ContractCall<Response<T, any>>,
+    options?: O
+  ): Promise<JsonIf<O, T>> {
+    return roOk(tx, this.roOptions(options || {})) as Promise<JsonIf<O, T>>;
+  }
+
+  roErr<T, O extends ClientOptions>(
+    tx: ContractCall<Response<any, T>>,
+    options?: O
+  ): Promise<JsonIf<O, T>> {
+    return roErr(tx, this.roOptions(options || {})) as Promise<JsonIf<O, T>>;
+  }
+}
