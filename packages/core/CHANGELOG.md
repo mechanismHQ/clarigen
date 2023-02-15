@@ -1,5 +1,11 @@
 # @clarigen/core
 
+## 1.0.11
+
+### Patch Changes
+
+- [`90da077`](https://github.com/mechanismHQ/clarigen/commit/90da077d69e575ba4502fe1e8e075823c758f295) Thanks [@hstove](https://github.com/hstove)! - Updates all `@clarigen/core` read-only api functions to support usage with only `url` instead of needing a `StacksNetwork`
+
 ## 1.0.10
 
 ### Patch Changes
