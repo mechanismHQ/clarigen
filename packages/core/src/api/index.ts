@@ -1,30 +1,37 @@
-import { callReadOnlyFunction, v2Endpoint, generateUrl } from 'micro-stacks/api';
+import { v2Endpoint, generateUrl } from 'micro-stacks/api';
 import { cvToHex, hexToCV } from 'micro-stacks/clarity';
 import { StacksNetwork } from 'micro-stacks/network';
-import { broadcastTransaction, StacksTransaction } from 'micro-stacks/transactions';
-import { cvToJSON, cvToValue, expectErr, expectOk, Jsonize } from './clarity-types';
-import { Response, TypedAbiMap } from './abi-types';
-import { ContractCall } from './factory-types';
-import { mapFactory } from './factory';
+import { StacksTransaction, broadcastRawTransaction } from 'micro-stacks/transactions';
+import { cvToJSON, cvToValue, expectErr, expectOk, Jsonize } from '../clarity-types';
+import { Response, TypedAbiMap } from '../abi-types';
+import { ContractCall } from '../factory-types';
+import { mapFactory } from '../factory';
+import { callReadOnlyFunction } from './call-read-only';
 
-export interface ApiOptionsBase {
+export interface ApiOptionsUrl {
+  url: string;
+}
+
+export interface ApiOptionsNetwork {
   network: StacksNetwork;
+}
+
+export type ApiOptionsBase = (ApiOptionsUrl | ApiOptionsNetwork) & {
   tip?: string;
   latest?: boolean;
-  // json?: boolean;
-}
+};
 
-export interface ApiOptionsJsonize extends ApiOptionsBase {
+export type ApiOptionsJsonize = ApiOptionsBase & {
   json: true;
-}
+};
 
-export interface ApiOptionsNoJson extends ApiOptionsBase {
+export type ApiOptionsNoJson = ApiOptionsBase & {
   json?: false | undefined;
-}
+};
 
-export interface ApiOptions extends ApiOptionsBase {
+export type ApiOptions = ApiOptionsBase & {
   json?: boolean;
-}
+};
 
 export type JsonIfOption<O extends ApiOptions, R> = O extends ApiOptionsJsonize ? Jsonize<R> : R;
 
@@ -50,7 +57,7 @@ export async function ro<O extends ApiOptions, T>(
     functionName: tx.functionName,
     functionArgs: tx.functionArgs,
     tip,
-    network: options.network,
+    url: getApiUrl(options),
   });
   if (options.json) {
     return cvToJSON(cv);
@@ -74,6 +81,11 @@ export async function roErr<O extends ApiOptions, Err>(
   return expectErr(result) as JsonIfOption<O, Err>;
 }
 
+export function getApiUrl(opts: ApiOptionsUrl | ApiOptionsNetwork) {
+  if ('network' in opts) return opts.network.getCoreApiUrl();
+  return opts.url;
+}
+
 export async function fetchMapGet<Key, Val>(
   contractId: string,
   map: TypedAbiMap<Key, Val>,
@@ -84,7 +96,7 @@ export async function fetchMapGet<Key, Val>(
   const lookupKey = JSON.stringify(cvToHex(payload.keyCV));
   const [addr, id] = contractId.split('.');
   const path = generateUrl(
-    `${v2Endpoint(options.network.getCoreApiUrl())}/map_entry/${addr}/${id}/${payload.map.name}`,
+    `${v2Endpoint(getApiUrl(options))}/map_entry/${addr}/${id}/${payload.map.name}`,
     {
       proof: 0,
       tip: getTip(options),
@@ -104,7 +116,8 @@ export async function fetchMapGet<Key, Val>(
 }
 
 export async function broadcast(transaction: StacksTransaction, options: ApiOptions) {
-  const result = await broadcastTransaction(transaction, options.network);
+  const url = `${getApiUrl(options)}/v2/transactions`;
+  const result = await broadcastRawTransaction(transaction.serialize(), url);
   if ('error' in result) {
     throw new Error(
       `Error broadcasting tx: ${result.error} - ${result.reason} - ${JSON.stringify(

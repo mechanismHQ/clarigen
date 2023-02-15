@@ -33,7 +33,7 @@ export async function tx(
     functionName: tx.function.name,
     contractAddress: tx.contractAddress,
     contractName: tx.contractName,
-    network: options?.network,
+    ...options,
     ...txOptions,
   });
   if (!window.StacksProvider) {
