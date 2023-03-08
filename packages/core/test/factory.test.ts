@@ -1,4 +1,4 @@
-import { project, contracts } from '../../../demo-project/esm';
+import { project, contracts } from 'demo-project';
 import { contractsFactory, mapFactory, projectFactory } from '../src';
 import { stringAsciiCV, uintCV } from 'micro-stacks/clarity';
 

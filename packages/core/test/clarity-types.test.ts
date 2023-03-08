@@ -27,7 +27,7 @@ import {
   tupleCV,
   uintCV,
 } from 'micro-stacks/clarity';
-import { project, contracts } from '../../../demo-project/esm';
+import { project, contracts } from 'demo-project';
 import { StacksMocknet } from 'micro-stacks/network';
 
 const devnet = projectFactory(project, 'devnet');

@@ -1,6 +1,6 @@
 import { uintCV } from 'micro-stacks/clarity';
 import { NonFungibleConditionCode } from 'micro-stacks/transactions';
-import { project, contracts } from '../../../demo-project/esm';
+import { project, contracts } from 'demo-project';
 import {
   AssetNames,
   createAssetInfo,

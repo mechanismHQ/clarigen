@@ -1,6 +1,7 @@
 {
   "deno.enablePaths": [
     "packages/cli/tmp/tests/deno",
-    "packages/core/dist/deno"
+    "packages/core/dist/deno",
+    "demo-project/test-runner.ts"
   ]
 }

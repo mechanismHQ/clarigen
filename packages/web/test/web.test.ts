@@ -2,7 +2,7 @@ import { projectFactory } from '@clarigen/core';
 import { StacksMocknet } from 'micro-stacks/network';
 import { MicroStacksClient } from '@micro-stacks/client';
 import { ClarigenClient } from '../src';
-import { project } from '../../../demo-project/esm';
+import { project } from 'demo-project';
 
 const devnet = projectFactory(project, 'devnet');
 

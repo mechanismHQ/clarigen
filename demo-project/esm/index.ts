@@ -643,7 +643,7 @@ export const contracts = {
       RESTRICTION_BLACKLIST: 5n,
       RESTRICTION_NONE: 0n,
       REVOKER_ROLE: 3n,
-      deployerPrincipal: 'ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM',
+      deployerPrincipal: 'SP3DX3H4FEYZJZ586MFBS25ZW3HZDMEW92260R2PR',
       isInitialized: false,
       tokenDecimals: 0n,
       tokenName: '',
