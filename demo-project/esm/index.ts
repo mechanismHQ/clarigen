@@ -84,9 +84,10 @@ export interface ClarityAbiTypeFungibleToken {
   name: string;
 }
 
-export interface ClarityAbiTypeNonFungibleToken {
+export interface ClarityAbiTypeNonFungibleToken<T = unknown> {
   name: string;
   type: ClarityAbiType;
+  _t?: T;
 }
 
 export interface ClarityAbi {
@@ -94,7 +95,7 @@ export interface ClarityAbi {
   variables: ClarityAbiVariable[];
   maps: ClarityAbiMap[];
   fungible_tokens: ClarityAbiTypeFungibleToken[];
-  non_fungible_tokens: ClarityAbiTypeNonFungibleToken[];
+  non_fungible_tokens: ClarityAbiTypeNonFungibleToken<unknown>[];
 }
 
 export type TypedAbi = Readonly<{
@@ -111,7 +112,7 @@ export type TypedAbi = Readonly<{
     [key: string]: unknown;
   };
   fungible_tokens: Readonly<ClarityAbiTypeFungibleToken[]>;
-  non_fungible_tokens: Readonly<ClarityAbiTypeNonFungibleToken[]>;
+  non_fungible_tokens: Readonly<ClarityAbiTypeNonFungibleToken<unknown>[]>;
   contractName: string;
   contractFile?: string;
 }>;
@@ -134,6 +135,160 @@ export type OkType<R> = R extends ResponseOk<infer V, unknown> ? V : never;
 export type ErrType<R> = R extends ResponseErr<unknown, infer V> ? V : never;
 
 export const contracts = {
+  ftTrait: {
+    functions: {},
+    maps: {},
+    variables: {},
+    constants: {},
+    non_fungible_tokens: [],
+    fungible_tokens: [],
+    epoch: 'Epoch20',
+    clarity_version: 'Clarity1',
+    contractName: 'ft-trait',
+  },
+  restrictedTokenTrait: {
+    functions: {},
+    maps: {},
+    variables: {},
+    constants: {},
+    non_fungible_tokens: [],
+    fungible_tokens: [],
+    epoch: 'Epoch20',
+    clarity_version: 'Clarity1',
+    contractName: 'restricted-token-trait',
+  },
+  tester: {
+    functions: {
+      printErr: {
+        name: 'print-err',
+        access: 'public',
+        args: [],
+        outputs: { type: { response: { ok: 'none', error: 'uint128' } } },
+      } as TypedAbiFunction<[], Response<null, bigint>>,
+      printPub: {
+        name: 'print-pub',
+        access: 'public',
+        args: [],
+        outputs: { type: { response: { ok: 'bool', error: 'none' } } },
+      } as TypedAbiFunction<[], Response<boolean, null>>,
+      setInMap: {
+        name: 'set-in-map',
+        access: 'public',
+        args: [
+          { name: 'key', type: 'uint128' },
+          { name: 'val', type: 'bool' },
+        ],
+        outputs: { type: { response: { ok: 'bool', error: 'none' } } },
+      } as TypedAbiFunction<
+        [key: TypedAbiArg<number | bigint, 'key'>, val: TypedAbiArg<boolean, 'val'>],
+        Response<boolean, null>
+      >,
+      setNum: {
+        name: 'set-num',
+        access: 'public',
+        args: [{ name: 'num', type: 'uint128' }],
+        outputs: { type: { response: { ok: 'bool', error: 'none' } } },
+      } as TypedAbiFunction<[num: TypedAbiArg<number | bigint, 'num'>], Response<boolean, null>>,
+      echo: {
+        name: 'echo',
+        access: 'read_only',
+        args: [{ name: 'val', type: { 'string-ascii': { length: 33 } } }],
+        outputs: { type: { 'string-ascii': { length: 33 } } },
+      } as TypedAbiFunction<[val: TypedAbiArg<string, 'val'>], string>,
+      echoWithLogs: {
+        name: 'echo-with-logs',
+        access: 'read_only',
+        args: [{ name: 'val', type: { 'string-ascii': { length: 33 } } }],
+        outputs: { type: { 'string-ascii': { length: 33 } } },
+      } as TypedAbiFunction<[val: TypedAbiArg<string, 'val'>], string>,
+      getTup: {
+        name: 'get-tup',
+        access: 'read_only',
+        args: [],
+        outputs: {
+          type: {
+            tuple: [
+              { name: 'a', type: 'uint128' },
+              { name: 'bool-prop', type: 'bool' },
+              {
+                name: 'tuple-prop',
+                type: { tuple: [{ name: 'sub-prop', type: { 'string-ascii': { length: 4 } } }] },
+              },
+            ],
+          },
+        },
+      } as TypedAbiFunction<
+        [],
+        {
+          a: bigint;
+          boolProp: boolean;
+          tupleProp: {
+            subProp: string;
+          };
+        }
+      >,
+      mergeTuple: {
+        name: 'merge-tuple',
+        access: 'read_only',
+        args: [{ name: 'i', type: { tuple: [{ name: 'min-height', type: 'uint128' }] } }],
+        outputs: {
+          type: {
+            tuple: [
+              { name: 'max-height', type: 'uint128' },
+              { name: 'min-height', type: 'uint128' },
+            ],
+          },
+        },
+      } as TypedAbiFunction<
+        [
+          i: TypedAbiArg<
+            {
+              minHeight: number | bigint;
+            },
+            'i'
+          >
+        ],
+        {
+          maxHeight: bigint;
+          minHeight: bigint;
+        }
+      >,
+      roResp: {
+        name: 'ro-resp',
+        access: 'read_only',
+        args: [{ name: 'return-err', type: 'bool' }],
+        outputs: {
+          type: { response: { ok: { 'string-ascii': { length: 4 } }, error: 'uint128' } },
+        },
+      } as TypedAbiFunction<
+        [returnErr: TypedAbiArg<boolean, 'returnErr'>],
+        Response<string, bigint>
+      >,
+    },
+    maps: {
+      simpleMap: { name: 'simple-map', key: 'uint128', value: 'bool' } as TypedAbiMap<
+        number | bigint,
+        boolean
+      >,
+    },
+    variables: {
+      numVar: {
+        name: 'num-var',
+        type: 'uint128',
+        access: 'variable',
+      } as TypedAbiVariable<bigint>,
+    },
+    constants: {
+      numVar: 0n,
+    },
+    non_fungible_tokens: [
+      { name: 'nft', type: 'uint128' } as ClarityAbiTypeNonFungibleToken<bigint>,
+    ],
+    fungible_tokens: [],
+    epoch: 'Epoch20',
+    clarity_version: 'Clarity1',
+    contractName: 'tester',
+  },
   wrappedBitcoin: {
     functions: {
       addPrincipalToRole: {
@@ -479,173 +634,34 @@ export const contracts = {
         access: 'variable',
       } as TypedAbiVariable<string>,
     },
-    constants: {},
+    constants: {
+      BLACKLISTER_ROLE: 4n,
+      BURNER_ROLE: 2n,
+      MINTER_ROLE: 1n,
+      OWNER_ROLE: 0n,
+      PERMISSION_DENIED_ERROR: 403n,
+      RESTRICTION_BLACKLIST: 5n,
+      RESTRICTION_NONE: 0n,
+      REVOKER_ROLE: 3n,
+      deployerPrincipal: 'ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM',
+      isInitialized: false,
+      tokenDecimals: 0n,
+      tokenName: '',
+      tokenSymbol: '',
+      uri: '',
+    },
+    non_fungible_tokens: [],
     fungible_tokens: [{ name: 'wrapped-bitcoin' }],
-    non_fungible_tokens: [],
+    epoch: 'Epoch20',
+    clarity_version: 'Clarity1',
     contractName: 'Wrapped-Bitcoin',
-  },
-  ftTrait: {
-    functions: {},
-    maps: {},
-    variables: {},
-    constants: {},
-    fungible_tokens: [],
-    non_fungible_tokens: [],
-    contractName: 'ft-trait',
-  },
-  tester: {
-    functions: {
-      printErr: {
-        name: 'print-err',
-        access: 'public',
-        args: [],
-        outputs: { type: { response: { ok: 'none', error: 'uint128' } } },
-      } as TypedAbiFunction<[], Response<null, bigint>>,
-      printPub: {
-        name: 'print-pub',
-        access: 'public',
-        args: [],
-        outputs: { type: { response: { ok: 'bool', error: 'none' } } },
-      } as TypedAbiFunction<[], Response<boolean, null>>,
-      setInMap: {
-        name: 'set-in-map',
-        access: 'public',
-        args: [
-          { name: 'key', type: 'uint128' },
-          { name: 'val', type: 'bool' },
-        ],
-        outputs: { type: { response: { ok: 'bool', error: 'none' } } },
-      } as TypedAbiFunction<
-        [key: TypedAbiArg<number | bigint, 'key'>, val: TypedAbiArg<boolean, 'val'>],
-        Response<boolean, null>
-      >,
-      setNum: {
-        name: 'set-num',
-        access: 'public',
-        args: [{ name: 'num', type: 'uint128' }],
-        outputs: { type: { response: { ok: 'bool', error: 'none' } } },
-      } as TypedAbiFunction<[num: TypedAbiArg<number | bigint, 'num'>], Response<boolean, null>>,
-      echo: {
-        name: 'echo',
-        access: 'read_only',
-        args: [{ name: 'val', type: { 'string-ascii': { length: 33 } } }],
-        outputs: { type: { 'string-ascii': { length: 33 } } },
-      } as TypedAbiFunction<[val: TypedAbiArg<string, 'val'>], string>,
-      echoWithLogs: {
-        name: 'echo-with-logs',
-        access: 'read_only',
-        args: [{ name: 'val', type: { 'string-ascii': { length: 33 } } }],
-        outputs: { type: { 'string-ascii': { length: 33 } } },
-      } as TypedAbiFunction<[val: TypedAbiArg<string, 'val'>], string>,
-      getTup: {
-        name: 'get-tup',
-        access: 'read_only',
-        args: [],
-        outputs: {
-          type: {
-            tuple: [
-              { name: 'a', type: 'uint128' },
-              { name: 'bool-prop', type: 'bool' },
-              {
-                name: 'tuple-prop',
-                type: { tuple: [{ name: 'sub-prop', type: { 'string-ascii': { length: 4 } } }] },
-              },
-            ],
-          },
-        },
-      } as TypedAbiFunction<
-        [],
-        {
-          a: bigint;
-          boolProp: boolean;
-          tupleProp: {
-            subProp: string;
-          };
-        }
-      >,
-      mergeTuple: {
-        name: 'merge-tuple',
-        access: 'read_only',
-        args: [{ name: 'i', type: { tuple: [{ name: 'min-height', type: 'uint128' }] } }],
-        outputs: {
-          type: {
-            tuple: [
-              { name: 'max-height', type: 'uint128' },
-              { name: 'min-height', type: 'uint128' },
-            ],
-          },
-        },
-      } as TypedAbiFunction<
-        [
-          i: TypedAbiArg<
-            {
-              minHeight: number | bigint;
-            },
-            'i'
-          >
-        ],
-        {
-          maxHeight: bigint;
-          minHeight: bigint;
-        }
-      >,
-      roResp: {
-        name: 'ro-resp',
-        access: 'read_only',
-        args: [{ name: 'return-err', type: 'bool' }],
-        outputs: {
-          type: { response: { ok: { 'string-ascii': { length: 4 } }, error: 'uint128' } },
-        },
-      } as TypedAbiFunction<
-        [returnErr: TypedAbiArg<boolean, 'returnErr'>],
-        Response<string, bigint>
-      >,
-    },
-    maps: {
-      simpleMap: { name: 'simple-map', key: 'uint128', value: 'bool' } as TypedAbiMap<
-        number | bigint,
-        boolean
-      >,
-    },
-    variables: {
-      numVar: {
-        name: 'num-var',
-        type: 'uint128',
-        access: 'variable',
-      } as TypedAbiVariable<bigint>,
-    },
-    constants: {},
-    fungible_tokens: [],
-    non_fungible_tokens: [],
-    contractName: 'tester',
-  },
-  restrictedTokenTrait: {
-    functions: {},
-    maps: {},
-    variables: {},
-    constants: {},
-    fungible_tokens: [],
-    non_fungible_tokens: [],
-    contractName: 'restricted-token-trait',
   },
 } as const;
 
 export const deployments = {
-  wrappedBitcoin: {
-    devnet: 'ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM.Wrapped-Bitcoin',
-    simnet: 'SP3DX3H4FEYZJZ586MFBS25ZW3HZDMEW92260R2PR.Wrapped-Bitcoin',
-    testnet: null,
-    mainnet: 'SP3DX3H4FEYZJZ586MFBS25ZW3HZDMEW92260R2PR.Wrapped-Bitcoin',
-  },
   ftTrait: {
     devnet: 'SP3DX3H4FEYZJZ586MFBS25ZW3HZDMEW92260R2PR.ft-trait',
     simnet: 'SP3DX3H4FEYZJZ586MFBS25ZW3HZDMEW92260R2PR.ft-trait',
-    testnet: null,
-    mainnet: null,
-  },
-  tester: {
-    devnet: 'ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM.tester',
-    simnet: 'ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM.tester',
     testnet: null,
     mainnet: null,
   },
@@ -655,20 +671,32 @@ export const deployments = {
     testnet: null,
     mainnet: null,
   },
+  tester: {
+    devnet: 'ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM.tester',
+    simnet: 'ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM.tester',
+    testnet: null,
+    mainnet: null,
+  },
+  wrappedBitcoin: {
+    devnet: 'ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM.Wrapped-Bitcoin',
+    simnet: 'SP3DX3H4FEYZJZ586MFBS25ZW3HZDMEW92260R2PR.Wrapped-Bitcoin',
+    testnet: null,
+    mainnet: 'SP3DX3H4FEYZJZ586MFBS25ZW3HZDMEW92260R2PR.Wrapped-Bitcoin',
+  },
 } as const;
 
 export const simnetDeployment = [
   {
-    identifier: 'SP3DX3H4FEYZJZ586MFBS25ZW3HZDMEW92260R2PR.restricted-token-trait',
-    file: 'demo-project/.requirements/SP3DX3H4FEYZJZ586MFBS25ZW3HZDMEW92260R2PR.restricted-token-trait.clar',
+    identifier: 'SP3DX3H4FEYZJZ586MFBS25ZW3HZDMEW92260R2PR.ft-trait',
+    file: 'demo-project/.requirements/requirements/SP3DX3H4FEYZJZ586MFBS25ZW3HZDMEW92260R2PR.ft-trait.clar',
   },
   {
-    identifier: 'SP3DX3H4FEYZJZ586MFBS25ZW3HZDMEW92260R2PR.ft-trait',
-    file: 'demo-project/.requirements/SP3DX3H4FEYZJZ586MFBS25ZW3HZDMEW92260R2PR.ft-trait.clar',
+    identifier: 'SP3DX3H4FEYZJZ586MFBS25ZW3HZDMEW92260R2PR.restricted-token-trait',
+    file: 'demo-project/.requirements/requirements/SP3DX3H4FEYZJZ586MFBS25ZW3HZDMEW92260R2PR.restricted-token-trait.clar',
   },
   {
     identifier: 'SP3DX3H4FEYZJZ586MFBS25ZW3HZDMEW92260R2PR.Wrapped-Bitcoin',
-    file: 'demo-project/.requirements/SP3DX3H4FEYZJZ586MFBS25ZW3HZDMEW92260R2PR.Wrapped-Bitcoin.clar',
+    file: 'demo-project/.requirements/requirements/SP3DX3H4FEYZJZ586MFBS25ZW3HZDMEW92260R2PR.Wrapped-Bitcoin.clar',
   },
   {
     identifier: 'ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM.tester',

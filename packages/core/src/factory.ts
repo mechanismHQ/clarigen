@@ -22,7 +22,7 @@ import {
 } from './factory-types';
 
 export const DEPLOYMENT_NETWORKS = ['devnet', 'simnet', 'testnet', 'mainnet'] as const;
-export type DeploymentNetwork = typeof DEPLOYMENT_NETWORKS[number];
+export type DeploymentNetwork = (typeof DEPLOYMENT_NETWORKS)[number];
 
 export type DeploymentsForContracts<C extends AllContracts> = {
   [K in keyof C]: ContractDeployments;
@@ -133,7 +133,7 @@ export function deploymentFactory<T extends AllContracts>(
     final.contractFile = getDeploymentTxPath(tx);
     final.identifier = id;
     Object.keys(contracts[contractName].functions).forEach(_fnName => {
-      const fnName: keyof typeof def['functions'] = _fnName;
+      const fnName: keyof (typeof def)['functions'] = _fnName;
       const fn = ((...args: any[]) => {
         const foundFunction = def.functions[fnName];
         const functionArgs = transformArgsToCV(foundFunction, args);
@@ -144,8 +144,8 @@ export function deploymentFactory<T extends AllContracts>(
           function: foundFunction,
           nativeArgs: args,
         };
-      }) as FnToContractCall<typeof def['functions']>;
-      final[fnName as keyof typeof result[typeof contractName]] = fn;
+      }) as FnToContractCall<(typeof def)['functions']>;
+      final[fnName as keyof (typeof result)[typeof contractName]] = fn;
     });
   });
   return result as ContractFactory<T>;

@@ -35,26 +35,36 @@ genesis:
       address: ST3NBRSFKX28FQ2ZJ1MAKX58HKHSDGNV5N7R21XCP
       balance: "100000000000000"
   contracts:
+    - costs
     - pox
-    - costs-v2
+    - pox-2
+    - lockup
+    - costs-2
+    - costs-3
+    - cost-voting
     - bns
 plan:
   batches:
     - id: 0
       transactions:
         - emulated-contract-publish:
-            contract-name: restricted-token-trait
-            emulated-sender: SP3DX3H4FEYZJZ586MFBS25ZW3HZDMEW92260R2PR
-            path: ".requirements/SP3DX3H4FEYZJZ586MFBS25ZW3HZDMEW92260R2PR.restricted-token-trait.clar"
-        - emulated-contract-publish:
             contract-name: ft-trait
             emulated-sender: SP3DX3H4FEYZJZ586MFBS25ZW3HZDMEW92260R2PR
-            path: ".requirements/SP3DX3H4FEYZJZ586MFBS25ZW3HZDMEW92260R2PR.ft-trait.clar"
+            path: ".requirements/requirements/SP3DX3H4FEYZJZ586MFBS25ZW3HZDMEW92260R2PR.ft-trait.clar"
+            clarity-version: 1
+        - emulated-contract-publish:
+            contract-name: restricted-token-trait
+            emulated-sender: SP3DX3H4FEYZJZ586MFBS25ZW3HZDMEW92260R2PR
+            path: ".requirements/requirements/SP3DX3H4FEYZJZ586MFBS25ZW3HZDMEW92260R2PR.restricted-token-trait.clar"
+            clarity-version: 1
         - emulated-contract-publish:
             contract-name: Wrapped-Bitcoin
             emulated-sender: SP3DX3H4FEYZJZ586MFBS25ZW3HZDMEW92260R2PR
-            path: ".requirements/SP3DX3H4FEYZJZ586MFBS25ZW3HZDMEW92260R2PR.Wrapped-Bitcoin.clar"
+            path: ".requirements/requirements/SP3DX3H4FEYZJZ586MFBS25ZW3HZDMEW92260R2PR.Wrapped-Bitcoin.clar"
+            clarity-version: 1
         - emulated-contract-publish:
             contract-name: tester
             emulated-sender: ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM
             path: contracts/tester.clar
+            clarity-version: 1
+      epoch: "2.0"

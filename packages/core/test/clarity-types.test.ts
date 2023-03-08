@@ -5,8 +5,19 @@ import {
   transformArgsToCV,
   cvToJSON,
   Jsonize,
+  AbiTypeTo,
+  AbiTupleTo,
 } from '../src/clarity-types';
-import { projectFactory, ro, roOk, roErr, JsonIfOption, ApiOptionsJsonize, Response } from '../src';
+import {
+  projectFactory,
+  ro,
+  roOk,
+  roErr,
+  JsonIfOption,
+  ApiOptionsJsonize,
+  Response,
+  ClarityAbiTypeNonFungibleToken,
+} from '../src';
 import {
   bufferCV,
   contractPrincipalCV,
@@ -125,7 +136,7 @@ type ArrJson = Jsonize<Arr>;
 const arrJson: ArrJson = [{ a: '' }];
 arrJson.forEach(v => v);
 
-type Fn = typeof devnet['tester']['mergeTuple'];
+type Fn = (typeof devnet)['tester']['mergeTuple'];
 
 // type RoResp = ReturnType<typeof ro
 
@@ -157,3 +168,17 @@ const mergeNorm: ApiNorm = {
   minHeight: 1n,
   maxHeight: 1n,
 };
+
+const bnsNftAsset = {
+  name: 'names',
+  type: {
+    tuple: [
+      { name: 'name', type: { buffer: { length: 48 } } },
+      { name: 'namespace', type: { buffer: { length: 20 } } },
+    ],
+  },
+} as const;
+
+type BnsAsset = AbiTypeTo<(typeof bnsNftAsset)['type']>;
+
+type BnsTup = AbiTupleTo<(typeof bnsNftAsset)['type']>;

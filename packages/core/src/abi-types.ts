@@ -54,7 +54,6 @@ export interface ClarityAbiFunction {
 
 export type TypedAbiArg<T, N extends string> = { _t?: T; name: N };
 
-// deno-lint-ignore no-explicit-any
 export type TypedAbiFunction<T extends TypedAbiArg<unknown, string>[], R> = ClarityAbiFunction & {
   _t?: T;
   _r?: R;
@@ -85,9 +84,10 @@ export interface ClarityAbiTypeFungibleToken {
   name: string;
 }
 
-export interface ClarityAbiTypeNonFungibleToken {
+export interface ClarityAbiTypeNonFungibleToken<T = unknown> {
   name: string;
-  type: ClarityAbiType | Readonly<ClarityAbiType>;
+  type: ClarityAbiType;
+  _t?: T;
 }
 
 export interface ClarityAbi {
@@ -95,7 +95,7 @@ export interface ClarityAbi {
   variables: ClarityAbiVariable[];
   maps: ClarityAbiMap[];
   fungible_tokens: ClarityAbiTypeFungibleToken[];
-  non_fungible_tokens: ClarityAbiTypeNonFungibleToken[];
+  non_fungible_tokens: ClarityAbiTypeNonFungibleToken<unknown>[];
 }
 
 export type TypedAbi = Readonly<{
@@ -109,11 +109,10 @@ export type TypedAbi = Readonly<{
     [key: string]: TypedAbiMap<unknown, unknown>;
   };
   constants: {
-    // deno-lint-ignore no-explicit-any
-    [key: string]: any;
+    [key: string]: unknown;
   };
   fungible_tokens: Readonly<ClarityAbiTypeFungibleToken[]>;
-  non_fungible_tokens: Readonly<ClarityAbiTypeNonFungibleToken[]>;
+  non_fungible_tokens: Readonly<ClarityAbiTypeNonFungibleToken<unknown>[]>;
   contractName: string;
   contractFile?: string;
 }>;

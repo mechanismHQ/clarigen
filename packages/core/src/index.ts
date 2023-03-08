@@ -20,3 +20,4 @@ export * from './abi-types';
 export * from './factory';
 export * from './factory-types';
 export type { DeploymentPlan, SimnetDeploymentPlan } from './deployment';
+export * from './post-conditions';

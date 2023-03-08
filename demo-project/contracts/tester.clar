@@ -1,5 +1,7 @@
 (define-map simple-map uint bool)
 
+(define-non-fungible-token nft uint)
+
 (define-public (set-in-map (key uint) (val bool))
   (ok (map-set simple-map key val))
 )
