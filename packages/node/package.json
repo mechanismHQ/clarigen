@@ -16,7 +16,7 @@
     "dev": "tsup --watch",
     "build": "shx rm -rf dist && tsup",
     "test": "jest --passWithNoTests",
-    "lint": "eslint \"src/**/*.{ts,tsx}\" && prettier  --check src/**/*.ts",
+    "lint": "eslint \"src/**/*.{ts,tsx}\" && prettier --check \"./**/*.{ts,js}\"",
     "typecheck": "tsc --noEmit -p tsconfig-test.json"
   },
   "prettier": "@stacks/prettier-config",

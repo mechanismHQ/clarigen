@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-var-requires */
 const { cp } = require('fs/promises');
 const { resolve } = require('path');
 

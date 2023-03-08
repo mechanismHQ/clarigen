@@ -4,6 +4,9 @@ module.exports = {
   env: {
     es6: true,
   },
+  parserOptions: {
+    ecmaVersion: 8,
+  },
   overrides: [
     {
       files: ['*.ts', '*.tsx'], // Your TypeScript files extension

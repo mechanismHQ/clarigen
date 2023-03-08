@@ -4,7 +4,7 @@
   "scripts": {
     "build": "turbo run build",
     "lint": "turbo run lint --continue",
-    "lint:fix": "eslint --fix packages/**/*.{ts,js}",
+    "lint:fix": "eslint --fix packages/**/*.{ts,js} && prettier --write \"packages/**/*.{ts,js}\"",
     "test": "turbo run test --continue",
     "typecheck": "turbo run typecheck --continue",
     "publish-packages": "pnpm build && pnpm publish -r",

@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-var-requires */
 const { readFile, writeFile, mkdir } = require('fs/promises');
 const { resolve } = require('path');
 
