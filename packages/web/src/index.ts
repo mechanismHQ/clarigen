@@ -13,7 +13,7 @@ import { deserializeTransaction } from 'micro-stacks/transactions';
 import { ContractCallParams, MicroStacksClient, TxType } from '@micro-stacks/client';
 import { StacksNetwork } from 'micro-stacks/network';
 
-export type WebOptions = ApiOptions;
+export type WebOptions = Omit<ApiOptions, 'network'> & { network: StacksNetwork };
 
 export type ContractCallExtra = Omit<
   ContractCallParams,

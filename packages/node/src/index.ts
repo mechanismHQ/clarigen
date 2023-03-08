@@ -7,9 +7,8 @@ import {
   Response,
   JsonIfOption,
   ApiOptions,
+  Network,
 } from '@clarigen/core';
-import { StacksNetwork } from 'micro-stacks/network';
-import { makeContractCall, ContractCallOptions } from 'micro-stacks/transactions';
 
 export interface NodeOptions {
   url: string;
@@ -23,7 +22,7 @@ type JsonIf<O extends ClientRoOptions, T> = JsonIfOption<O & { url: string }, T>
 export class ClarigenNodeClient {
   public url: string;
 
-  constructor(networkOrUrl: StacksNetwork | string) {
+  constructor(networkOrUrl: Network | string) {
     if (typeof networkOrUrl === 'string') {
       this.url = networkOrUrl;
     } else {

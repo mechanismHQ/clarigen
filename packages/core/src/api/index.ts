@@ -1,6 +1,5 @@
 import { v2Endpoint, generateUrl } from 'micro-stacks/api';
 import { cvToHex, hexToCV } from 'micro-stacks/clarity';
-import { StacksNetwork } from 'micro-stacks/network';
 import { StacksTransaction, broadcastRawTransaction } from 'micro-stacks/transactions';
 import { cvToJSON, cvToValue, expectErr, expectOk, Jsonize } from '../clarity-types';
 import { Response, TypedAbiMap } from '../abi-types';
@@ -12,8 +11,12 @@ export interface ApiOptionsUrl {
   url: string;
 }
 
+export type Network = {
+  getCoreApiUrl: () => string;
+};
+
 export interface ApiOptionsNetwork {
-  network: StacksNetwork;
+  network: Network;
 }
 
 export type ApiOptionsBase = (ApiOptionsUrl | ApiOptionsNetwork) & {
@@ -139,7 +142,7 @@ type JsonIf<O extends ClientOptions, T> = JsonIfOption<O & { url: string }, T>;
 export class ClarigenClient {
   public url: string;
 
-  constructor(networkOrUrl: StacksNetwork | string) {
+  constructor(networkOrUrl: Network | string) {
     if (typeof networkOrUrl === 'string') {
       this.url = networkOrUrl;
     } else {
