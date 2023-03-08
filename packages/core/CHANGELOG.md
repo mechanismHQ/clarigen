@@ -1,5 +1,29 @@
 # @clarigen/core
 
+## 1.0.13
+
+### Patch Changes
+
+- [`b4d0e58`](https://github.com/mechanismHQ/clarigen/commit/b4d0e58255efa5d0b4768417165b5b6ad7aee76d) Thanks [@hstove](https://github.com/hstove)! - Adds helper methods for creating post conditions for a contract.
+
+  ```ts
+  import {
+    createAssetInfo,
+    makeNonFungiblePostCondition,
+    makeFungiblePostCondition,
+  } from '@clarigen/core';
+  import { contract } from './contracts';
+
+  // create asset info by specifying the name of the asset
+  createAssetInfo(contract, 'names');
+
+  makeNonFungiblePostCondition(contract, sender, NFTCode.DoesNotOwn, 1n);
+
+  makeFungiblePostCondition(contract, sender, FTCode.Equals, 1000n);
+  ```
+
+* [`585c13c`](https://github.com/mechanismHQ/clarigen/commit/585c13c20cdf10185d7f3dcaa335aa9e3cc5eef7) Thanks [@hstove](https://github.com/hstove)! - Updates the `ClarigenClient` constructor type to only rely on a `Network` with `getCoreApiUrl`. This will improve compatibility with Stacks.js
+
 ## 1.0.12
 
 ### Patch Changes
