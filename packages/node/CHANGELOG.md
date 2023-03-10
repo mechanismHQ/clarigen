@@ -1,5 +1,12 @@
 # @clarigen/node
 
+## 1.0.14
+
+### Patch Changes
+
+- Updated dependencies [[`c74ca1e`](https://github.com/mechanismHQ/clarigen/commit/c74ca1ee50892a946b74c30161cc6f50d6fe4375)]:
+  - @clarigen/core@1.0.14
+
 ## 1.0.13
 
 ### Patch Changes
