@@ -6,7 +6,7 @@ export type ClarityAbiTypeResponse = {
 };
 export type ClarityAbiTypeOptional = { optional: ClarityAbiType };
 export type ClarityAbiTypeTuple = {
-  tuple: { name: string; type: ClarityAbiType }[];
+  tuple: readonly { name: string; type: ClarityAbiType }[];
 };
 export type ClarityAbiTypeList = {
   list: { type: ClarityAbiType; length: number };
@@ -95,7 +95,7 @@ export interface ClarityAbi {
   variables: ClarityAbiVariable[];
   maps: ClarityAbiMap[];
   fungible_tokens: ClarityAbiTypeFungibleToken[];
-  non_fungible_tokens: ClarityAbiTypeNonFungibleToken<unknown>[];
+  non_fungible_tokens: readonly ClarityAbiTypeNonFungibleToken<unknown>[];
 }
 
 export type TypedAbi = Readonly<{

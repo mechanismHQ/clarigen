@@ -1,7 +1,7 @@
 import {
   addressToString,
   ClarityAbi as _ClarityAbi,
-  ClarityAbiType,
+  ClarityAbiType as MSClarityAbiType,
   ClarityAbiTypeTuple,
   ClarityType,
   ClarityValue,
@@ -16,18 +16,9 @@ import {
   tupleCV,
   listCV,
   hexToCV,
-  ClarityAbiFunction,
   bufferCV,
 } from 'micro-stacks/clarity';
-import {
-  isClarityAbiList,
-  isClarityAbiOptional,
-  isClarityAbiStringAscii,
-  isClarityAbiStringUtf8,
-  isClarityAbiTuple,
-  isClarityAbiBuffer,
-  parseToCV as _parseToCV,
-} from 'micro-stacks/transactions';
+import { parseToCV as _parseToCV } from 'micro-stacks/transactions';
 import { bytesToAscii, bytesToHex } from 'micro-stacks/common';
 import {
   Response,
@@ -47,6 +38,8 @@ import {
   ClarityAbiTypeStringUtf8,
   ClarityAbiTypeTraitReference,
   ClarityAbiMap,
+  ClarityAbiFunction,
+  ClarityAbiType,
   TypedAbiFunction,
   TypedAbiArg,
 } from './abi-types';
@@ -154,6 +147,23 @@ function inputToBigInt(input: CVInput) {
   return BigInt(input);
 }
 
+export const isClarityAbiPrimitive = (val: ClarityAbiType): val is ClarityAbiTypePrimitive =>
+  typeof val === 'string';
+export const isClarityAbiBuffer = (val: ClarityAbiType): val is ClarityAbiTypeBuffer =>
+  (val as ClarityAbiTypeBuffer).buffer !== undefined;
+export const isClarityAbiStringAscii = (val: ClarityAbiType): val is ClarityAbiTypeStringAscii =>
+  (val as ClarityAbiTypeStringAscii)['string-ascii'] !== undefined;
+export const isClarityAbiStringUtf8 = (val: ClarityAbiType): val is ClarityAbiTypeStringUtf8 =>
+  (val as ClarityAbiTypeStringUtf8)['string-utf8'] !== undefined;
+export const isClarityAbiResponse = (val: ClarityAbiType): val is ClarityAbiTypeResponse =>
+  (val as ClarityAbiTypeResponse).response !== undefined;
+export const isClarityAbiOptional = (val: ClarityAbiType): val is ClarityAbiTypeOptional =>
+  (val as ClarityAbiTypeOptional).optional !== undefined;
+export const isClarityAbiTuple = (val: ClarityAbiType): val is ClarityAbiTypeTuple =>
+  (val as ClarityAbiTypeTuple).tuple !== undefined;
+export const isClarityAbiList = (val: ClarityAbiType): val is ClarityAbiTypeList =>
+  (val as ClarityAbiTypeList).list !== undefined;
+
 export function parseToCV(input: CVInput, type: ClarityAbiType): ClarityValue {
   if (isClarityAbiTuple(type)) {
     if (typeof input !== 'object') {
@@ -201,7 +211,7 @@ export function parseToCV(input: CVInput, type: ClarityAbiType): ClarityValue {
   } else if (isClarityAbiBuffer(type)) {
     return bufferCV(input as Uint8Array);
   }
-  return _parseToCV(input as string, type);
+  return _parseToCV(input as string, type as MSClarityAbiType);
 }
 
 export function cvToString(val: ClarityValue, encoding: 'tryAscii' | 'hex' = 'hex'): string {
@@ -375,7 +385,7 @@ export type AbiPrimitiveTo<T extends ClarityAbiTypePrimitive> = T extends Clarit
   ? never
   : T;
 
-type ReadonlyTuple = {
+export type ReadonlyTuple = {
   readonly tuple: Readonly<ClarityAbiTypeTuple['tuple']>;
 };
 
@@ -407,7 +417,7 @@ export type AbiTypeTo<T extends ClarityAbiType | ReadonlyTuple> = T extends Clar
   ? Response<AbiTypeTo<T['response']['ok']>, AbiTypeTo<T['response']['error']>>
   : T extends ReadonlyTuple
   ? AbiTupleTo<T>
-  : T;
+  : never;
 
 // Helper type for inferring the return type of a function. Like `ReturnType`,
 // but for Clarigen types

@@ -179,6 +179,17 @@ const bnsNftAsset = {
   },
 } as const;
 
-type BnsAsset = AbiTypeTo<(typeof bnsNftAsset)['type']>;
+type BnsAsset2 = AbiTypeTo<(typeof bnsNftAsset)['type']>;
+
+type BnsAsset = AbiTypeTo<{
+  tuple: [
+    { name: 'name'; type: { buffer: { length: 48 } } },
+    { name: 'namespace'; type: { buffer: { length: 20 } } }
+  ];
+}>;
 
 type BnsTup = AbiTupleTo<(typeof bnsNftAsset)['type']>;
+
+type Contract = (typeof devnet)['tester'];
+
+type AA = AbiTypeTo<Contract['non_fungible_tokens'][0]['type']>;

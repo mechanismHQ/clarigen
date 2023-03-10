@@ -10,8 +10,8 @@ import {
   NonFungibleConditionCode,
   PostCondition,
 } from 'micro-stacks/transactions';
-import type { ClarityAbiTypeNonFungibleToken, TypedAbi } from './abi-types';
-import { AbiTypeTo, CVInput, parseToCV } from './clarity-types';
+import type { ClarityAbiType, TypedAbi } from './abi-types';
+import { AbiTypeTo, CVInput, parseToCV, ReadonlyTuple } from './clarity-types';
 import type { FullContract } from './factory-types';
 
 type AbiWithAssets = Pick<
@@ -22,12 +22,6 @@ type AbiWithAssets = Pick<
 export type AssetNames<T extends AbiWithAssets> =
   | T['non_fungible_tokens'][number]['name']
   | T['fungible_tokens'][number]['name'];
-
-export type NftAssets<T extends AbiWithAssets> = {
-  [K in keyof T['non_fungible_tokens']]: K extends number
-    ? [T['non_fungible_tokens'][K]['name'], T['non_fungible_tokens'][K]['type']]
-    : never;
-};
 
 export function createAssetInfo<T extends AbiWithAssets>(
   contract: T,
@@ -47,11 +41,16 @@ export function createAssetInfo<T extends AbiWithAssets>(
       return _createAssetInfo(addr, name, ft.name);
     }
   }
-  throw new Error(`Invalid asset: "${name}" is not an asset in contract.`);
+  throw new Error(`Invalid asset: "${asset}" is not an asset in contract.`);
 }
 
-export type NftAssetType<T extends AbiWithAssets> =
-  T['non_fungible_tokens'][0] extends ClarityAbiTypeNonFungibleToken<infer A> ? A : never;
+export type NftAssetType<T extends AbiWithAssets> = T['non_fungible_tokens'][0] extends {
+  type: infer Type;
+}
+  ? Type extends ClarityAbiType | ReadonlyTuple
+    ? AbiTypeTo<Type>
+    : never
+  : never;
 
 export function makeNonFungiblePostCondition<T extends AbiWithAssets>(
   contract: T,
