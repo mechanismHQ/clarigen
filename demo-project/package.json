@@ -1,6 +1,6 @@
 {
   "private": true,
-  "version": "1.0.14",
+  "version": "1.0.15",
   "name": "demo-project",
   "scripts": {
     "build": "shx rm -rf ./dist && tsup"

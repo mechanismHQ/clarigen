@@ -1,5 +1,13 @@
 # @clarigen/core
 
+## 1.0.15
+
+### Patch Changes
+
+- [`bdcaa6b`](https://github.com/mechanismHQ/clarigen/commit/bdcaa6b20bac7bfa645da33b123f1ec266bfa80a) Thanks [@hstove](https://github.com/hstove)! - - Fixed an issue with generically typed `projectFactory`, where contracts without mainnet deployments were typed as 'undefined'.
+  - Exports `UnknownArg` and `UnknownArgs`;
+  - Fixed an issue with `parseToCV` where an `(optional uint)` would return `none` when given a zero value (ie `0` or `0n`).
+
 ## 1.0.14
 
 ### Patch Changes

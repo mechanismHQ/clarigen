@@ -1,5 +1,12 @@
 # @clarigen/web
 
+## 1.0.15
+
+### Patch Changes
+
+- Updated dependencies [[`bdcaa6b`](https://github.com/mechanismHQ/clarigen/commit/bdcaa6b20bac7bfa645da33b123f1ec266bfa80a)]:
+  - @clarigen/core@1.0.15
+
 ## 1.0.14
 
 ### Patch Changes
