@@ -183,7 +183,7 @@ export function parseToCV(input: CVInput, type: ClarityAbiType): ClarityValue {
     });
     return listCV(values);
   } else if (isClarityAbiOptional(type)) {
-    if (!input) return noneCV();
+    if (input === null) return noneCV();
     return someCV(parseToCV(input, type.optional));
   } else if (isClarityAbiStringAscii(type)) {
     if (typeof input !== 'string') {

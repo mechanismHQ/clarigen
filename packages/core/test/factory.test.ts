@@ -1,5 +1,5 @@
 import { project, contracts } from 'demo-project';
-import { contractsFactory, mapFactory, projectFactory } from '../src';
+import { DeploymentNetwork, contractsFactory, mapFactory, projectFactory } from '../src';
 import { stringAsciiCV, uintCV } from 'micro-stacks/clarity';
 
 test('can make the factory', () => {
@@ -48,4 +48,22 @@ test('map factory', () => {
   expect(f.key).toEqual(1);
   expect(f.keyCV).toEqual(uintCV(1));
   expect(f.map.name).toEqual('simple-map');
+});
+
+test('projectFactory returns contract even if some deployment address missing', () => {
+  const { tester } = projectFactory(project, 'mainnet');
+  expect(tester).not.toBeTruthy();
+  /* eslint-disable @typescript-eslint/ban-ts-comment */
+  // /* eslint-disable @typescript-eslint/no-unsafe-call */
+
+  expect(() => {
+    // @ts-ignore
+    tester.echo('asdf');
+  }).toThrow();
+
+  /* eslint-enable @typescript-eslint/ban-ts-comment */
+  /* eslint-enable @typescript-eslint/no-unsafe-call */
+
+  const { tester: tester2 } = projectFactory(project, 'devnet' as unknown as DeploymentNetwork);
+  expect(tester2).toBeTruthy();
 });

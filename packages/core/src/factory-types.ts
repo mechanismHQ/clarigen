@@ -26,8 +26,8 @@ export type AllContracts = Record<string, TypedAbi>;
 
 // // Args
 
-type UnknownArg = TypedAbiArg<unknown, string>;
-type UnknownArgs = UnknownArg[];
+export type UnknownArg = TypedAbiArg<unknown, string>;
+export type UnknownArgs = UnknownArg[];
 
 export type ArgsTuple<T extends UnknownArgs> = {
   [K in keyof T]: T[K] extends TypedAbiArg<infer A, string> ? A : never;

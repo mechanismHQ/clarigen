@@ -41,10 +41,20 @@ export type FullContractWithIdentifier<C extends TypedAbi, Id extends string> = 
   identifier: Id;
 };
 
+type IsDeploymentNetwork<T> = T extends DeploymentNetwork
+  ? DeploymentNetwork extends T
+    ? true
+    : false
+  : never;
+
 export type ProjectFactory<P extends Project<any, any>, N extends DeploymentNetwork> = {
-  [ContractName in keyof P['contracts']]: P['deployments'][ContractName][N] extends string
-    ? FullContractWithIdentifier<P['contracts'][ContractName], P['deployments'][ContractName][N]>
-    : undefined;
+  [ContractName in keyof P['contracts']]: FullContractWithIdentifier<
+    P['contracts'][ContractName],
+    IsDeploymentNetwork<N> extends true ? '' : NonNullable<P['deployments'][ContractName][N]>
+  >;
+  // [ContractName in keyof P['contracts']]: P['deployments'][ContractName][N] extends string
+  //   ? FullContractWithIdentifier<P['contracts'][ContractName], P['deployments'][ContractName][N]>
+  //   : FullContractWithIdentifier<P['contracts'][ContractName], ''> | undefined;
 };
 
 export function projectFactory<
