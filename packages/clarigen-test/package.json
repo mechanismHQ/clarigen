@@ -1,0 +1,40 @@
+{
+  "version": "1.0.15",
+  "license": "MIT",
+  "types": "./dist/index.d.ts",
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "import": "./dist/index.mjs",
+  "files": [
+    "dist"
+  ],
+  "engines": {
+    "node": ">=10"
+  },
+  "scripts": {
+    "start": "tsup --watch",
+    "dev": "tsup --watch",
+    "build": "shx rm -rf dist && tsup",
+    "test": "jest --passWithNoTests",
+    "lint": "eslint \"src/**/*.{ts,tsx}\" && prettier --check \"./**/*.{ts,js}\"",
+    "typecheck": "tsc --noEmit"
+  },
+  "prettier": "@stacks/prettier-config",
+  "name": "@clarigen/test",
+  "author": "Hank Stoever",
+  "devDependencies": {
+    "@types/node": "20.10.4",
+    "demo-project": "workspace:*",
+    "vitest": "1.0.4"
+  },
+  "dependencies": {
+    "@clarigen/core": "workspace:*",
+    "micro-stacks": "^1.1.4",
+    "@stacks/transactions": "6.10.0",
+    "@hirosystems/clarinet-sdk": "1.2.0",
+    "@hirosystems/clarinet-sdk-wasm": "1.2.0"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

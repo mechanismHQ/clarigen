@@ -1,0 +1,26 @@
+
+# Set to your project's Clarinet config file
+clarinet = "./Clarinet.toml"
+
+# Set where you'd like Deno types output.
+# Comment or remove section to skip Deno types
+# [deno]
+# `output` can be a directory or a folder.
+# output = "artifacts/clarigen.ts"
+
+# Set where you'd like ESM types output.
+# Comment or remove section to skip ESM types
+[esm]
+# `output` can be a directory or a folder.
+output = "esm/index.ts"
+
+# `esm.after` - script to run after ESM types are generated.
+# examples:
+after = "pnpm prettier -w ./esm/index.ts"
+# after = "echo 'yay'"
+
+# Set where you'd like generated contract docs
+# Generate docs by running `clarigen docs`
+# [docs]
+# `output` should be a folder
+# output = "docs"

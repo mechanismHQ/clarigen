@@ -135,14 +135,54 @@ export type OkType<R> = R extends ResponseOk<infer V, unknown> ? V : never;
 export type ErrType<R> = R extends ResponseErr<unknown, infer V> ? V : never;
 
 export const contracts = {
+  counter: {
+    functions: {
+      decrement: {
+        name: 'decrement',
+        access: 'public',
+        args: [{ name: 'step', type: 'uint128' }],
+        outputs: { type: { response: { ok: 'uint128', error: 'none' } } },
+      } as TypedAbiFunction<[step: TypedAbiArg<number | bigint, 'step'>], Response<bigint, null>>,
+      increment: {
+        name: 'increment',
+        access: 'public',
+        args: [{ name: 'step', type: 'uint128' }],
+        outputs: { type: { response: { ok: 'uint128', error: 'none' } } },
+      } as TypedAbiFunction<[step: TypedAbiArg<number | bigint, 'step'>], Response<bigint, null>>,
+      getCounter: {
+        name: 'get-counter',
+        access: 'read_only',
+        args: [],
+        outputs: { type: 'uint128' },
+      } as TypedAbiFunction<[], bigint>,
+    },
+    maps: {},
+    variables: {
+      counter: {
+        name: 'counter',
+        type: 'uint128',
+        access: 'variable',
+      } as TypedAbiVariable<bigint>,
+    },
+    // TODO: fix with clarinet v2
+    // constants: undefined,
+    constants: {},
+    non_fungible_tokens: [],
+    fungible_tokens: [],
+    epoch: 'Epoch21',
+    clarity_version: 'Clarity1',
+    contractName: 'counter',
+  },
   ftTrait: {
     functions: {},
     maps: {},
     variables: {},
+    // TODO: fix with clarinet v2
+    // constants: undefined,
     constants: {},
     non_fungible_tokens: [],
     fungible_tokens: [],
-    epoch: 'Epoch20',
+    epoch: 'Epoch21',
     clarity_version: 'Clarity1',
     contractName: 'ft-trait',
   },
@@ -150,10 +190,12 @@ export const contracts = {
     functions: {},
     maps: {},
     variables: {},
+    // TODO: fix with clarinet v2
+    // constants: undefined,
     constants: {},
     non_fungible_tokens: [],
     fungible_tokens: [],
-    epoch: 'Epoch20',
+    epoch: 'Epoch21',
     clarity_version: 'Clarity1',
     contractName: 'restricted-token-trait',
   },
@@ -278,12 +320,12 @@ export const contracts = {
         access: 'variable',
       } as TypedAbiVariable<bigint>,
     },
-    constants: {
-      numVar: 0n,
-    },
+    // TODO: fix with clarinet v2
+    // constants: undefined,
+    constants: {},
     non_fungible_tokens: [{ name: 'nft', type: 'uint128' }],
     fungible_tokens: [{ name: 'ft' }],
-    epoch: 'Epoch20',
+    epoch: 'Epoch21',
     clarity_version: 'Clarity1',
     contractName: 'tester',
   },
@@ -632,31 +674,51 @@ export const contracts = {
         access: 'variable',
       } as TypedAbiVariable<string>,
     },
-    constants: {
-      BLACKLISTER_ROLE: 4n,
-      BURNER_ROLE: 2n,
-      MINTER_ROLE: 1n,
-      OWNER_ROLE: 0n,
-      PERMISSION_DENIED_ERROR: 403n,
-      RESTRICTION_BLACKLIST: 5n,
-      RESTRICTION_NONE: 0n,
-      REVOKER_ROLE: 3n,
-      deployerPrincipal: 'SP3DX3H4FEYZJZ586MFBS25ZW3HZDMEW92260R2PR',
-      isInitialized: false,
-      tokenDecimals: 0n,
-      tokenName: '',
-      tokenSymbol: '',
-      uri: '',
-    },
+    // TODO: fix with clarinet v2
+    // constants: undefined,
+    constants: {},
     non_fungible_tokens: [],
     fungible_tokens: [{ name: 'wrapped-bitcoin' }],
-    epoch: 'Epoch20',
+    epoch: 'Epoch21',
     clarity_version: 'Clarity1',
     contractName: 'Wrapped-Bitcoin',
   },
 } as const;
 
+export const accounts = {
+  wallet_3: { address: 'ST2JHG361ZXG51QTKY2NQCVBPPRRE2KZB1HR05NNC', balance: 0 },
+  wallet_6: { address: 'ST3AM1A56AK2C1XAFJ4115ZSV26EB49BVQ10MGCS0', balance: 0 },
+  wallet_1: { address: 'ST1SJ3DTE5DN7X54YDH5D64R3BCB6A2AG2ZQ8YPD5', balance: 0 },
+  wallet_5: { address: 'ST2REHHS5J3CERCRBEPMGH7921Q6PYKAADT7JP2VB', balance: 0 },
+  wallet_7: { address: 'ST3PF13W7Z0RRM42A8VZRVFQ75SV1K26RXEP8YGKJ', balance: 0 },
+  wallet_2: { address: 'ST2CY5V39NHDPWSXMW9QDT3HC3GD6Q6XX4CFRK9AG', balance: 0 },
+  faucet: { address: 'STNHKEPYEPJ8ET55ZZ0M5A34J0R3N5FM2CMMMAZ6', balance: 0 },
+  wallet_4: { address: 'ST2NEB84ASENDXKYGJPQW86YXQCEFEX2ZQPG87ND', balance: 0 },
+  wallet_8: { address: 'ST3NBRSFKX28FQ2ZJ1MAKX58HKHSDGNV5N7R21XCP', balance: 0 },
+  deployer: { address: 'ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM', balance: 0 },
+} as const;
+
+export const identifiers = {
+  counter: 'ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM.counter',
+  ftTrait: 'SP3DX3H4FEYZJZ586MFBS25ZW3HZDMEW92260R2PR.ft-trait',
+  restrictedTokenTrait: 'SP3DX3H4FEYZJZ586MFBS25ZW3HZDMEW92260R2PR.restricted-token-trait',
+  tester: 'ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM.tester',
+  wrappedBitcoin: 'SP3DX3H4FEYZJZ586MFBS25ZW3HZDMEW92260R2PR.Wrapped-Bitcoin',
+} as const;
+
+export const simnet = {
+  accounts,
+  contracts,
+  identifiers,
+} as const;
+
 export const deployments = {
+  counter: {
+    devnet: 'ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM.counter',
+    simnet: 'ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM.counter',
+    testnet: null,
+    mainnet: null,
+  },
   ftTrait: {
     devnet: 'SP3DX3H4FEYZJZ586MFBS25ZW3HZDMEW92260R2PR.ft-trait',
     simnet: 'SP3DX3H4FEYZJZ586MFBS25ZW3HZDMEW92260R2PR.ft-trait',
@@ -682,43 +744,6 @@ export const deployments = {
     mainnet: 'SP3DX3H4FEYZJZ586MFBS25ZW3HZDMEW92260R2PR.Wrapped-Bitcoin',
   },
 } as const;
-
-export const simnetDeployment = [
-  {
-    identifier: 'SP3DX3H4FEYZJZ586MFBS25ZW3HZDMEW92260R2PR.ft-trait',
-    file: 'demo-project/.requirements/requirements/SP3DX3H4FEYZJZ586MFBS25ZW3HZDMEW92260R2PR.ft-trait.clar',
-  },
-  {
-    identifier: 'SP3DX3H4FEYZJZ586MFBS25ZW3HZDMEW92260R2PR.restricted-token-trait',
-    file: 'demo-project/.requirements/requirements/SP3DX3H4FEYZJZ586MFBS25ZW3HZDMEW92260R2PR.restricted-token-trait.clar',
-  },
-  {
-    identifier: 'SP3DX3H4FEYZJZ586MFBS25ZW3HZDMEW92260R2PR.Wrapped-Bitcoin',
-    file: 'demo-project/.requirements/requirements/SP3DX3H4FEYZJZ586MFBS25ZW3HZDMEW92260R2PR.Wrapped-Bitcoin.clar',
-  },
-  {
-    identifier: 'ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM.tester',
-    file: 'demo-project/contracts/tester.clar',
-  },
-];
-
-export const accounts = {
-  deployer: { address: 'ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM', balance: 100000000000000 },
-  faucet: { address: 'STNHKEPYEPJ8ET55ZZ0M5A34J0R3N5FM2CMMMAZ6', balance: 100000000000000 },
-  wallet_1: { address: 'ST1SJ3DTE5DN7X54YDH5D64R3BCB6A2AG2ZQ8YPD5', balance: 100000000000000 },
-  wallet_2: { address: 'ST2CY5V39NHDPWSXMW9QDT3HC3GD6Q6XX4CFRK9AG', balance: 100000000000000 },
-  wallet_3: { address: 'ST2JHG361ZXG51QTKY2NQCVBPPRRE2KZB1HR05NNC', balance: 100000000000000 },
-  wallet_4: { address: 'ST2NEB84ASENDXKYGJPQW86YXQCEFEX2ZQPG87ND', balance: 100000000000000 },
-  wallet_5: { address: 'ST2REHHS5J3CERCRBEPMGH7921Q6PYKAADT7JP2VB', balance: 100000000000000 },
-  wallet_6: { address: 'ST3AM1A56AK2C1XAFJ4115ZSV26EB49BVQ10MGCS0', balance: 100000000000000 },
-  wallet_7: { address: 'ST3PF13W7Z0RRM42A8VZRVFQ75SV1K26RXEP8YGKJ', balance: 100000000000000 },
-  wallet_8: { address: 'ST3NBRSFKX28FQ2ZJ1MAKX58HKHSDGNV5N7R21XCP', balance: 100000000000000 },
-} as const;
-
-export const simnet = {
-  deployment: simnetDeployment,
-  accounts,
-};
 
 export const project = {
   contracts,
