@@ -1,0 +1,14 @@
+{
+  "mode": "pre",
+  "tag": "alpha",
+  "initialVersions": {
+    "demo-project": "1.0.15",
+    "@clarigen/test": "1.0.15",
+    "@clarigen/core": "1.0.15",
+    "@clarigen/node": "1.0.15",
+    "@clarigen/web": "1.0.15"
+  },
+  "changesets": [
+    "metal-vans-own"
+  ]
+}

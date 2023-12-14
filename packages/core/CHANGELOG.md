@@ -1,5 +1,7 @@
 # @clarigen/core
 
+## 1.0.16-alpha.0
+
 ## 1.0.15
 
 ### Patch Changes
