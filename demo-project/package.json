@@ -10,8 +10,6 @@
   "module": "./dist/index.mjs",
   "import": "./dist/index.mjs",
   "dependencies": {
-    "@clarigen/core": "workspace:*",
-    "@clarigen/test": "workspace:*",
     "@hirosystems/clarinet-sdk": "1.2.0",
     "@types/node": "20.10.4",
     "vitest": "1.0.4"

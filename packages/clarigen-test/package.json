@@ -15,7 +15,7 @@
     "start": "tsup --watch",
     "dev": "tsup --watch",
     "build": "shx rm -rf dist && tsup",
-    "test": "jest --passWithNoTests",
+    "test": "vitest run",
     "lint": "eslint \"src/**/*.{ts,tsx}\" && prettier --check \"./**/*.{ts,js}\"",
     "typecheck": "tsc --noEmit"
   },
@@ -25,7 +25,8 @@
   "devDependencies": {
     "@types/node": "20.10.4",
     "demo-project": "workspace:*",
-    "vitest": "1.0.4"
+    "vitest": "1.0.4",
+    "vitest-environment-clarinet": "^1.1.0"
   },
   "dependencies": {
     "@clarigen/core": "workspace:*",

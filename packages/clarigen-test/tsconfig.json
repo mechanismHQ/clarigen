@@ -12,5 +12,8 @@
     "skipLibCheck": true,
     "types": ["node"]
   },
-  "include": ["./src/**/*"]
+  "include": [
+    "@hirosystems/clarinet-sdk/vitest-helpers/src/global",
+    "./src/**/*"
+  ]
 }

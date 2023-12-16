@@ -11,6 +11,8 @@ import {
   serializeCV as serializeCVMS,
   deserializeCV as deserializeCVMS,
   ClarityAbiFunction,
+  Address,
+  ClarityType,
 } from 'micro-stacks/clarity';
 
 export function cvConvertMS(value: MSClarityValue): HiroClarityValue {
@@ -23,6 +25,12 @@ export function cvConvertHiro(value: HiroClarityValue): MSClarityValue {
 
 export function validateResponse<T>(result: HiroClarityValue, expectOk?: boolean): T {
   const value = cvToValue(cvConvertHiro(result), true);
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call
+  if (!value.hasOwnProperty('isOk') && typeof expectOk !== 'undefined') {
+    throw new Error(
+      `Expected response when calling function, but not a response. Try using just \`tx\` or \`rov\``
+    );
+  }
   if (typeof expectOk !== 'undefined' && 'isOk' in value) {
     const response = value as Response<unknown, unknown>;
     const inner = response.value;

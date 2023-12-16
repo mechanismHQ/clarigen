@@ -84,12 +84,6 @@ importers:
 
   demo-project:
     dependencies:
-      '@clarigen/core':
-        specifier: workspace:*
-        version: link:../packages/core
-      '@clarigen/test':
-        specifier: workspace:*
-        version: link:../packages/clarigen-test
       '@hirosystems/clarinet-sdk':
         specifier: 1.2.0
         version: 1.2.0(@types/node@20.10.4)
@@ -131,6 +125,9 @@ importers:
       vitest:
         specifier: 1.0.4
         version: 1.0.4(@types/node@20.10.4)
+      vitest-environment-clarinet:
+        specifier: ^1.1.0
+        version: 1.1.0(@hirosystems/clarinet-sdk@1.2.0)(vitest@1.0.4)
 
   packages/core:
     dependencies:
