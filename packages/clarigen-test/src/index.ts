@@ -14,6 +14,7 @@ import { cvConvertHiro, cvConvertMS, validateResponse } from './utils';
 import { CoreNodeEvent } from './events';
 import { ClarityType } from '@stacks/transactions';
 export * from './events';
+export * from './utils';
 
 declare global {
   let simnet: Simnet;
