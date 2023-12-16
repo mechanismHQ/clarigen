@@ -1,5 +1,11 @@
 # demo-project
 
+## 1.0.16-alpha.3
+
+### Patch Changes
+
+- [`911cc06`](https://github.com/mechanismHQ/clarigen/commit/911cc06c8f293d53c29e2cd5e16eff38a7762053) Thanks [@hstove](https://github.com/hstove)! - Include missing built files
+
 ## 1.0.16-alpha.2
 
 ### Patch Changes

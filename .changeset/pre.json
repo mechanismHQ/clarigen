@@ -9,6 +9,7 @@
     "@clarigen/web": "1.0.15"
   },
   "changesets": [
+    "early-pets-sip",
     "four-hotels-invite",
     "lucky-foxes-flow",
     "metal-vans-own"
