@@ -9,6 +9,7 @@
     "@clarigen/web": "1.0.15"
   },
   "changesets": [
+    "four-hotels-invite",
     "metal-vans-own"
   ]
 }
