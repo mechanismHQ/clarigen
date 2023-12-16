@@ -1,5 +1,11 @@
 # @clarigen/core
 
+## 1.0.16-alpha.2
+
+### Patch Changes
+
+- [`9a863ad`](https://github.com/mechanismHQ/clarigen/commit/9a863adcb5c94582e369181f2a8773078416f4f4) Thanks [@hstove](https://github.com/hstove)! - Export utils from `test`
+
 ## 1.0.16-alpha.1
 
 ### Patch Changes
