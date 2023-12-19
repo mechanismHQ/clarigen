@@ -25,7 +25,7 @@
   "name": "@clarigen/core",
   "author": "Hank Stoever",
   "dependencies": {
-    "micro-stacks": "^1.1.4"
+    "micro-stacks": "^1.2.1"
   },
   "devDependencies": {
     "demo-project": "workspace:*"

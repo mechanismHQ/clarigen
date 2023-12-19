@@ -33,7 +33,7 @@
     "@hirosystems/clarinet-sdk": "1.2.0",
     "@hirosystems/clarinet-sdk-wasm": "1.2.0",
     "@stacks/transactions": "6.10.0",
-    "micro-stacks": "^1.1.4"
+    "micro-stacks": "^1.2.1"
   },
   "publishConfig": {
     "access": "public"

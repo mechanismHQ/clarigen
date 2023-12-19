@@ -27,7 +27,7 @@
   },
   "dependencies": {
     "@clarigen/core": "workspace:*",
-    "micro-stacks": "^1.1.4"
+    "micro-stacks": "^1.2.1"
   },
   "publishConfig": {
     "access": "public"

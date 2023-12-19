@@ -25,7 +25,6 @@ import {
   serializeCV as serializeCVMS,
   deserializeCV as deserializeCVMS,
   ClarityAbiFunction,
-  Address,
   ClarityType,
   StacksMessageType,
 } from 'micro-stacks/clarity';
@@ -54,6 +53,25 @@ it('works fine for all MS clarity types', () => {
   cvConvert(MS.responseErrorCV(boolCV(true)));
   cvConvert(MS.listCV([boolCV(true)]));
   cvConvert(
+    MS.tupleCV({
+      a: boolCV(true),
+    })
+  );
+
+  serializeCVHiro(MS.uintCV(1n));
+  serializeCVHiro(MS.intCV(1n));
+  // These are broken
+  // serializeCVHiro(MS.principalCV('ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM'));
+  // serializeCVHiro(MS.principalCV('ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM.asdf'));
+  serializeCVHiro(MS.boolCV(true));
+  serializeCVHiro(MS.stringAsciiCV('asdf'));
+  serializeCVHiro(MS.stringUtf8CV('asdf'));
+  serializeCVHiro(MS.optionalCVOf(boolCV(true)));
+  serializeCVHiro(MS.bufferCV(Buffer.from('asdf')));
+  serializeCVHiro(MS.responseOkCV(boolCV(true)));
+  serializeCVHiro(MS.responseErrorCV(boolCV(true)));
+  serializeCVHiro(MS.listCV([boolCV(true)]));
+  serializeCVHiro(
     MS.tupleCV({
       a: boolCV(true),
     })

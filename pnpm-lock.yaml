@@ -110,8 +110,8 @@ importers:
         specifier: 6.10.0
         version: 6.10.0
       micro-stacks:
-        specifier: ^1.1.4
-        version: 1.1.4
+        specifier: ^1.2.1
+        version: 1.2.1
     devDependencies:
       '@types/node':
         specifier: 20.10.4
@@ -129,8 +129,8 @@ importers:
   packages/core:
     dependencies:
       micro-stacks:
-        specifier: ^1.1.4
-        version: 1.1.4
+        specifier: ^1.2.1
+        version: 1.2.1
     devDependencies:
       demo-project:
         specifier: workspace:*
@@ -142,8 +142,8 @@ importers:
         specifier: workspace:*
         version: link:../core
       micro-stacks:
-        specifier: ^1.1.4
-        version: 1.1.4
+        specifier: ^1.2.1
+        version: 1.2.1
     devDependencies:
       demo-project:
         specifier: workspace:*
@@ -158,8 +158,8 @@ importers:
         specifier: ^1.1.2
         version: 1.1.2(react@18.2.0)
       micro-stacks:
-        specifier: ^1.1.4
-        version: 1.1.4
+        specifier: ^1.2.1
+        version: 1.2.1
     devDependencies:
       demo-project:
         specifier: workspace:*
@@ -4519,6 +4519,22 @@ packages:
 
   /micro-stacks@1.1.4:
     resolution: {integrity: sha512-roWyLX2LZxYDIYcmFadfb5uRmRye+UA3m2efhg9I3I4AoOT3X4THOo3zekLhFvjFbhFUs+uoXMjGnQhOFBnpAw==}
+    engines: {node: '>=14'}
+    peerDependencies:
+      '@scure/bip32': 1.1.0
+      '@scure/bip39': 1.1.0
+    peerDependenciesMeta:
+      '@scure/bip32':
+        optional: true
+      '@scure/bip39':
+        optional: true
+    dependencies:
+      '@noble/hashes': 1.1.2
+      '@noble/secp256k1': 1.6.3
+    dev: false
+
+  /micro-stacks@1.2.1:
+    resolution: {integrity: sha512-CmFAH34GfgW9vMwnINflxH1COUWUg2kSYnPVfToZXPEJwHMGo8b3syte7s5zJ2rR/RSjpquQduiDNRAgF2Hh0w==}
     engines: {node: '>=14'}
     peerDependencies:
       '@scure/bip32': 1.1.0
