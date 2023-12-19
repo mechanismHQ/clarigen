@@ -1,4 +1,4 @@
-import { Response, cvToValue } from '@clarigen/core';
+import { Response, cvToValue, isResponse } from '@clarigen/core';
 import {
   ClarityValue as HiroClarityValue,
   deserializeCV as deserializeCVHiro,
@@ -24,25 +24,24 @@ export function cvConvertHiro(value: HiroClarityValue): MSClarityValue {
 }
 
 export function validateResponse<T>(result: HiroClarityValue, expectOk?: boolean): T {
-  const value = cvToValue(cvConvertHiro(result), true);
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call
-  if (!value.hasOwnProperty('isOk') && typeof expectOk !== 'undefined') {
+  const value = cvToValue<Response<T, T> | T>(cvConvertHiro(result), true);
+
+  if (!isResponse(value) && typeof expectOk !== 'undefined') {
     throw new Error(
-      `Expected response when calling function, but not a response. Try using just \`tx\` or \`rov\``
+      `Expected response when calling function, but not a response. Try using just \`rov\``
     );
   }
-  if (typeof expectOk !== 'undefined' && 'isOk' in value) {
-    const response = value as Response<unknown, unknown>;
+
+  if (isResponse(value) && typeof expectOk !== 'undefined') {
+    const response = value;
     const inner = response.value;
     if (expectOk && !response.isOk) {
-      // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-      throw new Error(`Tx result failed. Expected OK, received ERR ${inner}.`);
+      throw new Error(`Tx result failed. Expected OK, received ERR ${String(inner)}.`);
     }
     if (expectOk === false && response.isOk) {
-      // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-      throw new Error(`Tx result failed. Expected ERR, received OK ${inner}.`);
+      throw new Error(`Tx result failed. Expected ERR, received OK ${String(inner)}.`);
     }
-    return inner as T;
+    return inner;
   }
   return value as T;
 }

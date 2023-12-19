@@ -59,6 +59,10 @@ export function err<Ok = never, T = unknown>(value: T): ResponseErr<Ok, T> {
   };
 }
 
+export function isResponse<T>(value: Response<T, T> | T): value is Response<T, T> {
+  return typeof value === 'object' && value !== null && 'isOk' in value;
+}
+
 export interface ClarityAbi extends Omit<_ClarityAbi, 'maps'> {
   maps: ClarityAbiMap[];
   clarity_version?: string;

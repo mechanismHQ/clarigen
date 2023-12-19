@@ -17,7 +17,7 @@
     "build": "shx rm -rf dist && tsup",
     "test": "vitest run",
     "lint": "eslint \"src/**/*.{ts,tsx}\" && prettier --check \"./**/*.{ts,js}\"",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit -p tsconfig-test.json"
   },
   "prettier": "@stacks/prettier-config",
   "name": "@clarigen/test",
@@ -30,10 +30,10 @@
   },
   "dependencies": {
     "@clarigen/core": "workspace:*",
-    "micro-stacks": "^1.1.4",
-    "@stacks/transactions": "6.10.0",
     "@hirosystems/clarinet-sdk": "1.2.0",
-    "@hirosystems/clarinet-sdk-wasm": "1.2.0"
+    "@hirosystems/clarinet-sdk-wasm": "1.2.0",
+    "@stacks/transactions": "6.10.0",
+    "micro-stacks": "^1.1.4"
   },
   "publishConfig": {
     "access": "public"

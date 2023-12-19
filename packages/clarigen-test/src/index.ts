@@ -8,6 +8,7 @@ import {
   cvToValue,
   mapFactory,
   rawClarityToValue,
+  Response,
 } from '@clarigen/core';
 import { Simnet, ParsedTransactionResult } from '@hirosystems/clarinet-sdk';
 import { cvConvertHiro, cvConvertMS, validateResponse } from './utils';
@@ -25,7 +26,9 @@ export type TransactionResult<R> = Omit<ParsedTransactionResult, 'events'> & {
   events: CoreNodeEvent[];
 };
 
-export function txOk<A extends UnknownArgs, R>(
+export type AnyResponse = Response<unknown, unknown>;
+
+export function txOk<A extends UnknownArgs, R extends AnyResponse>(
   tx: ContractCallTyped<A, R>,
   sender: string
 ): TransactionResult<OkType<R>> {
@@ -41,7 +44,7 @@ export function txOk<A extends UnknownArgs, R>(
   };
 }
 
-export function txErr<A extends UnknownArgs, R>(
+export function txErr<A extends UnknownArgs, R extends AnyResponse>(
   tx: ContractCallTyped<A, R>,
   sender: string
 ): TransactionResult<ErrType<R>> {
@@ -57,7 +60,7 @@ export function txErr<A extends UnknownArgs, R>(
   };
 }
 
-export function tx<A extends UnknownArgs, R>(
+export function tx<A extends UnknownArgs, R extends AnyResponse>(
   tx: ContractCallTyped<A, R>,
   sender: string
 ): TransactionResult<R> {
@@ -99,7 +102,7 @@ export function rov<A extends UnknownArgs, R>(tx: ContractCallTyped<A, R>, sende
   return ro(tx, sender).value;
 }
 
-export function roOk<A extends UnknownArgs, R>(
+export function roOk<A extends UnknownArgs, R extends AnyResponse>(
   tx: ContractCallTyped<A, R>,
   sender?: string
 ): TransactionResult<OkType<R>> {
@@ -121,14 +124,14 @@ export function roOk<A extends UnknownArgs, R>(
   // return value;
 }
 
-export function rovOk<A extends UnknownArgs, R>(
+export function rovOk<A extends UnknownArgs, R extends AnyResponse>(
   tx: ContractCallTyped<A, R>,
   sender?: string
 ): OkType<R> {
   return roOk(tx, sender).value;
 }
 
-export function roErr<A extends UnknownArgs, R>(
+export function roErr<A extends UnknownArgs, R extends AnyResponse>(
   tx: ContractCallTyped<A, R>,
   sender?: string
 ): TransactionResult<ErrType<R>> {
@@ -151,7 +154,7 @@ export function roErr<A extends UnknownArgs, R>(
   // return value;
 }
 
-export function rovErr<A extends UnknownArgs, R>(
+export function rovErr<A extends UnknownArgs, R extends AnyResponse>(
   tx: ContractCallTyped<A, R>,
   sender?: string
 ): ErrType<R> {
