@@ -1,5 +1,11 @@
 # @clarigen/core
 
+## 1.0.16-alpha.4
+
+### Patch Changes
+
+- [`b969418`](https://github.com/mechanismHQ/clarigen/commit/b9694186e7b9a07368d75b46a66dcfdb1f9357d7) Thanks [@hstove](https://github.com/hstove)! - Improves types in `test` package
+
 ## 1.0.16-alpha.3
 
 ### Patch Changes
