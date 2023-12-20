@@ -12,6 +12,9 @@ contract_id = "SP3DX3H4FEYZJZ586MFBS25ZW3HZDMEW92260R2PR.Wrapped-Bitcoin"
 [contracts.tester]
 path = "contracts/tester.clar"
 
+[contracts.counter]
+path = "contracts/counter.clar"
+
 [repl.analysis]
 passes = []
 check_checker = { trusted_sender = false, trusted_caller = false, callee_filter = false }

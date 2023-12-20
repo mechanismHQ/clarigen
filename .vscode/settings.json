@@ -3,5 +3,11 @@
     "packages/cli/tmp/tests/deno",
     "packages/core/dist/deno",
     "demo-project/test-runner.ts"
-  ]
+  ],
+  "search.exclude": {
+    "**/node_modules": true,
+    "**/bower_components": true,
+    "**/*.code-search": true,
+    "deprecated": true
+  }
 }

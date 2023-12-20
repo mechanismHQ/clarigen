@@ -59,6 +59,10 @@ export function err<Ok = never, T = unknown>(value: T): ResponseErr<Ok, T> {
   };
 }
 
+export function isResponse<T>(value: Response<T, T> | T): value is Response<T, T> {
+  return typeof value === 'object' && value !== null && 'isOk' in value;
+}
+
 export interface ClarityAbi extends Omit<_ClarityAbi, 'maps'> {
   maps: ClarityAbiMap[];
   clarity_version?: string;
@@ -112,7 +116,7 @@ export function cvToValue<T = any>(val: ClarityValue, returnResponse = false): T
         const keyFixed = toCamelCase(key);
         return {
           ...acc,
-          [keyFixed]: cvToValue(val),
+          [keyFixed]: cvToValue(val, returnResponse),
         };
       }, {} as Record<string, any>);
       return tupleReduced as unknown as T;

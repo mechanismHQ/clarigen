@@ -1,0 +1,19 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "module": "esnext",
+    "lib": ["esnext"],
+    "outDir": "./dist",
+    "rootDir": "./src",
+    "resolveJsonModule": true,
+    "moduleResolution": "node",
+    "noUnusedLocals": false,
+    "noUnusedParameters": false,
+    "skipLibCheck": true,
+    "types": ["node"]
+  },
+  "include": [
+    "@hirosystems/clarinet-sdk/vitest-helpers/src/global",
+    "./src/**/*"
+  ]
+}

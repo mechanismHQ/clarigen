@@ -8,7 +8,7 @@ import {
   Response,
   JsonIfOption,
 } from '@clarigen/core';
-import { ContractCallTxOptions, makeContractCallToken } from 'micro-stacks/connect';
+import { ContractCallTxOptions, FinishedTxData, makeContractCallToken } from 'micro-stacks/connect';
 import { deserializeTransaction } from 'micro-stacks/transactions';
 import { ContractCallParams, MicroStacksClient, TxType } from '@micro-stacks/client';
 import { StacksNetwork } from 'micro-stacks/network';
@@ -97,7 +97,7 @@ export class ClarigenClient {
     this.microStacks = client;
   }
 
-  public get network() {
+  public get network(): StacksNetwork {
     return this.microStacks.getState().network;
   }
 
@@ -105,9 +105,9 @@ export class ClarigenClient {
     tx: ContractCall<any>,
     txOptions?: Omit<
       ContractCallTxOptions,
-      'contractName' | 'contractAddress' | 'functionName' | 'functionArgs'
-    >
-  ) {
+      'contractName' | 'contractAddress' | 'functionName' | 'functionArgs' | 'network'
+    > & { network?: StacksNetwork }
+  ): Promise<FinishedTxData | undefined> {
     return this.microStacks.signTransaction(TxType.ContractCall, {
       functionArgs: tx.functionArgs,
       functionName: tx.function.name,

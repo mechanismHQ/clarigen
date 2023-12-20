@@ -50,6 +50,18 @@ describe('cvToValue', () => {
     const value = cvToValue(okCV, true);
     expect(value).toEqual(ok(100n));
   });
+
+  test('handling tuples with responses', () => {
+    const cv = tupleCV({
+      val: responseOkCV(uintCV(100)),
+    });
+    console.log(cv);
+
+    const value = cvToValue<{ val: Response<bigint, bigint> }>(cv, true);
+    expect(value.val.isOk).toEqual(true);
+    expect(value.val.value).toEqual(100n);
+    console.log(value);
+  });
 });
 
 describe('parseToCV', () => {
