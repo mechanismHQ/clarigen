@@ -116,7 +116,7 @@ export function cvToValue<T = any>(val: ClarityValue, returnResponse = false): T
         const keyFixed = toCamelCase(key);
         return {
           ...acc,
-          [keyFixed]: cvToValue(val),
+          [keyFixed]: cvToValue(val, returnResponse),
         };
       }, {} as Record<string, any>);
       return tupleReduced as unknown as T;
