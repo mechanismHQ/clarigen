@@ -9,6 +9,7 @@
     "@clarigen/web": "1.0.15"
   },
   "changesets": [
+    "brave-camels-sniff",
     "early-pets-sip",
     "four-hotels-invite",
     "lucky-foxes-flow",

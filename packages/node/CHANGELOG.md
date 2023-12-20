@@ -1,5 +1,14 @@
 # @clarigen/node
 
+## 1.0.16-alpha.6
+
+### Patch Changes
+
+- [#37](https://github.com/mechanismHQ/clarigen/pull/37) [`f63a739`](https://github.com/mechanismHQ/clarigen/commit/f63a73930d80bddb83f1ec18e886a5c738e3a8ef) Thanks [@hstove](https://github.com/hstove)! - Fixed a bug in `cvToValue` when changing tuples with responses in values
+
+- Updated dependencies [[`f63a739`](https://github.com/mechanismHQ/clarigen/commit/f63a73930d80bddb83f1ec18e886a5c738e3a8ef)]:
+  - @clarigen/core@1.0.16-alpha.6
+
 ## 1.0.16-alpha.5
 
 ### Patch Changes
