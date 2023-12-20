@@ -6,6 +6,11 @@ export const MAINNET_BURN_ADDRESS = 'SP000000000000000000002Q6VF78';
 
 export const toCamelCase = (input: string | number | symbol, titleCase?: boolean) => {
   const inputStr = typeof input === 'string' ? input : String(input);
+  // Check if the input string only contains uppercase letters and/or underscores
+  const isUpperCaseAndUnderscore = /^[A-Z_]+$/.test(inputStr);
+  if (isUpperCaseAndUnderscore) {
+    return inputStr;
+  }
   const [first, ...parts] = inputStr.replace('!', '').replace('?', '').split('-');
   const firstChar = titleCase ? first[0].toUpperCase() : first[0].toLowerCase();
   let result = `${firstChar}${first.slice(1)}`;
