@@ -1,5 +1,14 @@
 # @clarigen/web
 
+## 1.0.16-alpha.5
+
+### Patch Changes
+
+- [#37](https://github.com/mechanismHQ/clarigen/pull/37) [`ac1ef2f`](https://github.com/mechanismHQ/clarigen/commit/ac1ef2ffa39dcb580693694b6c98d15194f07910) Thanks [@hstove](https://github.com/hstove)! - Fixes `toCamelCase` to handle UPPER_CASE format
+
+- Updated dependencies [[`ac1ef2f`](https://github.com/mechanismHQ/clarigen/commit/ac1ef2ffa39dcb580693694b6c98d15194f07910)]:
+  - @clarigen/core@1.0.16-alpha.5
+
 ## 1.0.16-alpha.4
 
 ### Patch Changes
